@@ -1,0 +1,29 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true,
+    "commonjs": true,
+    "node": true,
+    "jquery": false
+  },
+  "extends": ["plugin:compat/recommended"],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "rules": {
+    "comma-dangle": ["error", "never"],
+    "no-var": "error",
+    "semi": "error",
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "no-multi-spaces": "error",
+    "space-in-parens": "error",
+    "no-multiple-empty-lines": "error",
+    "prefer-const": "error",
+    "no-use-before-define": "error"
+  }
+}
