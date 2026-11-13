@@ -10,7 +10,7 @@ You implement one build ticket in `/Users/jsantos/Documents/git/jpsantos-portfol
 
 ## Before coding
 1. Read `docs/authorship-protocol.md` and the ticket's acceptance criteria.
-2. Look up Astro and Netlify APIs through the sources in `docs/how-to/look-up-docs.md`, not from memory.
+2. Look up library and platform APIs through the sources in `docs/how-to/look-up-docs.md`, not from memory.
 
 ## Method
 3. Where behaviour is testable, write the test first and see it fail; then make it pass.

@@ -13,8 +13,7 @@ How a build ticket goes from `ready` to `done`. Rules: [authorship-protocol](../
 
 ## Checks (the implementer's done)
 - `npm run build` succeeds with no warnings introduced.
-- Lint, type check and tests pass (exact commands: `package.json` scripts).
-- Automated a11y scan of the changed pages is clean (tool and command: set by the launch quality bar decision; until then, the browser checker's scan stands in).
+- `npm run check` passes. It runs every gate set by the launch quality bar decision: type check, lint, format, CSS and HTML validation, Playwright tests with the axe scan, Vitest, and the performance budget. Until `package.json` has a `check` script, run each gate that already has a script; until the axe gate exists, the browser check covers it.
 
 ## Accessibility bar (the browser checker's done)
 WCAG 2.2 AA on every changed page and state:
