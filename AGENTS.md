@@ -11,6 +11,7 @@ Personal Site of a design engineer and accessibility specialist, being rebuilt a
 
 ## Rules
 - Authorship protocol is mandatory: [docs/authorship-protocol.md](docs/authorship-protocol.md).
+- Third-party skills ([.agents/skills/THIRD-PARTY.md](.agents/skills/THIRD-PARTY.md)): read authorship-protocol rule 6 before running one.
 - Stay tool-agnostic. Rules and workflows live in `AGENTS.md`, `docs/` and `.agents/skills/`; tool-specific files (`.claude/agents/`, `.claude/skills/` symlinks, `.mcp.json`) only point at them.
 - Roles, briefs, checkpoints and escalation: [delegate-work](docs/how-to/delegate-work.md).
 - Library docs: use the source routed in [look-up-docs](docs/how-to/look-up-docs.md). A library with no row yet gets one decided with the human first.

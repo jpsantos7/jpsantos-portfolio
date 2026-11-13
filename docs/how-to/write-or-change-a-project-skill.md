@@ -10,3 +10,5 @@ Rules: [authorship-protocol](../authorship-protocol.md).
 
 ## Third-party skills
 Vet before install: source, scripts, network access, licence, and whether it decides visuals or writes copy (that breaks the authorship protocol). Install the single skill needed, never the whole collection. Record the vetting in the ticket's resolution.
+
+Copy third-party skills verbatim, so steps 2–3 (line cap, protocol link) don't apply to them. Record each in [`.agents/skills/THIRD-PARTY.md`](../../.agents/skills/THIRD-PARTY.md): source, pinned commit, licence file, and the sibling skills it names that are not installed.
