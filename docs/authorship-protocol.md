@@ -12,7 +12,7 @@ The Site is the owner's voice and the owner's design. Agents make the owner fast
 ## Design
 4. Type, colour, space scale, layout and motion are the owner's decisions, recorded in the vault (ticket resolution or ADR). Code uses existing tokens; a value with no token is raised as an open issue for the owner.
 5. Agents explore visual options only inside a prototype ticket, as rough throwaway artifacts for the owner to react to, never as the answer.
-6. The `ui-ux-pro-max` skill is excluded from this project. Third-party skills are vetted before use ([write-or-change-a-project-skill](how-to/write-or-change-a-project-skill.md)).
+6. The `ui-ux-pro-max` skill is excluded from this project. Third-party skills are vetted before use ([write-or-change-a-project-skill](how-to/write-or-change-a-project-skill.md)). They advise: a value or edit one suggests (an easing curve, a duration, a removal) goes to the owner as a proposal under rule 4. Run `remove-animations` through its Workflow step 4 (hazards checked), then report the candidates as proposals in its output format; the owner decides what goes.
 
 ## Code principles
 7. CSS follows CUBE CSS with Every Layout compositions and design tokens. No CSS framework, no component library.
