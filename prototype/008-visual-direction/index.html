@@ -21,6 +21,8 @@
   Round 8 (e0ebff0): owner picked E1 Fraunces Italic. The page now shows only the chosen direction.
   Round 9: three CSS scroll-driven extras, each a toggle under tune > Scroll effects: Case study reading progress,
   photo drift inside frames (off under reduced motion), sticky header that settles on scroll.
+  Round 9 verdict: reading progress and header-on-scroll kept; photo drift dropped (glitched on mobile in Orca, flashing
+  between the duotone and the colour image).
   Round 5 notes: layout is all Bleed (hero portrait off the edge, big Work rows, photo band, full-bleed Case study opener).
   The variants differ only in what replaces the mustard accents in LIGHT mode (dark mode keeps yellow text, 10:1):
     B1 Ink    — no colour on text; accents are plain ink. Yellow lives in the photos and the footer only.
@@ -256,24 +258,15 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     html:not(.rm)[data-motion="3"] .prose figure .ph{animation:wipe linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
   }
 }
-/* =================== round 9: scroll-driven extras (CSS only; each one a tune toggle) =================== */
+/* =================== round 9: scroll-driven extras (CSS only) =================== */
 @keyframes progress{to{transform:scaleX(1)}}
-@keyframes drift{from{translate:0 -6%}to{translate:0 6%}}
 @keyframes header-settle{to{background-color:var(--bg);box-shadow:0 1px 0 var(--line)}}
 .read-progress{display:none}
 @supports (animation-timeline:scroll()){
   /* 1. reading progress on the Case study: yellow as decoration, ink hairline under it; kept under reduced motion (it tracks the reader's own scroll) */
-  html[data-sd-progress="1"] [data-page=cs] .read-progress{display:block;position:fixed;inset-block-start:0;inset-inline:0;z-index:50;block-size:4px;background:var(--yellow);box-shadow:0 1px 0 var(--fg);transform:scaleX(0);transform-origin:left center;animation:progress linear both;animation-timeline:scroll(root)}
+  [data-page=cs] .read-progress{display:block;position:fixed;inset-block-start:0;inset-inline:0;z-index:50;block-size:4px;background:var(--yellow);box-shadow:0 1px 0 var(--fg);transform:scaleX(0);transform-origin:left center;animation:progress linear both;animation-timeline:scroll(root)}
   /* 3. header: sticks, and gains the page colour and a hairline once the page moves */
-  html[data-sd-header="1"] .v header.site{position:sticky;inset-block-start:0;z-index:40;animation:header-settle linear both;animation-timeline:scroll(root);animation-range:0 12rem}
-}
-@media (prefers-reduced-motion:no-preference){
-  @supports (animation-timeline:view()){
-    /* 2. photos drift slightly slower than the page, inside their frames; off under reduced motion */
-    html:not(.rm)[data-sd-drift="1"] .hero-b .ph img,
-    html:not(.rm)[data-sd-drift="1"] .band .ph img,
-    html:not(.rm)[data-sd-drift="1"] .cs-open .ph img{scale:1.14;animation:drift linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
-  }
+  .v header.site{position:sticky;inset-block-start:0;z-index:40;animation:header-settle linear both;animation-timeline:scroll(root);animation-range:0 12rem}
 }
 </style>
 </head>
@@ -417,11 +410,6 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     <label><input type="radio" name="darkduo" value="same" checked>same as light</label>
     <label><input type="radio" name="darkduo" value="dim">dimmed (shadow = page)</label>
   </fieldset>
-  <fieldset><legend>Scroll effects</legend>
-    <label><input type="checkbox" name="sd-progress" checked>reading progress (Case study)</label>
-    <label><input type="checkbox" name="sd-drift" checked>photo drift</label>
-    <label><input type="checkbox" name="sd-header" checked>header on scroll</label>
-  </fieldset>
   <fieldset><legend>Reduced motion</legend>
     <label><input type="radio" name="rm" value="system" checked>follow system</label>
     <label><input type="radio" name="rm" value="on">force on</label>
@@ -508,9 +496,8 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     theme: themes.includes(params.get('theme')) ? params.get('theme') : 'light',
     tune: params.get('tune') === '1', contrast: params.get('contrast') === '1',
     yellow: params.get('yellow') || '#f2c200', shadow: params.get('shadow') || '#161412',
-    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal', rm: params.get('rm') === 'on' ? 'on' : 'system', 'sd-progress': params.get('sd-progress') ?? '1', 'sd-drift': params.get('sd-drift') ?? '1', 'sd-header': params.get('sd-header') ?? '1',
+    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal', rm: params.get('rm') === 'on' ? 'on' : 'system',
   };
-  for (const n of ['sd-progress', 'sd-drift', 'sd-header']) tune.querySelector(`input[name=${n}]`).checked = st[n] === '1';
   for (const n of ['yellow', 'shadow', 'darkduo', 'hover', 'lift', 'rm']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
 
   const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
@@ -546,7 +533,6 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     document.body.classList.toggle('dark', dark);
     document.body.dataset.hover = st.hover;
     document.documentElement.dataset.motion = v.dataset.motion;
-    for (const n of ['sd-progress', 'sd-drift', 'sd-header']) document.documentElement.setAttribute('data-' + n, st[n]);
     document.documentElement.classList.toggle('rm', st.rm === 'on');
     document.querySelectorAll('feFuncR[type=gamma],feFuncG[type=gamma],feFuncB[type=gamma]').forEach(f => f.setAttribute('exponent', st.lift));
     setFilter('duo-light', st.shadow, st.yellow);
