@@ -1,0 +1,451 @@
+<!doctype html>
+<!--
+  PROTOTYPE, round 1: throwaway. Ticket 009 "Preferences control: theme toggle and motion behaviour".
+  The page is the look chosen in ticket 008 (Bleed, Bricolage + Geist + Fraunces Italic, "Considered" motion), fixed.
+  The variants differ only in the PREFERENCES CONTROL: where it lives, how many states it has, and whether motion is offered.
+    A  Theme button only : one icon toggle in the header (light / dark). No motion control: motion follows the OS.
+    B  Two buttons       : header "Theme: System / Light / Dark" (cycles) + a "Reduce motion" toggle.
+    C  Preferences menu  : a header "Preferences" button opens a small panel: Theme (System/Light/Dark), Motion (System/Full/Reduced).
+    D  Footer settings   : the same two groups as C, always visible in the footer. Nothing in the header.
+  Pink bar (not part of the design):
+    OS theme / OS motion : simulate the visitor's system settings (or "real" = this machine's).
+    JS                   : "off" shows the no-JS Site: controls hidden, everything follows the OS.
+    theme change         : snap, or a short crossfade.
+    clear saved          : forget the saved choices (each variant saves under PROTOTYPE-009:<variant> in localStorage).
+  Reload the page to see what a saved choice does on the next visit. Click a Work row for the Case study; the logo goes back.
+  Control labels are placeholder wording; the owner writes the real copy. Images: Unsplash stand-ins (hotlinked).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROTOTYPE 009 · Preferences control · round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@1,9..144,300..600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body,h1,h2,h3,p,dl,dd,figure,ol,ul,fieldset{margin:0}
+ol,ul{padding:0;list-style:none}
+img{display:block;max-inline-size:100%;block-size:auto}
+a{color:inherit}
+.visually-hidden{position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* =================== the 008 look (fixed) =================== */
+.v{
+  --bg:#f7f4ed; --fg:#161412; --mid:#5a544f; --line:#dcd6ca; --card:#ece7dd;
+  --yellow:#f2c200; --shadow:#161412; --on-yellow:#161412; --accent-text:var(--fg);
+  --display:"Bricolage Grotesque",system-ui,sans-serif; --body:"Geist",system-ui,sans-serif; --mono:"Geist Mono",ui-monospace,monospace; --italic:"Fraunces",serif;
+  --step-0:clamp(1rem,.95rem + .3vw,1.2rem); --step-2:clamp(1.6rem,1.2rem + 1.8vw,2.8rem);
+  --step-4:clamp(2.4rem,1rem + 5vw,6rem); --step-6:clamp(3.6rem,1rem + 13vw,17rem);
+  --gutter:clamp(1rem,4vw,3.5rem); --space-l:clamp(3.5rem,2rem + 7vw,10rem); --radius:1.25rem;
+  background:var(--bg); color:var(--fg); font:400 var(--step-0)/1.6 var(--body);
+}
+html{color-scheme:light}
+html.dark{color-scheme:dark}
+.dark .v{--bg:#1f1d1a; --fg:#f1ede5; --mid:#a9a198; --line:#3a3631; --card:#2a2723; --accent-text:var(--yellow)}
+.v :focus-visible{outline:3px solid var(--fg);outline-offset:3px;box-shadow:0 0 0 6px var(--yellow)}
+.v .wrap{padding-inline:var(--gutter)}
+.v .mono{font:500 .75rem/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.v .accent{color:var(--accent-text)}
+.v header.site .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:1.25rem;flex-wrap:wrap;gap:1rem}
+.v .hd-right{display:flex;align-items:center;gap:clamp(1rem,3vw,2.5rem);flex-wrap:wrap}
+.v .logo{font:800 1.25rem/1 var(--display);letter-spacing:-.018em;text-decoration:none}
+.v .stop{color:var(--accent-text)}
+.v nav ul{display:flex;gap:clamp(1rem,3vw,2.5rem)}
+.v nav a{text-decoration:none}
+.v nav a:hover{text-decoration:underline;text-underline-offset:.3em}
+.v h1.display{font:800 var(--step-6)/.86 var(--display);letter-spacing:-.033em;margin-inline-start:-.04em}
+.v .lead{font:400 var(--step-2)/1.2 var(--display);letter-spacing:-.012em;max-inline-size:26ch}
+.v em{font:italic 400 1.02em/1 var(--italic);letter-spacing:-.01em}
+.v .head-row{display:flex;justify-content:space-between;align-items:baseline;padding-block:1rem;border-block-start:1px solid var(--fg)}
+.v .prose a{color:var(--accent-text);text-underline-offset:.2em}
+.v footer.site{background:#161412;color:#f1ede5;--fg:#f1ede5;--bg:#161412;--mid:#a9a198}
+.v footer.site .wrap{padding-block:var(--space-l) 1.5rem}
+.v footer.site .big{font:800 var(--step-6)/.86 var(--display);letter-spacing:-.033em}
+.v footer.site .big a{text-decoration:none;color:var(--yellow)}
+.v footer.site .row{display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:1.5rem;margin-block-start:var(--space-l)}
+.v .ph{overflow:clip;background:var(--yellow)}
+.v .ph img{inline-size:100%;block-size:100%;object-fit:cover;filter:url(#duo)}
+.v a:hover .ph img{filter:none}
+.v .glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr));border-block-end:1px solid var(--line)}
+.v .glance div{padding:1.25rem var(--gutter) 1.25rem 0;border-block-end:1px solid var(--line)}
+.v .glance dt{color:var(--mid)}
+.v .glance dd{font:500 1rem/1.4 var(--display);margin-block-start:.35rem}
+.v .stats{display:grid;gap:1rem;padding-block:var(--space-l) 0}
+@media (min-width:52em){.v .stats{grid-template-columns:repeat(3,1fr)}}
+.v .stats li{background:var(--card);border-radius:var(--radius);padding:1.5rem;min-block-size:14rem;display:flex;flex-direction:column;justify-content:space-between;gap:1rem}
+.v .stats strong{font:800 var(--step-2)/1 var(--display);letter-spacing:-.018em}
+.v .stats small{color:var(--mid)}
+.v .prose{max-inline-size:40rem;margin-inline:auto;padding-block:var(--space-l)}
+.v .prose h2{font:700 var(--step-2)/1.1 var(--display);letter-spacing:-.015em;margin-block:2.5em .6em}
+.v .prose h2:first-child{margin-block-start:0}
+.v .prose figure{margin-block:2.5rem;margin-inline:calc(-1 * min(8rem, var(--gutter)))}
+.v .prose figure .ph{aspect-ratio:21/9}
+.v .prose figcaption{margin-block-start:.75rem;color:var(--mid)}
+.hero-b{display:grid;gap:2rem;padding-block-start:calc(var(--space-l)/3)}
+@media (min-width:60em){.hero-b{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;align-items:end;min-block-size:min(88vh,60rem)}}
+.hero-b .text{padding-inline:var(--gutter);padding-block-end:var(--space-l);position:relative;z-index:1}
+.hero-b h1.display{font-size:clamp(3.4rem,1rem + 9vw,12rem)}
+@media (min-width:60em){.hero-b h1.display{margin-inline-end:-30%}}
+.hero-b .lead{margin-block-start:2rem}
+.hero-b .ph{block-size:100%;min-block-size:24rem}
+@media (max-width:59.99em){.hero-b .ph{aspect-ratio:4/3;min-block-size:0;block-size:auto}}
+.rows{padding-block:1.5rem var(--space-l)}
+.row a{display:grid;gap:1.5rem;text-decoration:none;padding-block:clamp(2rem,4vw,4rem);border-block-end:1px solid var(--line)}
+@media (min-width:52em){.row a{grid-template-columns:7fr 5fr;gap:clamp(2rem,4vw,4rem);align-items:center}.row:nth-child(even) .ph{order:2}}
+.row .ph{aspect-ratio:16/10}
+.row h3{font:800 var(--step-4)/.92 var(--display);letter-spacing:-.024em;margin-block:.75rem 1rem;text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.1em;text-decoration-color:transparent}
+.row a:hover h3{text-decoration-color:currentColor}
+.row p{color:var(--mid);max-inline-size:36ch}
+.row .meta{display:block;margin-block-start:1rem;color:var(--mid)}
+.band{position:relative;min-block-size:min(80vh,40rem);display:grid;align-items:end}
+.band .ph{position:absolute;inset:0}
+.band .inner{position:relative;padding:var(--space-l) var(--gutter) var(--gutter)}
+.band p{display:inline;background:#161412;color:#f1ede5;font:700 var(--step-2)/1.35 var(--display);padding:.05em .2em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.band p a{color:var(--yellow)}
+.cs-open{position:relative;color:#f7f4ed;background:#161412}
+.cs-open .ph{position:absolute;inset:0}
+.cs-open .ph img{opacity:.6}
+.cs-open .wrap{position:relative;min-block-size:min(85vh,48rem);display:flex;flex-direction:column;justify-content:flex-end;padding-block:var(--space-l)}
+.cs-open h1{font:800 var(--step-4)/.9 var(--display);letter-spacing:-.027em;max-inline-size:16ch;margin-block:1.5rem}
+.cs-open h1 span,.cs-open .outcome span{background:#161412;box-decoration-break:clone;-webkit-box-decoration-break:clone;padding-inline:.15em}
+.cs-open .outcome{font:400 var(--step-2)/1.25 var(--display);max-inline-size:30ch;color:var(--yellow)}
+
+/* "Considered" motion. Gated on html.rm (set from the OS setting and the visitor's choice) instead of the media query,
+   so the prototype can simulate the OS. The Site would combine @media (prefers-reduced-motion) with the saved choice. */
+:root{--ease-out:cubic-bezier(.2,.8,.2,1);--ease-in-out:cubic-bezier(.65,0,.35,1)}
+@keyframes fade-in{from{opacity:0}}
+@keyframes fade-out{to{opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+::view-transition-old(root){animation:fade-out .2s ease both}
+::view-transition-new(root){animation:fade-in .25s ease both}
+::view-transition-group(work-img){animation-duration:.55s;animation-timing-function:var(--ease-in-out)}
+::view-transition-old(work-img),::view-transition-new(work-img){animation-duration:.55s;block-size:100%;object-fit:cover;overflow:clip}
+html.rm::view-transition-old(root){animation:fade-out .15s ease both}
+html.rm::view-transition-new(root){animation:fade-in .15s ease both}
+html:not(.rm) .v .ph img{transition:filter .35s ease,transform 1.2s var(--ease-out)}
+html:not(.rm) .row h3{transition:text-decoration-color .3s ease}
+html:not(.rm) .row a:hover .ph img{transform:scale(1.03)}
+html:not(.rm) .hero-b .text > *{animation:rise .7s var(--ease-out) both}
+html:not(.rm) .hero-b .text > :nth-child(2){animation-delay:.08s}
+html:not(.rm) .hero-b .text > :nth-child(3){animation-delay:.16s}
+html:not(.rm) .hero-b .ph{animation:fade-in 1s ease .1s both}
+html:not(.rm) .cs-open .wrap > *{animation:rise .7s var(--ease-out) .2s both}
+html:not(.rm) .cs-open .wrap > :nth-child(2){animation-delay:.28s}
+html:not(.rm) .cs-open .wrap > :nth-child(3){animation-delay:.36s}
+@supports (animation-timeline:view()){
+  html:not(.rm) .row, html:not(.rm) .glance, html:not(.rm) .stats li{animation:rise linear both;animation-timeline:view();animation-range:entry 5% entry 60%}
+}
+@keyframes progress{to{transform:scaleX(1)}}
+@keyframes header-settle{to{background-color:var(--bg);box-shadow:0 1px 0 var(--line)}}
+.read-progress{display:none}
+@supports (animation-timeline:scroll()){
+  [data-page=cs] .read-progress{display:block;position:fixed;inset-block-start:0;inset-inline:0;z-index:50;block-size:4px;background:var(--yellow);box-shadow:0 1px 0 var(--fg);transform:scaleX(0);transform-origin:left center;animation:progress linear both;animation-timeline:scroll(root)}
+  .v header.site{position:sticky;inset-block-start:0;z-index:40;animation:header-settle linear both;animation-timeline:scroll(root);animation-range:0 12rem}
+}
+
+/* =================== round 1: the preferences control =================== */
+.pc{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.pc[hidden]{display:none}
+.pc-btn{font:500 .75rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--fg);background:transparent;border:1px solid var(--fg);border-radius:999px;padding:.6em .9em;min-block-size:2.25rem;cursor:pointer;display:inline-flex;align-items:center;gap:.5em}
+.pc-btn:hover{background:var(--card)}
+.pc-btn[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.pc-btn b{font-weight:500}
+.pc-icon{inline-size:2.25rem;padding:0;justify-content:center}
+.pc-icon svg{inline-size:1.1rem;block-size:1.1rem}
+.pc-icon[aria-pressed="true"]{background:transparent;color:var(--fg)}
+.pc-menu{position:relative}
+.pc-panel{position:absolute;inset-block-start:calc(100% + .5rem);inset-inline-end:0;z-index:60;background:var(--bg);color:var(--fg);border:1px solid var(--fg);border-radius:var(--radius);padding:1.25rem;inline-size:max-content;max-inline-size:calc(100vw - 2 * var(--gutter));box-shadow:0 12px 32px #0003;display:grid;gap:1.25rem}
+.pc-panel[hidden]{display:none}
+.pc-group{border:0;padding:0;display:grid;gap:.5rem}
+.pc-group legend{padding:0;margin-block-end:.5rem;color:var(--mid)}
+.pc-seg{display:flex;border:1px solid var(--fg);border-radius:999px;padding:3px;gap:2px;inline-size:max-content}
+.pc-seg label{position:relative;font:500 .75rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:.6em .9em;border-radius:999px;cursor:pointer}
+.pc-seg input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.pc-seg label:has(input:checked){background:var(--fg);color:var(--bg)}
+.pc-seg label:has(input:focus-visible){outline:3px solid var(--fg);outline-offset:2px;box-shadow:0 0 0 6px var(--yellow)}
+.pc-foot{display:flex;gap:1.5rem;flex-wrap:wrap}
+.pc-foot .pc-group legend{color:#a9a198}
+
+/* ---------- prototype chrome (NOT part of the design) ---------- */
+.proto-bar{position:fixed;inset-block-end:16px;inset-inline-start:50%;transform:translateX(-50%);z-index:999;display:flex;align-items:center;gap:4px;padding:6px;border-radius:24px;background:#ff00aa;color:#fff;font:600 13px/1 "JetBrains Mono",monospace;box-shadow:0 6px 24px #0006,0 0 0 2px #fff;inline-size:max-content;max-inline-size:calc(100vw - 16px);flex-wrap:wrap;justify-content:center}
+.proto-bar button{all:unset;cursor:pointer;padding:8px 12px;border-radius:999px}
+.proto-bar button:hover,.proto-bar button:focus-visible{background:#0003}
+.proto-bar button:focus-visible{outline:2px solid #fff}
+.proto-bar output{padding-inline:8px;text-align:center}
+.proto-state{position:fixed;inset-block-start:16px;inset-inline-end:16px;z-index:999;background:#111;color:#eee;font:12px/1.6 "JetBrains Mono",monospace;padding:12px 14px;border-radius:12px;box-shadow:0 6px 24px #0008;max-inline-size:min(24rem,calc(100vw - 32px));border:2px solid #ff00aa}
+.proto-state[hidden]{display:none}
+.proto-state b{color:#ff7ad0;font-weight:500}
+.proto-state .eff{color:#7ee787}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="duo" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values=".2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  0 0 0 1 0"/>
+    <feComponentTransfer><feFuncR type="gamma" exponent=".5"/><feFuncG type="gamma" exponent=".5"/><feFuncB type="gamma" exponent=".5"/></feComponentTransfer>
+    <feComponentTransfer><feFuncR type="table" tableValues=".0863 .949"/><feFuncG type="table" tableValues=".0784 .7608"/><feFuncB type="table" tableValues=".0706 0"/></feComponentTransfer>
+  </filter>
+</svg>
+
+<template id="t-header">
+  <header class="site"><div class="wrap">
+    <a class="logo" href="#">Name<span class="stop">.</span></a>
+    <div class="hd-right">
+      <nav aria-label="Main" class="mono"><ul><li><a href="#">Work</a></li><li><a href="#">About</a></li><li><a href="#">Contact</a></li></ul></nav>
+      <div class="pc" data-slot="head"></div>
+    </div>
+  </div></header>
+</template>
+<template id="t-footer">
+  <footer class="site"><div class="wrap">
+    <span class="mono">Contact</span>
+    <!-- PLACEHOLDER: contact call to action -->
+    <p class="big"><a href="#">Lorem ipsum →</a></p>
+    <div class="row mono"><span>© Name Surname</span><div class="pc pc-foot" data-slot="foot"></div><span>Footer slot</span></div>
+  </div></footer>
+</template>
+<template id="t-home">
+  <main>
+    <section class="hero-b">
+      <div class="text">
+        <span class="mono accent">Role slot — Lisbon</span>
+        <!-- PLACEHOLDER: positioning line -->
+        <h1 class="display">Lorem <em>ipsum</em> dolor sit<span class="stop">.</span></h1>
+        <p class="lead">Consectetur adipiscing elit, sed do <em>eiusmod</em> tempor incididunt ut labore.</p>
+      </div>
+      <div class="ph"><img data-img="p" data-w="1200" data-h="1500" alt=""></div>
+    </section>
+    <section class="wrap" aria-labelledby="work-h">
+      <div class="head-row"><h2 class="mono" id="work-h">Selected work</h2><span class="mono accent">(03)</span></div>
+      <ol class="rows">
+        <li class="row"><a href="#cs"><div class="ph"><img data-img="a" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">01</span><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur adipiscing.</p><span class="mono meta">Industry · 2025–26</span></div></a></li>
+        <li class="row"><a href="#cs"><div class="ph"><img data-img="b" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">02</span><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam quis nostrud exercitation.</p><span class="mono meta">Client · 2019–23</span></div></a></li>
+        <li class="row"><a href="#cs"><div class="ph"><img data-img="c" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">03</span><h3>Case study three title</h3><p>Outcome: duis aute irure dolor in reprehenderit in voluptate.</p><span class="mono meta">Industry · 2024</span></div></a></li>
+      </ol>
+    </section>
+    <section class="band" aria-label="About">
+      <div class="ph"><img data-img="t" data-w="2000" data-h="1100" alt=""></div>
+      <div class="inner"><p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec odio praesent libero. <a href="#">More about me</a></p></div>
+    </section>
+  </main>
+</template>
+<template id="t-cs">
+  <main><article>
+    <header class="cs-open">
+      <div class="ph" aria-hidden="true"><img data-img="s" data-w="1800" data-h="1000" alt=""></div>
+      <div class="wrap">
+        <span class="mono">Case study — 01</span>
+        <h1><span>Case study one title</span></h1>
+        <!-- PLACEHOLDER: outcome -->
+        <p class="outcome"><span>Outcome: lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</span></p>
+      </div>
+    </header>
+    <div class="wrap">
+      <dl class="glance" aria-label="At a glance">
+        <div><dt class="mono">Role</dt><dd>Role slot</dd></div><div><dt class="mono">Team</dt><dd>Team slot</dd></div><div><dt class="mono">Period</dt><dd>2025–2026</dd></div><div><dt class="mono">Employer</dt><dd>Employer slot</dd></div><div><dt class="mono">Industry</dt><dd>Industry · scale</dd></div><div><dt class="mono">Stack</dt><dd>Item, item, item</dd></div>
+      </dl>
+      <h2 class="visually-hidden">Results</h2>
+      <ol class="stats">
+        <li><span class="mono accent">Result 01</span><strong>Result claim one lorem ipsum.</strong><small>Evidence slot</small></li>
+        <li><span class="mono accent">Result 02</span><strong>Result claim two dolor sit.</strong><small>Evidence slot</small></li>
+        <li><span class="mono accent">Result 03</span><strong>Result claim three amet.</strong><small>Evidence slot</small></li>
+      </ol>
+      <div class="prose">
+        <h2>Challenge</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud <a href="#">exercitation ullamco</a> laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <figure><div class="ph"><img data-img="f" data-w="1800" data-h="1000" alt=""></div><figcaption class="mono">Figure caption slot</figcaption></figure>
+        <h2>Approach</h2>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </div>
+    </div>
+  </article></main>
+</template>
+
+<div class="v"></div>
+
+<!-- ============================ prototype chrome ============================ -->
+<div class="proto-state" aria-live="polite"></div>
+<div class="proto-bar" role="toolbar" aria-label="Prototype controls">
+  <button type="button" data-step="-1" aria-label="Previous variant">←</button>
+  <output></output>
+  <button type="button" data-step="1" aria-label="Next variant">→</button>
+  <button type="button" data-sim="theme"></button>
+  <button type="button" data-sim="motion"></button>
+  <button type="button" data-sim="js"></button>
+  <button type="button" data-sim="fade"></button>
+  <button type="button" data-clear>clear saved</button>
+  <button type="button" data-state-btn aria-pressed="true">state</button>
+</div>
+<script>
+(() => {
+  const IMG = { a:'1460925895917-afdab827c52f', b:'1551288049-bebda4e38f71', c:'1498050108023-c5249f4df085',
+                p:'1500648767791-00dcc994a43e', s:'1497366216548-37526070297c', f:'1517694712202-14dd9538aa97', t:'1522202176988-66273c2fd55f' };
+  const src = (k, w, h) => `https://images.unsplash.com/photo-${IMG[k]}?w=${w}&h=${h}&fit=crop&q=70&auto=format`;
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const html = document.documentElement;
+
+  // ---------- build the two "pages" (Home, Case study) ----------
+  const v = $('.v'), tpl = id => document.getElementById('t-' + id).content.cloneNode(true);
+  const page = name => { const d = document.createElement('div'); d.dataset.page = name; return d; };
+  const home = page('home'), cs = page('cs'); cs.hidden = true;
+  home.append(tpl('header'), tpl('home'), tpl('footer'));
+  const bar = document.createElement('div'); bar.className = 'read-progress'; bar.setAttribute('aria-hidden', 'true');
+  cs.append(bar, tpl('header'), tpl('cs'), tpl('footer'));
+  v.append(home, cs);
+  $$('img[data-img]', v).forEach(i => { i.width = i.dataset.w; i.height = i.dataset.h; i.loading = 'lazy'; i.src = src(i.dataset.img, i.dataset.w, i.dataset.h); });
+
+  // ---------- variants ----------
+  const VARIANTS = {
+    A: { name: 'Theme button only', theme: ['light', 'dark'], motion: null },
+    B: { name: 'Two buttons', theme: ['system', 'light', 'dark'], motion: ['full', 'reduced'] },
+    C: { name: 'Preferences menu', theme: ['system', 'light', 'dark'], motion: ['system', 'full', 'reduced'] },
+    D: { name: 'Footer settings', theme: ['system', 'light', 'dark'], motion: ['system', 'full', 'reduced'] },
+  };
+  const keys = Object.keys(VARIANTS);
+  const params = new URLSearchParams(location.search);
+  const sim = { theme: 'light', motion: 'no-preference', js: true, fade: false };
+  let vk = keys.includes(params.get('variant')) ? params.get('variant') : 'A';
+
+  // ---------- OS (simulated or real) ----------
+  const mqDark = matchMedia('(prefers-color-scheme: dark)'), mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const osDark = () => sim.theme === 'real' ? mqDark.matches : sim.theme === 'dark';
+  const osReduce = () => sim.motion === 'real' ? mqReduce.matches : sim.motion === 'reduce';
+
+  // ---------- saved choice (what the Site would keep in localStorage) ----------
+  const storeKey = () => 'PROTOTYPE-009:' + vk;
+  const load = () => { try { return JSON.parse(localStorage.getItem(storeKey())) || {}; } catch { return {}; } };
+  const save = p => { try { localStorage.setItem(storeKey(), JSON.stringify(p)); } catch {} };
+  let prefs = load();
+
+  const effective = () => {
+    const t = sim.js ? prefs.theme : undefined, m = sim.js && VARIANTS[vk].motion ? prefs.motion : undefined;
+    const dark = t === 'dark' || ((!t || t === 'system') && osDark());
+    const reduce = m === 'reduced' || ((!m || m === 'system') && osReduce());
+    return { dark, reduce };
+  };
+
+  // ---------- control markup per variant ----------
+  let uid = 0;
+  const icon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>';
+  const LABEL = { system: 'System', light: 'Light', dark: 'Dark', full: 'Full', reduced: 'Reduced' };
+  const seg = (kind, legend, opts) => { const n = `${kind}-${++uid}`; return `<fieldset class="pc-group"><legend class="mono">${legend}</legend><div class="pc-seg">${opts.map(o => `<label><input type="radio" name="${n}" value="${o}" data-pref="${kind}">${LABEL[o]}</label>`).join('')}</div></fieldset>`; };
+  function controls(where) {
+    if (vk === 'A' && where === 'head') return `<button type="button" class="pc-btn pc-icon" data-act="theme-flip" aria-pressed="false">${icon}<span class="visually-hidden">Dark theme</span></button>`;
+    if (vk === 'B' && where === 'head') return `<button type="button" class="pc-btn" data-act="theme-cycle">Theme: <b></b></button><button type="button" class="pc-btn" data-act="motion-toggle" aria-pressed="false">Reduce motion</button>`;
+    if (vk === 'C' && where === 'head') { const id = `pc-panel-${++uid}`; return `<div class="pc-menu"><button type="button" class="pc-btn" data-act="menu" aria-expanded="false" aria-controls="${id}">Preferences</button><div class="pc-panel" id="${id}" hidden>${seg('theme', 'Theme', VARIANTS.C.theme)}${seg('motion', 'Motion', VARIANTS.C.motion)}</div></div>`; }
+    if (vk === 'D' && where === 'foot') return seg('theme', 'Theme', VARIANTS.D.theme) + seg('motion', 'Motion', VARIANTS.D.motion);
+    return '';
+  }
+  function buildControls() { $$('[data-slot]', v).forEach(s => s.innerHTML = controls(s.dataset.slot)); }
+
+  // ---------- apply ----------
+  function apply() {
+    const { dark, reduce } = effective();
+    html.classList.toggle('dark', dark); document.body.classList.toggle('dark', dark);
+    html.classList.toggle('rm', reduce);
+  }
+  function sync() {
+    const { dark, reduce } = effective();
+    $$('[data-slot]', v).forEach(s => s.hidden = !sim.js);
+    $$('[data-act=theme-flip]', v).forEach(b => b.setAttribute('aria-pressed', dark));
+    $$('[data-act=theme-cycle] b', v).forEach(b => b.textContent = LABEL[prefs.theme || 'system']);
+    $$('[data-act=motion-toggle]', v).forEach(b => b.setAttribute('aria-pressed', reduce));
+    $$('input[data-pref]', v).forEach(i => i.checked = i.value === (prefs[i.dataset.pref] || 'system'));
+  }
+  function render(animateTheme) {
+    const before = html.classList.contains('dark');
+    const run = () => { apply(); sync(); };
+    const wouldChange = effective().dark !== before;
+    if (animateTheme && sim.fade && wouldChange && !html.classList.contains('rm') && document.startViewTransition) document.startViewTransition(run);
+    else run();
+    renderState();
+  }
+  function setPref(k, val) { prefs = { ...prefs, [k]: val }; save(prefs); render(true); }
+
+  // ---------- state readout ----------
+  const stateEl = $('.proto-state'), out = $('.proto-bar output');
+  function renderState() {
+    const { dark, reduce } = effective(), saved = localStorage.getItem(storeKey());
+    out.textContent = `${vk} · ${VARIANTS[vk].name}`;
+    stateEl.innerHTML = `<b>${vk} · ${VARIANTS[vk].name}</b><br>
+      OS: ${osDark() ? 'dark' : 'light'} · motion ${osReduce() ? 'reduce' : 'no-preference'}${sim.theme === 'real' || sim.motion === 'real' ? ' (partly real)' : ' (simulated)'}<br>
+      JS: ${sim.js ? 'on' : 'OFF (no-JS Site: control hidden)'}<br>
+      saved: ${saved ? saved : '(nothing; follows OS)'}<br>
+      <span class="eff">shown: ${dark ? 'DARK' : 'LIGHT'} · motion ${reduce ? 'REDUCED (0.15s fades only)' : 'FULL'}</span>`;
+    $('[data-sim=theme]').textContent = `OS theme: ${sim.theme}`;
+    $('[data-sim=motion]').textContent = `OS motion: ${sim.motion}`;
+    $('[data-sim=js]').textContent = `JS: ${sim.js ? 'on' : 'off'}`;
+    $('[data-sim=fade]').textContent = `theme change: ${sim.fade ? 'fade' : 'snap'}`;
+    params.set('variant', vk); history.replaceState(null, '', `?${params}${location.hash}`);
+  }
+
+  // ---------- control events ----------
+  const closeMenus = (except) => $$('[data-act=menu]', v).forEach(b => { if (b === except) return; b.setAttribute('aria-expanded', 'false'); document.getElementById(b.getAttribute('aria-controls')).hidden = true; });
+  v.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]');
+    if (!b) { if (!e.target.closest('.pc-panel')) closeMenus(); return; }
+    const act = b.dataset.act;
+    if (act === 'theme-flip') setPref('theme', effective().dark ? 'light' : 'dark');
+    else if (act === 'theme-cycle') { const o = VARIANTS.B.theme; setPref('theme', o[(o.indexOf(prefs.theme || 'system') + 1) % o.length]); }
+    else if (act === 'motion-toggle') setPref('motion', effective().reduce ? 'full' : 'reduced');
+    else if (act === 'menu') { const open = b.getAttribute('aria-expanded') !== 'true'; closeMenus(b); b.setAttribute('aria-expanded', open); document.getElementById(b.getAttribute('aria-controls')).hidden = !open; }
+  });
+  v.addEventListener('change', e => { const i = e.target.closest('input[data-pref]'); if (i) setPref(i.dataset.pref, i.value); });
+  v.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const open = $$('[data-act=menu][aria-expanded=true]', v)[0];
+    if (open) { closeMenus(); open.focus(); }
+  });
+
+  // ---------- page "navigation" with the 008 photo morph ----------
+  let lastPh = null, savedY = 0;
+  function go(to, ph) {
+    const homeP = $('[data-page=home]', v), csP = $('[data-page=cs]', v);
+    if ((to === 'cs') === !csP.hidden) return;
+    closeMenus();
+    const cover = $('.cs-open .ph', csP), morph = !html.classList.contains('rm');
+    if (to === 'cs') { savedY = scrollY; lastPh = ph || null; }
+    const from = to === 'cs' ? lastPh : cover, dest = to === 'cs' ? cover : lastPh;
+    if (morph && from) from.style.viewTransitionName = 'work-img';
+    const swap = () => {
+      if (from) from.style.viewTransitionName = '';
+      homeP.hidden = to !== 'home'; csP.hidden = to !== 'cs';
+      if (morph && dest) dest.style.viewTransitionName = 'work-img';
+      scrollTo(0, to === 'cs' ? 0 : savedY);
+    };
+    if (!document.startViewTransition) return swap();
+    document.startViewTransition(swap).finished.finally(() => { if (dest) dest.style.viewTransitionName = ''; });
+  }
+  v.addEventListener('click', e => {
+    const a = e.target.closest('a[href]'); if (!a) return;
+    const href = a.getAttribute('href');
+    if (href === '#cs') { e.preventDefault(); go('cs', a.querySelector('.ph')); }
+    else if (a.matches('.logo') || a.textContent.trim() === 'Work') { e.preventDefault(); go('home'); }
+    else if (href === '#') e.preventDefault();
+  });
+
+  // ---------- prototype chrome ----------
+  const cycle = (arr, cur) => arr[(arr.indexOf(cur) + 1) % arr.length];
+  function setVariant(k) { vk = k; prefs = load(); buildControls(); render(false); }
+  $$('[data-step]').forEach(b => b.addEventListener('click', () => setVariant(keys[(keys.indexOf(vk) + +b.dataset.step + keys.length) % keys.length])));
+  $('[data-sim=theme]').addEventListener('click', () => { sim.theme = cycle(['light', 'dark', 'real'], sim.theme); render(true); });
+  $('[data-sim=motion]').addEventListener('click', () => { sim.motion = cycle(['no-preference', 'reduce', 'real'], sim.motion); render(false); });
+  $('[data-sim=js]').addEventListener('click', () => { sim.js = !sim.js; render(false); });
+  $('[data-sim=fade]').addEventListener('click', () => { sim.fade = !sim.fade; renderState(); });
+  $('[data-clear]').addEventListener('click', () => { keys.forEach(k => { try { localStorage.removeItem('PROTOTYPE-009:' + k); } catch {} }); prefs = {}; render(true); });
+  $('[data-state-btn]').addEventListener('click', e => { const on = e.currentTarget.getAttribute('aria-pressed') !== 'true'; e.currentTarget.setAttribute('aria-pressed', on); stateEl.hidden = !on; });
+  mqDark.addEventListener('change', () => render(true)); mqReduce.addEventListener('change', () => render(false));
+  addEventListener('keydown', e => {
+    if (e.target.closest('input, textarea, [contenteditable]') || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowLeft') $('[data-step="-1"]').click();
+    else if (e.key === 'ArrowRight') $('[data-step="1"]').click();
+  });
+
+  setVariant(vk);
+})();
+</script>
+</body>
+</html>
