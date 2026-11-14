@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  PROTOTYPE, round 8 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
+  PROTOTYPE, round 9 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
   Round 1 (e737601): owner picked C Hybrid. Round 2 (7d9107d): owner picked C3 Duotone.
   Round 3 (0c50389): owner picked the warm yellow (#f2c200) and asked to mix D1 Contained and D2 Bleed.
   Round 4 (54e95c8): owner chose all Bleed, and disliked the mustard (#6b5600) text accent in light mode.
@@ -19,6 +19,8 @@
   Round 8: variants differ only in the EMPHASIS (italic) face next to Bricolage: E1 Fraunces, E2 Instrument Serif,
   E3 Newsreader, E4 Gambetta, E5 Sentient. The hero headline now carries an italic word too.
   Round 8 (e0ebff0): owner picked E1 Fraunces Italic. The page now shows only the chosen direction.
+  Round 9: three CSS scroll-driven extras, each a toggle under tune > Scroll effects: Case study reading progress,
+  photo drift inside frames (off under reduced motion), sticky header that settles on scroll.
   Round 5 notes: layout is all Bleed (hero portrait off the edge, big Work rows, photo band, full-bleed Case study opener).
   The variants differ only in what replaces the mustard accents in LIGHT mode (dark mode keeps yellow text, 10:1):
     B1 Ink    — no colour on text; accents are plain ink. Yellow lives in the photos and the footer only.
@@ -32,7 +34,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PROTOTYPE 008 · Visual direction · round 8</title>
+<title>PROTOTYPE 008 · Visual direction · round 9</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@1,9..144,300..600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -85,7 +87,7 @@ a{color:inherit}
 .v footer.site .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-block-start:var(--space-l)}
 
 /* the duotone itself: SVG filter (#duo-light / #duo-dark), shadows -> --shadow, highlights -> --yellow */
-.v .ph{overflow:hidden;background:var(--yellow)}
+.v .ph{overflow:clip;background:var(--yellow)}
 .v .ph img{inline-size:100%;block-size:100%;object-fit:cover;filter:url(#duo-light)}
 .dark .v .ph img{filter:url(#duo-dark)}
 @media (prefers-reduced-motion:no-preference){.v .ph img{transition:filter .35s ease,transform .5s cubic-bezier(.2,.7,.2,1)}}
@@ -254,6 +256,25 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     html:not(.rm)[data-motion="3"] .prose figure .ph{animation:wipe linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
   }
 }
+/* =================== round 9: scroll-driven extras (CSS only; each one a tune toggle) =================== */
+@keyframes progress{to{transform:scaleX(1)}}
+@keyframes drift{from{translate:0 -6%}to{translate:0 6%}}
+@keyframes header-settle{to{background-color:var(--bg);box-shadow:0 1px 0 var(--line)}}
+.read-progress{display:none}
+@supports (animation-timeline:scroll()){
+  /* 1. reading progress on the Case study: yellow as decoration, ink hairline under it; kept under reduced motion (it tracks the reader's own scroll) */
+  html[data-sd-progress="1"] [data-page=cs] .read-progress{display:block;position:fixed;inset-block-start:0;inset-inline:0;z-index:50;block-size:4px;background:var(--yellow);box-shadow:0 1px 0 var(--fg);transform:scaleX(0);transform-origin:left center;animation:progress linear both;animation-timeline:scroll(root)}
+  /* 3. header: sticks, and gains the page colour and a hairline once the page moves */
+  html[data-sd-header="1"] .v header.site{position:sticky;inset-block-start:0;z-index:40;animation:header-settle linear both;animation-timeline:scroll(root);animation-range:0 12rem}
+}
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    /* 2. photos drift slightly slower than the page, inside their frames; off under reduced motion */
+    html:not(.rm)[data-sd-drift="1"] .hero-b .ph img,
+    html:not(.rm)[data-sd-drift="1"] .band .ph img,
+    html:not(.rm)[data-sd-drift="1"] .cs-open .ph img{scale:1.14;animation:drift linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+  }
+}
 </style>
 </head>
 <body data-hover="reveal">
@@ -396,6 +417,11 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     <label><input type="radio" name="darkduo" value="same" checked>same as light</label>
     <label><input type="radio" name="darkduo" value="dim">dimmed (shadow = page)</label>
   </fieldset>
+  <fieldset><legend>Scroll effects</legend>
+    <label><input type="checkbox" name="sd-progress" checked>reading progress (Case study)</label>
+    <label><input type="checkbox" name="sd-drift" checked>photo drift</label>
+    <label><input type="checkbox" name="sd-header" checked>header on scroll</label>
+  </fieldset>
   <fieldset><legend>Reduced motion</legend>
     <label><input type="radio" name="rm" value="system" checked>follow system</label>
     <label><input type="radio" name="rm" value="on">force on</label>
@@ -433,7 +459,8 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     const fc = tpl('footer-cs'), footer = fc.querySelector('footer'), csMain = document.createElement('main');
     csMain.append(fc.querySelector('article'));
     home.append(tpl('header'), main, footer);
-    cs.append(tpl('header'), csMain, footer.cloneNode(true));
+    const bar = document.createElement('div'); bar.className = 'read-progress'; bar.setAttribute('aria-hidden', 'true');
+    cs.append(bar, tpl('header'), csMain, footer.cloneNode(true));
     v.append(home, cs);
     v.querySelectorAll('[id="work-h"]').forEach(e => e.id = key + '-work');
     v.querySelectorAll('[aria-labelledby="work-h"]').forEach(e => e.setAttribute('aria-labelledby', key + '-work'));
@@ -481,8 +508,9 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     theme: themes.includes(params.get('theme')) ? params.get('theme') : 'light',
     tune: params.get('tune') === '1', contrast: params.get('contrast') === '1',
     yellow: params.get('yellow') || '#f2c200', shadow: params.get('shadow') || '#161412',
-    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal', rm: params.get('rm') === 'on' ? 'on' : 'system',
+    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal', rm: params.get('rm') === 'on' ? 'on' : 'system', 'sd-progress': params.get('sd-progress') ?? '1', 'sd-drift': params.get('sd-drift') ?? '1', 'sd-header': params.get('sd-header') ?? '1',
   };
+  for (const n of ['sd-progress', 'sd-drift', 'sd-header']) tune.querySelector(`input[name=${n}]`).checked = st[n] === '1';
   for (const n of ['yellow', 'shadow', 'darkduo', 'hover', 'lift', 'rm']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
 
   const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
@@ -518,6 +546,7 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     document.body.classList.toggle('dark', dark);
     document.body.dataset.hover = st.hover;
     document.documentElement.dataset.motion = v.dataset.motion;
+    for (const n of ['sd-progress', 'sd-drift', 'sd-header']) document.documentElement.setAttribute('data-' + n, st[n]);
     document.documentElement.classList.toggle('rm', st.rm === 'on');
     document.querySelectorAll('feFuncR[type=gamma],feFuncG[type=gamma],feFuncB[type=gamma]').forEach(f => f.setAttribute('exponent', st.lift));
     setFilter('duo-light', st.shadow, st.yellow);
@@ -537,7 +566,7 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
   themeBtn.addEventListener('click', cycleTheme);
   tuneBtn.addEventListener('click', () => { st.tune = !st.tune; render(); });
   cBtn.addEventListener('click', () => { st.contrast = !st.contrast; render(); });
-  tune.addEventListener('change', e => { st[e.target.name] = e.target.value; render(); });
+  tune.addEventListener('change', e => { st[e.target.name] = e.target.type === 'checkbox' ? (e.target.checked ? '1' : '0') : e.target.value; render(); });
   mq.addEventListener('change', render);
   addEventListener('keydown', e => {
     if (e.target.closest('input, textarea, [contenteditable]') || e.metaKey || e.ctrlKey || e.altKey) return;
