@@ -1,20 +1,23 @@
 <!doctype html>
 <!--
-  PROTOTYPE, round 4 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
+  PROTOTYPE, round 5 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
   Round 1 (e737601): owner picked C Hybrid. Round 2 (7d9107d): owner picked C3 Duotone.
   Round 3 (0c50389): owner picked the warm yellow (#f2c200) and asked to mix D1 Contained and D2 Bleed.
-  Round 4 assembles each variant from parts of both:
-    M1 Bleed hero, contained body — portrait bleeds beside the headline; Work as cards; About with a small photo; full-bleed Case study opener.
-    M2 Contained hero, bleed body — giant headline alone; Work as big alternating rows; About as a photo band; contained Case study cover.
-    M3 Bleed scale, rounded       — Bleed's sizes everywhere, but every photo keeps Contained's rounded corners and gutter inset.
-  "tune" still swaps yellow (default now warm), shadow tone, dark-mode duotone and hover. "contrast" shows ratios. Theme: button or T.
+  Round 4 (54e95c8): owner chose all Bleed, and disliked the mustard (#6b5600) text accent in light mode.
+  Round 5: layout is all Bleed (hero portrait off the edge, big Work rows, photo band, full-bleed Case study opener).
+  The variants differ only in what replaces the mustard accents in LIGHT mode (dark mode keeps yellow text, 10:1):
+    B1 Ink    — no colour on text; accents are plain ink. Yellow lives in the photos and the footer only.
+    B2 Chips  — yellow as a surface: labels become yellow tags with ink text; links get a yellow highlighter band.
+    B3 Marks  — yellow as small outlined marks: full stop and label squares outlined in ink; links get a yellow underline band.
+  Photos now default to brighter mid-tones (gamma .5) so the warm duotone reads less brown; "tune" > Photo mid-tones.
+  "tune" still swaps yellow (default warm #f2c200), shadow tone, dark-mode duotone and hover. Theme: button or T.
   Images: Unsplash stand-ins (hotlinked). Copy is placeholder. Open this file in a browser.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PROTOTYPE 008 · Visual direction · round 4</title>
+<title>PROTOTYPE 008 · Visual direction · round 5</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;0,900;1,900&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -151,6 +154,18 @@ body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
 .round .cs-b .cs-open{margin:var(--gutter) var(--gutter) 0;border-radius:var(--radius);overflow:hidden}
 .round .cs-b .prose figure .ph{border-radius:var(--radius)}
 
+/* =================== round 5: light-mode accent without mustard =================== */
+/* dark mode keeps yellow text accents (10:1); these rules change light mode only */
+body:not(.dark) .acc-ink,body:not(.dark) .acc-chip,body:not(.dark) .acc-marker{--accent-text:var(--fg)}
+/* B2 chips: yellow is a surface behind ink, in both themes */
+.acc-chip .mono.accent{background:var(--yellow);color:var(--on-yellow);padding:.25em .5em;display:inline-block}
+.acc-chip .prose a{color:var(--fg);text-decoration:none;background:linear-gradient(transparent 55%,var(--yellow) 55%);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.acc-chip .prose a:hover{background:var(--yellow);color:var(--on-yellow)}
+/* B3 marks: yellow as small outlined marks; ink carries the meaning */
+body:not(.dark) .acc-marker .stop{color:var(--yellow);-webkit-text-stroke:.015em var(--fg);paint-order:stroke fill}
+.acc-marker .mono.accent::before{content:"";display:inline-block;inline-size:.7em;block-size:.7em;background:var(--yellow);box-shadow:0 0 0 1px var(--fg);margin-inline-end:.6em;vertical-align:-.05em}
+body:not(.dark) .acc-marker .prose a{color:var(--fg);text-decoration-color:var(--fg);text-decoration-thickness:1px;text-underline-offset:.15em;box-shadow:inset 0 -.3em 0 var(--yellow)}
+
 /* ---------- prototype chrome (NOT part of the design) ---------- */
 .proto-bar{position:fixed;inset-block-end:16px;inset-inline-start:50%;transform:translateX(-50%);z-index:999;display:flex;align-items:center;gap:4px;padding:6px;border-radius:999px;background:#ff00aa;color:#fff;font:600 13px/1 "JetBrains Mono",monospace;box-shadow:0 6px 24px #0006,0 0 0 2px #fff;max-inline-size:calc(100vw - 16px);flex-wrap:wrap;justify-content:center}
 .proto-bar button{all:unset;cursor:pointer;padding:8px 12px;border-radius:999px}
@@ -284,9 +299,9 @@ body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
   </article>
 </template>
 
-<div class="v m1 cs-b" data-key="M1" data-name="Bleed hero, contained body" data-parts="hero-b work-cards about-c" hidden></div>
-<div class="v m2 cs-c" data-key="M2" data-name="Contained hero, bleed body" data-parts="hero-c work-rows about-b" hidden></div>
-<div class="v m3 cs-b round" data-key="M3" data-name="Bleed scale, rounded" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-ink cs-b" data-key="B1" data-name="All bleed · ink accents" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-chip cs-b" data-key="B2" data-name="All bleed · yellow chips" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-marker cs-b" data-key="B3" data-name="All bleed · yellow marks" data-parts="hero-b work-rows about-b" hidden></div>
 
 <!-- ============================ prototype chrome ============================ -->
 <form class="proto-panel proto-tune" hidden>
@@ -303,6 +318,11 @@ body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
     <label><input type="radio" name="shadow" value="#2b1d0e"><span class="sw" style="background:#2b1d0e"></span>brown</label><br>
     <label><input type="radio" name="shadow" value="#2a1430"><span class="sw" style="background:#2a1430"></span>plum</label>
     <label><input type="radio" name="shadow" value="#0f2e2a"><span class="sw" style="background:#0f2e2a"></span>teal</label>
+  </fieldset>
+  <fieldset><legend>Photo mid-tones (less brown = brighter)</legend>
+    <label><input type="radio" name="lift" value=".7">as round 4</label>
+    <label><input type="radio" name="lift" value=".5" checked>brighter</label>
+    <label><input type="radio" name="lift" value=".35">brightest</label>
   </fieldset>
   <fieldset><legend>Dark-mode duotone</legend>
     <label><input type="radio" name="darkduo" value="same" checked>same as light</label>
@@ -351,13 +371,13 @@ body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
   const mq = matchMedia('(prefers-color-scheme: dark)');
   const params = new URLSearchParams(location.search);
   const st = {
-    v: keys.includes(params.get('variant')) ? params.get('variant') : 'M1',
+    v: keys.includes(params.get('variant')) ? params.get('variant') : 'B1',
     theme: themes.includes(params.get('theme')) ? params.get('theme') : 'light',
     tune: params.get('tune') === '1', contrast: params.get('contrast') === '1',
     yellow: params.get('yellow') || '#f2c200', shadow: params.get('shadow') || '#161412',
-    darkduo: params.get('darkduo') || 'same', hover: params.get('hover') || 'reveal',
+    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal',
   };
-  for (const n of ['yellow', 'shadow', 'darkduo', 'hover']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
+  for (const n of ['yellow', 'shadow', 'darkduo', 'hover', 'lift']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
 
   const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
   function setFilter(id, dark, light) {
@@ -391,6 +411,7 @@ body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
     const dark = st.theme === 'dark' || (st.theme === 'auto' && mq.matches);
     document.body.classList.toggle('dark', dark);
     document.body.dataset.hover = st.hover;
+    document.querySelectorAll('feFuncR[type=gamma],feFuncG[type=gamma],feFuncB[type=gamma]').forEach(f => f.setAttribute('exponent', st.lift));
     setFilter('duo-light', st.shadow, st.yellow);
     setFilter('duo-dark', st.darkduo === 'dim' ? '#1f1d1a' : st.shadow, st.yellow);
     out.textContent = `${st.v} (${v.dataset.name})`;
