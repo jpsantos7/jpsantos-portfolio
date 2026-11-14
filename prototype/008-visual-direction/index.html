@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  PROTOTYPE, round 7 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
+  PROTOTYPE, round 8 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
   Round 1 (e737601): owner picked C Hybrid. Round 2 (7d9107d): owner picked C3 Duotone.
   Round 3 (0c50389): owner picked the warm yellow (#f2c200) and asked to mix D1 Contained and D2 Bleed.
   Round 4 (54e95c8): owner chose all Bleed, and disliked the mustard (#6b5600) text accent in light mode.
@@ -15,6 +15,9 @@
     M2 Considered  — M1 + the Work photo morphs into the Case study cover, hero text rises in, rows rise in on scroll.
     M3 Expressive  — M2 + photos wipe up into place, the page lifts out and the new one rises in.
   Reduced motion (system, or tune > Reduced motion) keeps only 150ms fades on every level.
+  Round 7 (b78bfe6, 81b01ad): owner picked M2 Considered motion (now fixed); Geist Italic did not work as emphasis.
+  Round 8: variants differ only in the EMPHASIS (italic) face next to Bricolage: E1 Fraunces, E2 Instrument Serif,
+  E3 Newsreader, E4 Gambetta, E5 Sentient. The hero headline now carries an italic word too.
   Round 5 notes: layout is all Bleed (hero portrait off the edge, big Work rows, photo band, full-bleed Case study opener).
   The variants differ only in what replaces the mustard accents in LIGHT mode (dark mode keeps yellow text, 10:1):
     B1 Ink    — no colour on text; accents are plain ink. Yellow lives in the photos and the footer only.
@@ -28,10 +31,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PROTOTYPE 008 · Visual direction · round 7</title>
+<title>PROTOTYPE 008 · Visual direction · round 8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:ital,wght@0,400..700;1,400..700&family=Geist+Mono:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@1,9..144,300..600&family=Newsreader:ital,opsz,wght@1,6..72,400..500&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+<!-- Fontshare (ITF Free Font License): one link per family -->
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambetta@400i&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=sentient@400i&display=swap">
 <style>
 *,*::before,*::after{box-sizing:border-box}
 body,h1,h2,h3,p,dl,dd,figure,ol,ul{margin:0}
@@ -69,9 +75,7 @@ a{color:inherit}
 .v nav a:hover{text-decoration:underline;text-underline-offset:.3em}
 .v h1.display{font:var(--dw) var(--step-6)/.86 var(--display);letter-spacing:calc(-.055em * var(--dt));margin-inline-start:-.04em}
 .v .lead{font:400 var(--step-2)/1.2 var(--display);letter-spacing:calc(-.02em * var(--dt));max-inline-size:26ch}
-.v em{font:italic 400 1.1em/1 var(--italic)}
-/* round 7b: italic = Geist Italic (default) or Instrument Serif; Bricolage has no italic */
-html[data-italic="geist"] .v em{font-family:var(--body);font-style:italic;font-size:1em;font-weight:inherit;line-height:inherit;letter-spacing:normal}
+.v em{font:italic 400 var(--italic-size,1.1em)/1 var(--italic);letter-spacing:-.01em}
 .v .head-row{display:flex;justify-content:space-between;align-items:baseline;padding-block:1rem;border-block-start:1px solid var(--fg)}
 .v .prose a,.v .statement a{color:var(--accent-text);text-underline-offset:.2em}
 .v .btn{display:inline-block;margin-block-start:2rem;background:var(--fg);color:var(--bg);padding:.9rem 1.4rem;border-radius:999px;text-decoration:none;font:600 1rem/1 var(--body)}
@@ -290,7 +294,7 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
       <div class="text">
         <span class="mono accent">Role slot — Lisbon</span>
         <!-- PLACEHOLDER: positioning line -->
-        <h1 class="display">Lorem ipsum dolor sit<span class="stop">.</span></h1>
+        <h1 class="display">Lorem <em>ipsum</em> dolor sit<span class="stop">.</span></h1>
         <p class="lead">Consectetur adipiscing elit, sed do <em>eiusmod</em> tempor incididunt ut labore.</p>
       </div>
       <div class="ph"><img data-img="p" data-w="1200" data-h="1500" alt=""></div>
@@ -367,9 +371,11 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
   </article>
 </template>
 
-<div class="v acc-ink cs-b" data-key="M1" data-motion="1" data-name="Quiet" data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-ink cs-b" data-key="M2" data-motion="2" data-name="Considered" data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-ink cs-b" data-key="M3" data-motion="3" data-name="Expressive" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-ink cs-b" data-key="E1" data-name="Fraunces Italic (soft, warm)" style='--italic:"Fraunces",serif;--italic-size:1.02em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-ink cs-b" data-key="E2" data-name="Instrument Serif Italic (narrow, sharp)" style='--italic:"Instrument Serif",serif;--italic-size:1.1em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-ink cs-b" data-key="E3" data-name="Newsreader Italic (bookish)" style='--italic:"Newsreader",serif;--italic-size:1.05em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-ink cs-b" data-key="E4" data-name="Gambetta Italic (crisp, contemporary)" style='--italic:"Gambetta",serif;--italic-size:1.02em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-ink cs-b" data-key="E5" data-name="Sentient Italic (calm, literary)" style='--italic:"Sentient",serif;--italic-size:1.02em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
 
 <!-- ============================ prototype chrome ============================ -->
 <form class="proto-panel proto-tune" hidden>
@@ -399,10 +405,6 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
   <fieldset><legend>Reduced motion</legend>
     <label><input type="radio" name="rm" value="system" checked>follow system</label>
     <label><input type="radio" name="rm" value="on">force on</label>
-  </fieldset>
-  <fieldset><legend>Italic words</legend>
-    <label><input type="radio" name="italic" value="geist" checked>Geist Italic</label>
-    <label><input type="radio" name="italic" value="serif">Instrument Serif</label>
   </fieldset>
   <fieldset><legend>Hover on Work images</legend>
     <label><input type="radio" name="hover" value="reveal" checked>reveal colour</label>
@@ -481,13 +483,13 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
   const mq = matchMedia('(prefers-color-scheme: dark)');
   const params = new URLSearchParams(location.search);
   const st = {
-    v: keys.includes(params.get('variant')) ? params.get('variant') : 'M2',
+    v: keys.includes(params.get('variant')) ? params.get('variant') : 'E1',
     theme: themes.includes(params.get('theme')) ? params.get('theme') : 'light',
     tune: params.get('tune') === '1', contrast: params.get('contrast') === '1',
     yellow: params.get('yellow') || '#f2c200', shadow: params.get('shadow') || '#161412',
-    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal', rm: params.get('rm') === 'on' ? 'on' : 'system', italic: params.get('italic') === 'serif' ? 'serif' : 'geist',
+    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal', rm: params.get('rm') === 'on' ? 'on' : 'system',
   };
-  for (const n of ['yellow', 'shadow', 'darkduo', 'hover', 'lift', 'rm', 'italic']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
+  for (const n of ['yellow', 'shadow', 'darkduo', 'hover', 'lift', 'rm']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
 
   const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
   function setFilter(id, dark, light) {
@@ -522,7 +524,6 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     document.body.classList.toggle('dark', dark);
     document.body.dataset.hover = st.hover;
     document.documentElement.dataset.motion = v.dataset.motion;
-    document.documentElement.dataset.italic = st.italic;
     document.documentElement.classList.toggle('rm', st.rm === 'on');
     document.querySelectorAll('feFuncR[type=gamma],feFuncG[type=gamma],feFuncB[type=gamma]').forEach(f => f.setAttribute('exponent', st.lift));
     setFilter('duo-light', st.shadow, st.yellow);
