@@ -18,6 +18,7 @@
   Round 7 (b78bfe6, 81b01ad): owner picked M2 Considered motion (now fixed); Geist Italic did not work as emphasis.
   Round 8: variants differ only in the EMPHASIS (italic) face next to Bricolage: E1 Fraunces, E2 Instrument Serif,
   E3 Newsreader, E4 Gambetta, E5 Sentient. The hero headline now carries an italic word too.
+  Round 8 (e0ebff0): owner picked E1 Fraunces Italic. The page now shows only the chosen direction.
   Round 5 notes: layout is all Bleed (hero portrait off the edge, big Work rows, photo band, full-bleed Case study opener).
   The variants differ only in what replaces the mustard accents in LIGHT mode (dark mode keeps yellow text, 10:1):
     B1 Ink    — no colour on text; accents are plain ink. Yellow lives in the photos and the footer only.
@@ -34,10 +35,7 @@
 <title>PROTOTYPE 008 · Visual direction · round 8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@1,9..144,300..600&family=Newsreader:ital,opsz,wght@1,6..72,400..500&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
-<!-- Fontshare (ITF Free Font License): one link per family -->
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=gambetta@400i&display=swap">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=sentient@400i&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@1,9..144,300..600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 *,*::before,*::after{box-sizing:border-box}
 body,h1,h2,h3,p,dl,dd,figure,ol,ul{margin:0}
@@ -371,11 +369,7 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
   </article>
 </template>
 
-<div class="v acc-ink cs-b" data-key="E1" data-name="Fraunces Italic (soft, warm)" style='--italic:"Fraunces",serif;--italic-size:1.02em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-ink cs-b" data-key="E2" data-name="Instrument Serif Italic (narrow, sharp)" style='--italic:"Instrument Serif",serif;--italic-size:1.1em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-ink cs-b" data-key="E3" data-name="Newsreader Italic (bookish)" style='--italic:"Newsreader",serif;--italic-size:1.05em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-ink cs-b" data-key="E4" data-name="Gambetta Italic (crisp, contemporary)" style='--italic:"Gambetta",serif;--italic-size:1.02em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-ink cs-b" data-key="E5" data-name="Sentient Italic (calm, literary)" style='--italic:"Sentient",serif;--italic-size:1.02em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-ink cs-b" data-key="E1" data-name="Chosen: Bricolage + Geist + Fraunces Italic, M2" style='--italic:"Fraunces",serif;--italic-size:1.02em' data-motion="2" data-parts="hero-b work-rows about-b" hidden></div>
 
 <!-- ============================ prototype chrome ============================ -->
 <form class="proto-panel proto-tune" hidden>
