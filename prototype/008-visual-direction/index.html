@@ -1,10 +1,14 @@
 <!doctype html>
 <!--
-  PROTOTYPE, round 5 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
+  PROTOTYPE, round 6 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
   Round 1 (e737601): owner picked C Hybrid. Round 2 (7d9107d): owner picked C3 Duotone.
   Round 3 (0c50389): owner picked the warm yellow (#f2c200) and asked to mix D1 Contained and D2 Bleed.
   Round 4 (54e95c8): owner chose all Bleed, and disliked the mustard (#6b5600) text accent in light mode.
-  Round 5: layout is all Bleed (hero portrait off the edge, big Work rows, photo band, full-bleed Case study opener).
+  Round 5 (f9aa422): owner picked B2 Chips, brighter photo mid-tones (gamma .5) and reveal-colour hover.
+  Round 6: everything from round 5 B2 is fixed; the variants differ only in TYPE (owner is tired of Hanken Grotesk;
+  free fonts, not only Google): F0 Hanken+Inter (baseline), F1 Cabinet Grotesk+Satoshi, F2 Clash Display+General Sans,
+  F3 Zodiak serif+Switzer, F4 Bricolage Grotesque+Geist+Geist Mono, F5 Panchang (wide)+Supreme.
+  Round 5 notes: layout is all Bleed (hero portrait off the edge, big Work rows, photo band, full-bleed Case study opener).
   The variants differ only in what replaces the mustard accents in LIGHT mode (dark mode keeps yellow text, 10:1):
     B1 Ink    — no colour on text; accents are plain ink. Yellow lives in the photos and the footer only.
     B2 Chips  — yellow as a surface: labels become yellow tags with ink text; links get a yellow highlighter band.
@@ -17,10 +21,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PROTOTYPE 008 · Visual direction · round 5</title>
+<title>PROTOTYPE 008 · Visual direction · round 6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;0,900;1,900&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;0,900;1,900&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&display=swap">
+<!-- Fontshare (ITF Free Font License): its CSS API returns only the first family per request, so one link each -->
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,800&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=zodiak@400,700,400i&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=panchang@500,800&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=supreme@400,500,700&display=swap">
 <style>
 *,*::before,*::after{box-sizing:border-box}
 body,h1,h2,h3,p,dl,dd,figure,ol,ul{margin:0}
@@ -36,6 +51,7 @@ a{color:inherit}
   --bg:#f7f4ed; --fg:#161412; --mid:#5a544f; --line:#dcd6ca; --card:#ece7dd;
   --yellow:#f2c200; --shadow:#161412; --on-yellow:#161412; --accent-text:#6b5600;
   --display:"Hanken Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace; --italic:"Instrument Serif",Georgia,serif;
+  --dw:900; --dw2:700; --dt:1; --dsz:1;
   --step-0:clamp(1rem,.95rem + .3vw,1.2rem);
   --step-2:clamp(1.6rem,1.2rem + 1.8vw,2.8rem);
   --step-4:clamp(2.4rem,1rem + 5vw,6rem);
@@ -50,20 +66,20 @@ a{color:inherit}
 .v .mono{font:500 .75rem/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase}
 .v .accent{color:var(--accent-text)}
 .v header.site .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:1.25rem;flex-wrap:wrap;gap:1rem}
-.v .logo{font:900 1.25rem/1 var(--display);letter-spacing:-.03em;text-decoration:none}
+.v .logo{font:var(--dw) 1.25rem/1 var(--display);letter-spacing:calc(-.03em * var(--dt));text-decoration:none}
 .v .stop{color:var(--accent-text)}
 .v nav ul{display:flex;gap:clamp(1rem,3vw,2.5rem)}
 .v nav a{text-decoration:none}
 .v nav a:hover{text-decoration:underline;text-underline-offset:.3em}
-.v h1.display{font:900 var(--step-6)/.86 var(--display);letter-spacing:-.055em;margin-inline-start:-.04em}
-.v .lead{font:400 var(--step-2)/1.2 var(--display);letter-spacing:-.02em;max-inline-size:26ch}
+.v h1.display{font:var(--dw) var(--step-6)/.86 var(--display);letter-spacing:calc(-.055em * var(--dt));margin-inline-start:-.04em}
+.v .lead{font:400 var(--step-2)/1.2 var(--display);letter-spacing:calc(-.02em * var(--dt));max-inline-size:26ch}
 .v em{font:italic 400 1.1em/1 var(--italic)}
 .v .head-row{display:flex;justify-content:space-between;align-items:baseline;padding-block:1rem;border-block-start:1px solid var(--fg)}
 .v .prose a,.v .statement a{color:var(--accent-text);text-underline-offset:.2em}
 .v .btn{display:inline-block;margin-block-start:2rem;background:var(--fg);color:var(--bg);padding:.9rem 1.4rem;border-radius:999px;text-decoration:none;font:600 1rem/1 var(--body)}
 .v footer.site{background:#161412;color:#f1ede5}
 .v footer.site .wrap{padding-block:var(--space-l) 1.5rem}
-.v footer.site .big{font:900 var(--step-6)/.86 var(--display);letter-spacing:-.055em}
+.v footer.site .big{font:var(--dw) var(--step-6)/.86 var(--display);letter-spacing:calc(-.055em * var(--dt))}
 .v footer.site .big a{text-decoration:none;color:var(--yellow)}
 .v footer.site .big a:hover{text-decoration:underline;text-decoration-thickness:.05em;text-underline-offset:.08em}
 .v footer.site .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-block-start:var(--space-l)}
@@ -84,17 +100,17 @@ body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
 .v .stats{display:grid;gap:1rem;padding-block:var(--space-l) 0}
 @media (min-width:52em){.v .stats{grid-template-columns:repeat(3,1fr)}}
 .v .stats li{background:var(--card);border-radius:var(--radius);padding:1.5rem;min-block-size:14rem;display:flex;flex-direction:column;justify-content:space-between;gap:1rem}
-.v .stats strong{font:900 var(--step-2)/1 var(--display);letter-spacing:-.03em}
+.v .stats strong{font:var(--dw) var(--step-2)/1 var(--display);letter-spacing:calc(-.03em * var(--dt))}
 .v .stats small{color:var(--mid)}
 .v .prose{max-inline-size:40rem;margin-inline:auto;padding-block:var(--space-l)}
-.v .prose h2{font:700 var(--step-2)/1.1 var(--display);letter-spacing:-.025em;margin-block:2.5em .6em}
+.v .prose h2{font:var(--dw2) var(--step-2)/1.1 var(--display);letter-spacing:calc(-.025em * var(--dt));margin-block:2.5em .6em}
 .v .prose h2:first-child{margin-block-start:0}
 .v .prose p + p{margin-block-start:1em}
 .v .prose figure{margin-block:2.5rem;margin-inline:calc(-1 * min(8rem, var(--gutter)))}
 .v .prose figure .ph{aspect-ratio:3/2;border-radius:var(--radius)}
 .v .prose figcaption{margin-block-start:.75rem;color:var(--mid)}
-.v .cs-open h1{font:900 var(--step-4)/.9 var(--display);letter-spacing:-.045em;max-inline-size:16ch;margin-block:1.5rem}
-.v .cs-open .outcome{font:400 var(--step-2)/1.25 var(--display);letter-spacing:-.02em;max-inline-size:30ch}
+.v .cs-open h1{font:var(--dw) var(--step-4)/.9 var(--display);letter-spacing:calc(-.045em * var(--dt));max-inline-size:16ch;margin-block:1.5rem}
+.v .cs-open .outcome{font:400 var(--step-2)/1.25 var(--display);letter-spacing:calc(-.02em * var(--dt));max-inline-size:30ch}
 
 /* =================== parts: Contained =================== */
 .hero-c{padding-block:calc(var(--space-l)/2) var(--space-l)}
@@ -110,7 +126,7 @@ body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
 .card .mono{display:block;margin-block-start:.5rem;color:var(--mid)}
 .statement{padding-block:var(--space-l);border-block-start:1px solid var(--fg);display:grid;gap:2rem;align-items:end}
 @media (min-width:52em){.statement{grid-template-columns:2fr 1fr}}
-.statement p{font:700 var(--step-2)/1.15 var(--display);letter-spacing:-.025em;max-inline-size:30ch}
+.statement p{font:var(--dw2) var(--step-2)/1.15 var(--display);letter-spacing:calc(-.025em * var(--dt));max-inline-size:30ch}
 .statement .ph{aspect-ratio:4/5;border-radius:var(--radius);max-inline-size:22rem}
 .cs-c .cs-open{display:flex;flex-direction:column-reverse}
 .cs-c .cs-open .wrap{padding-block:var(--space-l) 2rem}
@@ -120,7 +136,7 @@ body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
 .hero-b{display:grid;gap:2rem;padding-block-start:calc(var(--space-l)/3)}
 @media (min-width:60em){.hero-b{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;align-items:end;min-block-size:min(88vh,60rem)}}
 .hero-b .text{padding-inline:var(--gutter);padding-block-end:var(--space-l);position:relative;z-index:1}
-.hero-b h1.display{font-size:clamp(3.4rem,1rem + 9vw,12rem)}
+.hero-b h1.display{font-size:calc(clamp(3.4rem,1rem + 9vw,12rem) * var(--dsz))}
 @media (min-width:60em){.hero-b h1.display{margin-inline-end:-30%}}
 .hero-b .lead{margin-block-start:2rem}
 .hero-b .ph{block-size:100%;min-block-size:24rem}
@@ -129,14 +145,14 @@ body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
 .row a{display:grid;gap:1.5rem;text-decoration:none;padding-block:clamp(2rem,4vw,4rem);border-block-end:1px solid var(--line)}
 @media (min-width:52em){.row a{grid-template-columns:7fr 5fr;gap:clamp(2rem,4vw,4rem);align-items:center}.row:nth-child(even) .ph{order:2}}
 .row .ph{aspect-ratio:16/10}
-.row h3{font:900 var(--step-4)/.92 var(--display);letter-spacing:-.04em;margin-block:.75rem 1rem}
+.row h3{font:var(--dw) var(--step-4)/.92 var(--display);letter-spacing:calc(-.04em * var(--dt));margin-block:.75rem 1rem}
 .row a:hover h3{text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.1em}
 .row p{color:var(--mid);max-inline-size:36ch}
 .row .meta{display:block;margin-block-start:1rem;color:var(--mid)}
 .band{position:relative;min-block-size:min(80vh,40rem);display:grid;align-items:end}
 .band .ph{position:absolute;inset:0}
 .band .inner{position:relative;padding:var(--space-l) var(--gutter) var(--gutter)}
-.band p{display:inline;background:#161412;color:#f1ede5;font:700 var(--step-2)/1.35 var(--display);letter-spacing:-.02em;padding:.05em .2em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.band p{display:inline;background:#161412;color:#f1ede5;font:var(--dw2) var(--step-2)/1.35 var(--display);letter-spacing:calc(-.02em * var(--dt));padding:.05em .2em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .band p a{color:var(--yellow)}
 .cs-b .cs-open{position:relative;color:#f7f4ed;background:#161412}
 .cs-b .cs-open .ph{position:absolute;inset:0}
@@ -299,9 +315,12 @@ body:not(.dark) .acc-marker .prose a{color:var(--fg);text-decoration-color:var(-
   </article>
 </template>
 
-<div class="v acc-ink cs-b" data-key="B1" data-name="All bleed · ink accents" data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-chip cs-b" data-key="B2" data-name="All bleed · yellow chips" data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-marker cs-b" data-key="B3" data-name="All bleed · yellow marks" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-chip cs-b" data-key="F0" data-name="Hanken Grotesk + Inter (round 5, for comparison)" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-chip cs-b" data-key="F1" data-name="Cabinet Grotesk + Satoshi" style='--display:"Cabinet Grotesk",sans-serif;--body:"Satoshi",sans-serif;--dw:800;--dt:.7' data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-chip cs-b" data-key="F2" data-name="Clash Display + General Sans" style='--display:"Clash Display",sans-serif;--body:"General Sans",sans-serif;--dw:600;--dw2:600;--dt:.5' data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-chip cs-b" data-key="F3" data-name="Zodiak (serif) + Switzer" style='--display:"Zodiak",serif;--body:"Switzer",sans-serif;--italic:"Zodiak",serif;--dw:700;--dt:.5' data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-chip cs-b" data-key="F4" data-name="Bricolage Grotesque + Geist + Geist Mono" style='--display:"Bricolage Grotesque",sans-serif;--body:"Geist",sans-serif;--mono:"Geist Mono",monospace;--dw:800;--dt:.6' data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-chip cs-b" data-key="F5" data-name="Panchang (wide) + Supreme" style='--display:"Panchang",sans-serif;--body:"Supreme",sans-serif;--dw:800;--dt:0;--dsz:.55;--step-6:clamp(2.2rem,.5rem + 7vw,9rem);--step-4:clamp(1.6rem,.6rem + 3.2vw,3.8rem);--step-2:clamp(1.3rem,1rem + 1.2vw,2.1rem)' data-parts="hero-b work-rows about-b" hidden></div>
 
 <!-- ============================ prototype chrome ============================ -->
 <form class="proto-panel proto-tune" hidden>
@@ -371,7 +390,7 @@ body:not(.dark) .acc-marker .prose a{color:var(--fg);text-decoration-color:var(-
   const mq = matchMedia('(prefers-color-scheme: dark)');
   const params = new URLSearchParams(location.search);
   const st = {
-    v: keys.includes(params.get('variant')) ? params.get('variant') : 'B1',
+    v: keys.includes(params.get('variant')) ? params.get('variant') : 'F1',
     theme: themes.includes(params.get('theme')) ? params.get('theme') : 'light',
     tune: params.get('tune') === '1', contrast: params.get('contrast') === '1',
     yellow: params.get('yellow') || '#f2c200', shadow: params.get('shadow') || '#161412',
