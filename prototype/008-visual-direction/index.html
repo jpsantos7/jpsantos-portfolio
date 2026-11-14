@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  PROTOTYPE, round 6 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
+  PROTOTYPE, round 7 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
   Round 1 (e737601): owner picked C Hybrid. Round 2 (7d9107d): owner picked C3 Duotone.
   Round 3 (0c50389): owner picked the warm yellow (#f2c200) and asked to mix D1 Contained and D2 Bleed.
   Round 4 (54e95c8): owner chose all Bleed, and disliked the mustard (#6b5600) text accent in light mode.
@@ -8,6 +8,13 @@
   Round 6: everything from round 5 B2 is fixed; the variants differ only in TYPE (owner is tired of Hanken Grotesk;
   free fonts, not only Google): F0 Hanken+Inter (baseline), F1 Cabinet Grotesk+Satoshi, F2 Clash Display+General Sans,
   F3 Zodiak serif+Switzer, F4 Bricolage Grotesque+Geist+Geist Mono, F5 Panchang (wide)+Supreme.
+  Round 6 (4cf19b7): owner picked F4 Bricolage Grotesque + Geist (+ Geist Mono), ink accents (B1, no chips or marks),
+  brighter photo mid-tones (.5) and reveal-colour hover. Those are now fixed.
+  Round 7: variants differ only in MOTION. Click a Work row to open the Case study; the logo or "Work" goes back.
+    M1 Quiet       — page crossfade, colour reveal and underline fade on hover. Nothing moves on load or scroll.
+    M2 Considered  — M1 + the Work photo morphs into the Case study cover, hero text rises in, rows rise in on scroll.
+    M3 Expressive  — M2 + photos wipe up into place, the page lifts out and the new one rises in.
+  Reduced motion (system, or tune > Reduced motion) keeps only 150ms fades on every level.
   Round 5 notes: layout is all Bleed (hero portrait off the edge, big Work rows, photo band, full-bleed Case study opener).
   The variants differ only in what replaces the mustard accents in LIGHT mode (dark mode keeps yellow text, 10:1):
     B1 Ink    — no colour on text; accents are plain ink. Yellow lives in the photos and the footer only.
@@ -21,21 +28,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PROTOTYPE 008 · Visual direction · round 6</title>
+<title>PROTOTYPE 008 · Visual direction · round 7</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;0,900;1,900&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&display=swap">
-<!-- Fontshare (ITF Free Font License): its CSS API returns only the first family per request, so one link each -->
-<link rel="preconnect" href="https://api.fontshare.com">
-<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,800&display=swap">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&display=swap">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=zodiak@400,700,400i&display=swap">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=panchang@500,800&display=swap">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=supreme@400,500,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 *,*::before,*::after{box-sizing:border-box}
 body,h1,h2,h3,p,dl,dd,figure,ol,ul{margin:0}
@@ -50,8 +46,8 @@ a{color:inherit}
 .v{
   --bg:#f7f4ed; --fg:#161412; --mid:#5a544f; --line:#dcd6ca; --card:#ece7dd;
   --yellow:#f2c200; --shadow:#161412; --on-yellow:#161412; --accent-text:#6b5600;
-  --display:"Hanken Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace; --italic:"Instrument Serif",Georgia,serif;
-  --dw:900; --dw2:700; --dt:1; --dsz:1;
+  --display:"Bricolage Grotesque",system-ui,sans-serif; --body:"Geist",system-ui,sans-serif; --mono:"Geist Mono",ui-monospace,monospace; --italic:"Instrument Serif",Georgia,serif;
+  --dw:800; --dw2:700; --dt:.6; --dsz:1;
   --step-0:clamp(1rem,.95rem + .3vw,1.2rem);
   --step-2:clamp(1.6rem,1.2rem + 1.8vw,2.8rem);
   --step-4:clamp(2.4rem,1rem + 5vw,6rem);
@@ -199,6 +195,61 @@ body:not(.dark) .acc-marker .prose a{color:var(--fg);text-decoration-color:var(-
 .proto-tune fieldset{border:0;padding:0;margin:0 0 10px}
 .proto-tune legend{padding:0;margin-block-end:4px;color:#aaa}
 .proto-tune label{display:inline-flex;align-items:center;gap:4px;margin-inline-end:10px;cursor:pointer}
+
+/* =================== round 7: motion =================== */
+/* One easing family. Reduced motion (system setting or tune > Reduced motion) keeps only short fades. */
+:root{--ease-out:cubic-bezier(.2,.8,.2,1);--ease-in-out:cubic-bezier(.65,0,.35,1)}
+@keyframes fade-in{from{opacity:0}}
+@keyframes fade-out{to{opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+@keyframes rise-lg{from{opacity:0;transform:translateY(32px)}}
+@keyframes lift-out{to{opacity:0;transform:translateY(-12px)}}
+@keyframes wipe{from{clip-path:inset(100% 0 0 0)}}
+
+/* page transitions (prototype: same-document; the Site would use cross-document @view-transition, no JS) */
+::view-transition-old(root){animation:fade-out .2s ease both}
+::view-transition-new(root){animation:fade-in .25s ease both}
+::view-transition-group(work-img){animation-duration:.55s;animation-timing-function:var(--ease-in-out)}
+::view-transition-old(work-img),::view-transition-new(work-img){animation-duration:.55s;block-size:100%;object-fit:cover;overflow:clip}
+html[data-motion="3"]::view-transition-old(root){animation:lift-out .25s var(--ease-out) both}
+html[data-motion="3"]::view-transition-new(root){animation:rise-lg .5s var(--ease-out) .1s both}
+html.rm::view-transition-old(root){animation:fade-out .15s ease both}
+html.rm::view-transition-new(root){animation:fade-in .15s ease both}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-old(root){animation:fade-out .15s ease both !important}
+  ::view-transition-new(root){animation:fade-in .15s ease both !important}
+}
+
+@media (prefers-reduced-motion:no-preference){
+  /* all levels: colour reveal on photo hover (round 5) + link underlines that fade in */
+  html:not(.rm) .row h3{text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.1em;text-decoration-color:transparent;transition:text-decoration-color .3s ease}
+  html:not(.rm) .row a:hover h3{text-decoration-color:currentColor}
+
+  /* M2 + M3: entrance, scroll reveal, case study opener, slow photo drift on hover */
+  html:not(.rm):is([data-motion="2"],[data-motion="3"]) .hero-b .text > *{animation:rise .7s var(--ease-out) both}
+  html:not(.rm):is([data-motion="2"],[data-motion="3"]) .hero-b .text > :nth-child(2){animation-delay:.08s}
+  html:not(.rm):is([data-motion="2"],[data-motion="3"]) .hero-b .text > :nth-child(3){animation-delay:.16s}
+  html:not(.rm)[data-motion="2"] .hero-b .ph{animation:fade-in 1s ease .1s both}
+  html:not(.rm):is([data-motion="2"],[data-motion="3"]) .cs-open .wrap > *{animation:rise .7s var(--ease-out) .2s both}
+  html:not(.rm):is([data-motion="2"],[data-motion="3"]) .cs-open .wrap > :nth-child(2){animation-delay:.28s}
+  html:not(.rm):is([data-motion="2"],[data-motion="3"]) .cs-open .wrap > :nth-child(3){animation-delay:.36s}
+  html:not(.rm):is([data-motion="2"],[data-motion="3"]) .row .ph img{transition:filter .35s ease,transform 1.2s var(--ease-out)}
+  html:not(.rm):is([data-motion="2"],[data-motion="3"]) .row a:hover .ph img{transform:scale(1.03)}
+  @supports (animation-timeline:view()){
+    html:not(.rm):is([data-motion="2"],[data-motion="3"]) .row,
+    html:not(.rm):is([data-motion="2"],[data-motion="3"]) .glance,
+    html:not(.rm):is([data-motion="2"],[data-motion="3"]) .stats li{animation:rise linear both;animation-timeline:view();animation-range:entry 5% entry 60%}
+  }
+
+  /* M3 only: photos wipe up into place, bigger headline rise */
+  html:not(.rm)[data-motion="3"] .hero-b h1.display{animation-name:rise-lg}
+  html:not(.rm)[data-motion="3"] .hero-b .ph{animation:wipe 1.1s var(--ease-in-out) .15s both}
+  @supports (animation-timeline:view()){
+    html:not(.rm)[data-motion="3"] .row .ph,
+    html:not(.rm)[data-motion="3"] .band .ph,
+    html:not(.rm)[data-motion="3"] .prose figure .ph{animation:wipe linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
+  }
+}
 </style>
 </head>
 <body data-hover="reveal">
@@ -282,7 +333,6 @@ body:not(.dark) .acc-marker .prose a{color:var(--fg);text-decoration-color:var(-
     <p class="big"><a href="#">Lorem ipsum →</a></p>
     <div class="row mono"><span>© Name Surname</span><span>Footer slot</span></div>
   </div></footer>
-  <p class="proto-divider" data-cs>↓ Case study page ↓</p>
   <article>
     <header class="cs-open">
       <div class="ph" aria-hidden="true"><img data-img="s" data-w="1800" data-h="1000" alt=""></div>
@@ -315,12 +365,9 @@ body:not(.dark) .acc-marker .prose a{color:var(--fg);text-decoration-color:var(-
   </article>
 </template>
 
-<div class="v acc-chip cs-b" data-key="F0" data-name="Hanken Grotesk + Inter (round 5, for comparison)" data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-chip cs-b" data-key="F1" data-name="Cabinet Grotesk + Satoshi" style='--display:"Cabinet Grotesk",sans-serif;--body:"Satoshi",sans-serif;--dw:800;--dt:.7' data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-chip cs-b" data-key="F2" data-name="Clash Display + General Sans" style='--display:"Clash Display",sans-serif;--body:"General Sans",sans-serif;--dw:600;--dw2:600;--dt:.5' data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-chip cs-b" data-key="F3" data-name="Zodiak (serif) + Switzer" style='--display:"Zodiak",serif;--body:"Switzer",sans-serif;--italic:"Zodiak",serif;--dw:700;--dt:.5' data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-chip cs-b" data-key="F4" data-name="Bricolage Grotesque + Geist + Geist Mono" style='--display:"Bricolage Grotesque",sans-serif;--body:"Geist",sans-serif;--mono:"Geist Mono",monospace;--dw:800;--dt:.6' data-parts="hero-b work-rows about-b" hidden></div>
-<div class="v acc-chip cs-b" data-key="F5" data-name="Panchang (wide) + Supreme" style='--display:"Panchang",sans-serif;--body:"Supreme",sans-serif;--dw:800;--dt:0;--dsz:.55;--step-6:clamp(2.2rem,.5rem + 7vw,9rem);--step-4:clamp(1.6rem,.6rem + 3.2vw,3.8rem);--step-2:clamp(1.3rem,1rem + 1.2vw,2.1rem)' data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-ink cs-b" data-key="M1" data-motion="1" data-name="Quiet" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-ink cs-b" data-key="M2" data-motion="2" data-name="Considered" data-parts="hero-b work-rows about-b" hidden></div>
+<div class="v acc-ink cs-b" data-key="M3" data-motion="3" data-name="Expressive" data-parts="hero-b work-rows about-b" hidden></div>
 
 <!-- ============================ prototype chrome ============================ -->
 <form class="proto-panel proto-tune" hidden>
@@ -346,6 +393,10 @@ body:not(.dark) .acc-marker .prose a{color:var(--fg);text-decoration-color:var(-
   <fieldset><legend>Dark-mode duotone</legend>
     <label><input type="radio" name="darkduo" value="same" checked>same as light</label>
     <label><input type="radio" name="darkduo" value="dim">dimmed (shadow = page)</label>
+  </fieldset>
+  <fieldset><legend>Reduced motion</legend>
+    <label><input type="radio" name="rm" value="system" checked>follow system</label>
+    <label><input type="radio" name="rm" value="on">force on</label>
   </fieldset>
   <fieldset><legend>Hover on Work images</legend>
     <label><input type="radio" name="hover" value="reveal" checked>reveal colour</label>
@@ -373,14 +424,48 @@ body:not(.dark) .acc-marker .prose a{color:var(--fg);text-decoration-color:var(-
   for (const v of variants) {
     const key = v.dataset.key.toLowerCase();
     const tpl = id => document.getElementById('t-' + id).content.cloneNode(true);
-    v.append(tpl('header'), document.createElement('main'), tpl('footer-cs'));
-    v.dataset.parts.split(' ').forEach(p => v.querySelector('main').append(tpl(p)));
-    v.querySelector('[data-cs]').id = key + '-cs';
-    v.querySelectorAll('a[href="#cs"]').forEach(a => a.setAttribute('href', '#' + key + '-cs'));
+    const page = name => { const d = document.createElement('div'); d.dataset.page = name; return d; };
+    const home = page('home'), cs = page('cs'); cs.hidden = true;
+    const main = document.createElement('main');
+    v.dataset.parts.split(' ').forEach(p => main.append(tpl(p)));
+    const fc = tpl('footer-cs'), footer = fc.querySelector('footer'), csMain = document.createElement('main');
+    csMain.append(fc.querySelector('article'));
+    home.append(tpl('header'), main, footer);
+    cs.append(tpl('header'), csMain, footer.cloneNode(true));
+    v.append(home, cs);
     v.querySelectorAll('[id="work-h"]').forEach(e => e.id = key + '-work');
     v.querySelectorAll('[aria-labelledby="work-h"]').forEach(e => e.setAttribute('aria-labelledby', key + '-work'));
     v.querySelectorAll('img[data-img]').forEach(i => { i.width = i.dataset.w; i.height = i.dataset.h; i.loading = 'lazy'; i.src = src(i.dataset.img, i.dataset.w, i.dataset.h); });
   }
+
+  // "navigation" between the two views, through a view transition when the browser has one
+  const rmq = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => rmq.matches || document.documentElement.classList.contains('rm');
+  let lastPh = null, savedY = 0;
+  function go(v, to, ph) {
+    const home = v.querySelector('[data-page=home]'), cs = v.querySelector('[data-page=cs]');
+    if ((to === 'cs') === !cs.hidden) return;
+    const cover = cs.querySelector('.cs-open .ph');
+    const morph = v.dataset.motion !== '1' && !reduced();
+    if (to === 'cs') { savedY = scrollY; lastPh = ph || null; }
+    const from = to === 'cs' ? lastPh : cover, dest = to === 'cs' ? cover : lastPh;
+    if (morph && from) from.style.viewTransitionName = 'work-img';
+    const swap = () => {
+      if (from) from.style.viewTransitionName = '';
+      home.hidden = to !== 'home'; cs.hidden = to !== 'cs';
+      if (morph && dest) dest.style.viewTransitionName = 'work-img';
+      scrollTo(0, to === 'cs' ? 0 : savedY);
+    };
+    if (!document.startViewTransition) return swap();
+    document.startViewTransition(swap).finished.finally(() => { if (dest) dest.style.viewTransitionName = ''; });
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('.v a[href]'); if (!a) return;
+    const v = a.closest('.v'), href = a.getAttribute('href');
+    if (href === '#cs') { e.preventDefault(); go(v, 'cs', a.querySelector('.ph')); }
+    else if (a.matches('.logo') || a.textContent.trim() === 'Work') { e.preventDefault(); go(v, 'home'); }
+    else if (href === '#') e.preventDefault();
+  });
 
   const keys = variants.map(v => v.dataset.key);
   const $ = s => document.querySelector(s);
@@ -390,13 +475,13 @@ body:not(.dark) .acc-marker .prose a{color:var(--fg);text-decoration-color:var(-
   const mq = matchMedia('(prefers-color-scheme: dark)');
   const params = new URLSearchParams(location.search);
   const st = {
-    v: keys.includes(params.get('variant')) ? params.get('variant') : 'F1',
+    v: keys.includes(params.get('variant')) ? params.get('variant') : 'M2',
     theme: themes.includes(params.get('theme')) ? params.get('theme') : 'light',
     tune: params.get('tune') === '1', contrast: params.get('contrast') === '1',
     yellow: params.get('yellow') || '#f2c200', shadow: params.get('shadow') || '#161412',
-    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal',
+    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal', rm: params.get('rm') === 'on' ? 'on' : 'system',
   };
-  for (const n of ['yellow', 'shadow', 'darkduo', 'hover', 'lift']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
+  for (const n of ['yellow', 'shadow', 'darkduo', 'hover', 'lift', 'rm']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
 
   const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
   function setFilter(id, dark, light) {
@@ -430,6 +515,8 @@ body:not(.dark) .acc-marker .prose a{color:var(--fg);text-decoration-color:var(-
     const dark = st.theme === 'dark' || (st.theme === 'auto' && mq.matches);
     document.body.classList.toggle('dark', dark);
     document.body.dataset.hover = st.hover;
+    document.documentElement.dataset.motion = v.dataset.motion;
+    document.documentElement.classList.toggle('rm', st.rm === 'on');
     document.querySelectorAll('feFuncR[type=gamma],feFuncG[type=gamma],feFuncB[type=gamma]').forEach(f => f.setAttribute('exponent', st.lift));
     setFilter('duo-light', st.shadow, st.yellow);
     setFilter('duo-dark', st.darkduo === 'dim' ? '#1f1d1a' : st.shadow, st.yellow);
