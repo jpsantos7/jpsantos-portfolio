@@ -1,21 +1,21 @@
 <!doctype html>
 <!--
-  PROTOTYPE, round 2 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
-  Round 1 (A Editorial, B Stark, C Hybrid) is in commit e737601; the owner picked C (Hybrid).
-  Round 2 keeps C's structure and type, and asks one question: how should yellow be used,
-  given yellow on the light background is ~1.35:1 (fails text and UI contrast)?
-    C1 Surface  — yellow only as a background, always with dark ink on it.
-    C2 Marker   — yellow only as small marks (full stop, highlight, rules); ink carries everything.
-    C3 Duotone  — yellow lives in the images (yellow/ink duotone); a dark-mustard ink for text accents in light.
-  Light and dark for every variant: theme button or T. "contrast" in the bar shows live ratios.
-  Images: Unsplash (hotlinked), stand-ins for style only. Copy is placeholder.
-  Run: open this file in a browser. Nothing here is production code.
+  PROTOTYPE, round 3 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
+  Round 1 (e737601): owner picked C Hybrid. Round 2 (7d9107d): owner picked C3 Duotone.
+  Round 3 keeps the Hybrid type and the duotone rule (yellow lives in the photos; ink carries text;
+  dark mustard for text accents in light mode, true yellow in dark mode) and explores:
+    D1 Contained — duotone photos inside rounded cards and figures (round-2 C3, now an SVG filter).
+    D2 Bleed     — photos take space: hero image bleeds off the edge, Work as big alternating rows.
+    D3 Print     — square corners, dot-screen + paper grain, numbered "Fig." captions, zine feel.
+  "tune" in the bar swaps the yellow, the shadow tone and the hover behaviour live (values are the
+  owner's call; the panel is for comparing). "contrast" shows live ratios. Theme: button or T.
+  Images: Unsplash stand-ins (hotlinked). Copy is placeholder. Open this file in a browser.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PROTOTYPE 008 · Visual direction · round 2</title>
+<title>PROTOTYPE 008 · Visual direction · round 3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;0,900;1,900&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -29,61 +29,52 @@ a{color:inherit}
 .visually-hidden{position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .proto-divider{font:500 12px/1 "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:10px;background:repeating-linear-gradient(45deg,#ff00aa22 0 10px,transparent 10px 20px);color:#a0006a;border-block:1px dashed #a0006a;margin:0}
 
-/* =================== shared Hybrid structure (chosen in round 1) =================== */
+/* =================== shared: Hybrid type + duotone rule =================== */
 .v{
-  /* light */
   --bg:#f7f4ed; --fg:#161412; --mid:#5a544f; --line:#dcd6ca; --card:#ece7dd;
-  --yellow:#f6d200; --on-yellow:#161412; --accent-text:var(--fg);
+  --yellow:#f6d200; --shadow:#161412; --on-yellow:#161412; --accent-text:#6b5600;
   --display:"Hanken Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace; --italic:"Instrument Serif",Georgia,serif;
   --step-0:clamp(1rem,.95rem + .3vw,1.2rem);
   --step-2:clamp(1.6rem,1.2rem + 1.8vw,2.8rem);
+  --step-4:clamp(2.4rem,1rem + 5vw,6rem);
   --step-6:clamp(3.6rem,1rem + 13vw,17rem);
   --gutter:clamp(1rem,4vw,3.5rem); --space-l:clamp(3.5rem,2rem + 7vw,10rem);
   --radius:1.25rem;
   background:var(--bg); color:var(--fg); font:400 var(--step-0)/1.6 var(--body);
 }
-/* dark: warm charcoal, not near-black (round-1 feedback: too dark) */
 .dark .v{--bg:#1f1d1a; --fg:#f1ede5; --mid:#a9a198; --line:#3a3631; --card:#2a2723; --accent-text:var(--yellow)}
 .v :focus-visible{outline:3px solid var(--fg);outline-offset:3px;box-shadow:0 0 0 6px var(--yellow)}
 .v .wrap{padding-inline:var(--gutter)}
 .v .mono{font:500 .75rem/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase}
-.v header .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:1.25rem;flex-wrap:wrap;gap:1rem}
+.v .accent{color:var(--accent-text)}
+.v header.site .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:1.25rem;flex-wrap:wrap;gap:1rem}
 .v .logo{font:900 1.25rem/1 var(--display);letter-spacing:-.03em;text-decoration:none}
+.v .stop{color:var(--accent-text)}
 .v nav ul{display:flex;gap:clamp(1rem,3vw,2.5rem)}
 .v nav a{text-decoration:none}
 .v nav a:hover{text-decoration:underline;text-underline-offset:.3em}
-.v .hero{padding-block:calc(var(--space-l)/2) var(--space-l)}
-.v .hero h1{font:900 var(--step-6)/.86 var(--display);letter-spacing:-.055em;margin-inline-start:-.04em}
-.v .hero-foot{display:grid;gap:1.5rem;margin-block-start:clamp(2rem,5vw,4rem)}
-@media (min-width:52em){.v .hero-foot{grid-template-columns:1fr 1fr 1fr}.v .hero-foot p{grid-column:2/4}}
-.v .hero-foot p{font:400 var(--step-2)/1.2 var(--display);letter-spacing:-.02em;max-inline-size:26ch}
-.v .hero-foot em,.v .statement em{font:italic 400 1.1em/1 var(--italic)}
+.v h1.display{font:900 var(--step-6)/.86 var(--display);letter-spacing:-.055em;margin-inline-start:-.04em}
+.v .lead{font:400 var(--step-2)/1.2 var(--display);letter-spacing:-.02em;max-inline-size:26ch}
+.v em{font:italic 400 1.1em/1 var(--italic)}
 .v .head-row{display:flex;justify-content:space-between;align-items:baseline;padding-block:1rem;border-block-start:1px solid var(--fg)}
-.v .cards{display:grid;gap:clamp(1rem,2vw,2rem);padding-block:1.5rem var(--space-l)}
-@media (min-width:52em){.v .cards{grid-template-columns:repeat(3,1fr)}}
-.v .card a{text-decoration:none;display:block}
-.v .cover{aspect-ratio:3/4;border-radius:var(--radius);overflow:hidden;background:var(--card)}
-.v .cover img{inline-size:100%;block-size:100%;object-fit:cover}
-@media (prefers-reduced-motion:no-preference){.v .cover img{transition:transform .4s cubic-bezier(.2,.7,.2,1)}.v .card a:hover .cover img{transform:scale(1.03)}}
-.v .card h3{margin-block-start:1rem;font:700 var(--step-0)/1.3 var(--display)}
-.v .card a:hover h3{text-decoration:underline;text-underline-offset:.25em}
-.v .card p{color:var(--mid);font-size:.95rem}
-.v .card .mono{display:block;margin-block-start:.5rem;color:var(--mid)}
-.v .statement{padding-block:var(--space-l);border-block-start:1px solid var(--fg);display:grid;gap:2rem;align-items:end}
-@media (min-width:52em){.v .statement{grid-template-columns:2fr 1fr}}
-.v .statement p{font:700 var(--step-2)/1.15 var(--display);letter-spacing:-.025em;max-inline-size:30ch}
-.v .portrait{aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;max-inline-size:22rem}
-.v .portrait img{inline-size:100%;block-size:100%;object-fit:cover}
-.v footer .wrap{padding-block:var(--space-l) 1.5rem}
-.v footer .big{font:900 var(--step-6)/.86 var(--display);letter-spacing:-.055em}
-.v footer .big a{text-decoration:none}
-.v footer .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-block-start:var(--space-l)}
-/* case study */
-.v .cs-open .wrap{padding-block:var(--space-l)}
-.v .cs-open h1{font:900 clamp(2.5rem,1rem + 6vw,7rem)/.9 var(--display);letter-spacing:-.045em;max-inline-size:16ch;margin-block:1.5rem}
-.v .cs-open .outcome{font:400 var(--step-2)/1.2 var(--display);letter-spacing:-.02em;max-inline-size:30ch}
-.v .cs-cover{aspect-ratio:21/9;overflow:hidden;border-radius:var(--radius);background:var(--card)}
-.v .cs-cover img{inline-size:100%;block-size:100%;object-fit:cover}
+.v .prose a,.v .statement a{color:var(--accent-text);text-underline-offset:.2em}
+.v .btn{display:inline-block;margin-block-start:2rem;background:var(--fg);color:var(--bg);padding:.9rem 1.4rem;border-radius:999px;text-decoration:none;font:600 1rem/1 var(--body)}
+.v footer.site{background:#161412;color:#f1ede5}
+.v footer.site .wrap{padding-block:var(--space-l) 1.5rem}
+.v footer.site .big{font:900 var(--step-6)/.86 var(--display);letter-spacing:-.055em}
+.v footer.site .big a{text-decoration:none;color:var(--yellow)}
+.v footer.site .big a:hover{text-decoration:underline;text-decoration-thickness:.05em;text-underline-offset:.08em}
+.v footer.site .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-block-start:var(--space-l)}
+
+/* the duotone itself: SVG filter (#duo-light / #duo-dark), shadows -> --shadow, highlights -> --yellow */
+.v .ph{overflow:hidden;background:var(--yellow)}
+.v .ph img{inline-size:100%;block-size:100%;object-fit:cover;filter:url(#duo-light)}
+.dark .v .ph img{filter:url(#duo-dark)}
+@media (prefers-reduced-motion:no-preference){.v .ph img{transition:filter .35s ease,transform .5s cubic-bezier(.2,.7,.2,1)}}
+body[data-hover="reveal"] .v a:hover .ph img{filter:none}
+body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
+
+/* shared case study bits */
 .v .glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr));border-block-end:1px solid var(--line)}
 .v .glance div{padding:1.25rem var(--gutter) 1.25rem 0;border-block-end:1px solid var(--line)}
 .v .glance dt{color:var(--mid)}
@@ -98,132 +89,230 @@ a{color:inherit}
 .v .prose h2:first-child{margin-block-start:0}
 .v .prose p + p{margin-block-start:1em}
 .v .prose figure{margin-block:2.5rem;margin-inline:calc(-1 * min(8rem, var(--gutter)))}
-.v .prose figure .frame{border-radius:var(--radius);overflow:hidden;aspect-ratio:3/2;background:var(--card)}
-.v .prose figure img{inline-size:100%;block-size:100%;object-fit:cover}
+.v .prose figure .ph{aspect-ratio:3/2;border-radius:var(--radius)}
 .v .prose figcaption{margin-block-start:.75rem;color:var(--mid)}
-.v .prose a{text-underline-offset:.2em}
+.v .cs-open h1{font:900 var(--step-4)/.9 var(--display);letter-spacing:-.045em;max-inline-size:16ch;margin-block:1.5rem}
+.v .cs-open .outcome{font:400 var(--step-2)/1.25 var(--display);letter-spacing:-.02em;max-inline-size:30ch}
 
-/* C1/C2: case-study image sits under the opener as a wide cover */
-.c1 .cs-open,.c2 .cs-open{display:flex;flex-direction:column-reverse}
-.c1 .cs-open .duo,.c2 .cs-open .duo{aspect-ratio:21/9;margin:0 var(--gutter) var(--gutter);border-radius:var(--radius);overflow:hidden}
-.c1 .cs-open .duo img,.c2 .cs-open .duo img{inline-size:100%;block-size:100%;object-fit:cover}
+/* =================== D1 · Contained =================== */
+.d1 .hero{padding-block:calc(var(--space-l)/2) var(--space-l)}
+.d1 .hero-foot{display:grid;gap:1.5rem;margin-block-start:clamp(2rem,5vw,4rem)}
+@media (min-width:52em){.d1 .hero-foot{grid-template-columns:1fr 1fr 1fr}.d1 .hero-foot .lead{grid-column:2/4}}
+.d1 .cards{display:grid;gap:clamp(1rem,2vw,2rem);padding-block:1.5rem var(--space-l)}
+@media (min-width:52em){.d1 .cards{grid-template-columns:repeat(3,1fr)}}
+.d1 .card a{text-decoration:none;display:block}
+.d1 .card .ph{aspect-ratio:3/4;border-radius:var(--radius)}
+.d1 .card h3{margin-block-start:1rem;font:700 var(--step-0)/1.3 var(--display)}
+.d1 .card a:hover h3{text-decoration:underline;text-underline-offset:.25em}
+.d1 .card p{color:var(--mid);font-size:.95rem}
+.d1 .card .mono{display:block;margin-block-start:.5rem;color:var(--mid)}
+.d1 .statement{padding-block:var(--space-l);border-block-start:1px solid var(--fg);display:grid;gap:2rem;align-items:end}
+@media (min-width:52em){.d1 .statement{grid-template-columns:2fr 1fr}}
+.d1 .statement p{font:700 var(--step-2)/1.15 var(--display);letter-spacing:-.025em;max-inline-size:30ch}
+.d1 .statement .ph{aspect-ratio:4/5;border-radius:var(--radius);max-inline-size:22rem}
+.d1 .cs-open{display:flex;flex-direction:column-reverse}
+.d1 .cs-open .wrap{padding-block:var(--space-l) 2rem}
+.d1 .cs-open .ph{aspect-ratio:21/9;border-radius:var(--radius);margin-inline:var(--gutter)}
 
-/* =================== C1 · Surface: yellow is only ever a background =================== */
-.c1 .hl{background:var(--yellow);color:var(--on-yellow);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding-inline:.06em}
-.c1 .hero h1 .hl{padding-inline:.08em .04em;background:linear-gradient(var(--yellow),var(--yellow)) 0 72%/100% .8em no-repeat}
-.c1 .logo span{background:var(--yellow);color:var(--on-yellow);padding-inline:.15em;margin-inline-start:.1em}
-.c1 .prose a,.c1 .statement a{text-decoration-thickness:2px}
-.c1 .prose a:hover,.c1 .statement a:hover{background:var(--yellow);color:var(--on-yellow)}
-.c1 .cs-open{background:var(--yellow);color:var(--on-yellow)}
-.c1 .stats li:first-child{background:var(--yellow);color:var(--on-yellow)}
-.c1 .stats li:first-child small{color:var(--on-yellow)}
-.c1 footer{background:var(--yellow);color:var(--on-yellow)}
-.c1 .btn{display:inline-block;margin-block-start:2rem;background:var(--fg);color:var(--bg);padding:.9rem 1.4rem;border-radius:999px;text-decoration:none;font:600 1rem/1 var(--body)}
+/* =================== D2 · Bleed =================== */
+.d2 .hero{display:grid;gap:2rem;padding-block-start:calc(var(--space-l)/3)}
+@media (min-width:60em){.d2 .hero{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;align-items:end;min-block-size:min(88vh,60rem)}}
+.d2 .hero .text{padding-inline:var(--gutter);padding-block-end:var(--space-l);position:relative;z-index:1}
+.d2 .hero h1.display{font-size:clamp(3.4rem,1rem + 9vw,12rem)}
+@media (min-width:60em){.d2 .hero h1.display{margin-inline-end:-30%}}
+.d2 .hero .lead{margin-block-start:2rem}
+.d2 .hero .ph{block-size:100%;min-block-size:24rem}
+@media (max-width:59.99em){.d2 .hero .ph{aspect-ratio:4/3;min-block-size:0}}
+.d2 .rows{padding-block:1.5rem var(--space-l)}
+.d2 .row a{display:grid;gap:1.5rem;text-decoration:none;padding-block:clamp(2rem,4vw,4rem);border-block-end:1px solid var(--line)}
+@media (min-width:52em){.d2 .row a{grid-template-columns:7fr 5fr;gap:clamp(2rem,4vw,4rem);align-items:center}.d2 .row:nth-child(even) .ph{order:2}}
+.d2 .row .ph{aspect-ratio:16/10}
+.d2 .row h3{font:900 var(--step-4)/.92 var(--display);letter-spacing:-.04em;margin-block:.75rem 1rem}
+.d2 .row a:hover h3{text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.1em}
+.d2 .row p{color:var(--mid);max-inline-size:36ch}
+.d2 .row .meta{display:block;margin-block-start:1rem;color:var(--mid)}
+.d2 .band{position:relative;min-block-size:min(80vh,40rem);display:grid;align-items:end}
+.d2 .band .ph{position:absolute;inset:0}
+.d2 .band .inner{position:relative;padding:var(--space-l) var(--gutter) var(--gutter)}
+.d2 .band p{display:inline;background:#161412;color:#f1ede5;font:700 var(--step-2)/1.35 var(--display);letter-spacing:-.02em;padding:.05em .2em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.d2 .band p a{color:var(--yellow)}
+.d2 .cs-open{position:relative;color:#f7f4ed;background:#161412}
+.d2 .cs-open .ph{position:absolute;inset:0}
+.d2 .cs-open .ph img{opacity:.6}
+.d2 .cs-open .wrap{position:relative;min-block-size:min(85vh,48rem);display:flex;flex-direction:column;justify-content:flex-end;padding-block:var(--space-l)}
+.d2 .cs-open h1 span,.d2 .cs-open .outcome span{background:#161412;box-decoration-break:clone;-webkit-box-decoration-break:clone;padding-inline:.15em}
+.d2 .cs-open .outcome{color:var(--yellow)}
+.d2 .prose figure .ph{border-radius:0;aspect-ratio:21/9}
 
-/* =================== C2 · Marker: yellow only as small marks; ink carries the meaning =================== */
-.c2 .stop{color:var(--yellow);-webkit-text-stroke:.012em var(--fg)}
-.dark .c2 .stop{-webkit-text-stroke:0}
-.c2 .mark{background:linear-gradient(transparent 62%,var(--yellow) 62%,var(--yellow) 92%,transparent 92%);box-decoration-break:clone;-webkit-box-decoration-break:clone}
-.dark .c2 .mark{background:none;color:var(--yellow)}
-.c2 .head-row{border-block-start:4px solid var(--yellow);box-shadow:0 -1px 0 var(--fg)}
-.c2 .prose a,.c2 .statement a{text-decoration-color:var(--fg);text-decoration-thickness:1px}
-.c2 .prose a:hover,.c2 .statement a:hover{text-decoration-color:var(--yellow);text-decoration-thickness:.3em;text-underline-offset:-.05em;text-decoration-skip-ink:none}
-.dark .c2 .prose a,.dark .c2 .statement a{color:var(--yellow);text-decoration-color:var(--yellow)}
-.c2 .cs-open{border-block-end:1px solid var(--fg)}
-.c2 .cs-open .wrap{border-inline-start:10px solid var(--yellow);margin-inline-start:var(--gutter);padding-inline-start:calc(var(--gutter) - 10px);margin-block:var(--gutter)}
-.c2 .stats strong::before{content:"";display:block;inline-size:2.5rem;block-size:.4rem;background:var(--yellow);margin-block-end:1rem;outline:1px solid var(--fg)}
-.dark .c2 .stats strong::before{outline:0}
-.c2 footer{border-block-start:1px solid var(--fg)}
-.c2 footer .big a:hover .mark{color:inherit}
-.c2 .btn{display:inline-block;margin-block-start:2rem;background:var(--fg);color:var(--bg);padding:.9rem 1.4rem;border-radius:999px;text-decoration:none;font:600 1rem/1 var(--body);box-shadow:inset 0 -4px 0 var(--yellow)}
-
-/* =================== C3 · Duotone: yellow lives in the photography =================== */
-.c3{--accent-text:#6b5600}
-.dark .c3{--accent-text:var(--yellow)}
-.c3 .duo{background:var(--yellow);position:relative}
-.c3 .duo img{filter:grayscale(1) contrast(1.15) brightness(1.05);mix-blend-mode:multiply}
-@media (prefers-reduced-motion:no-preference){.c3 .card a:hover .duo img{filter:none;mix-blend-mode:normal;transition:filter .3s}}
-.c3 .logo span,.c3 .stop{color:var(--accent-text)}
-.c3 .mono.accent,.c3 .head-row .mono:last-child{color:var(--accent-text)}
-.c3 .prose a,.c3 .statement a{color:var(--accent-text);text-decoration-thickness:1px}
-.c3 .cs-open{position:relative;color:#f7f4ed;background:#161412}
-.c3 .cs-open .duo{position:absolute;inset:0;overflow:hidden}
-.c3 .cs-open .duo img{inline-size:100%;block-size:100%;object-fit:cover;opacity:.55}
-.c3 .cs-open .wrap{position:relative;min-block-size:min(80vh,44rem);display:flex;flex-direction:column;justify-content:flex-end}
-.c3 .cs-open h1,.c3 .cs-open .outcome{background:#161412;box-decoration-break:clone;-webkit-box-decoration-break:clone;display:inline;padding-inline:.15em}
-.c3 .cs-open .outcome{color:var(--yellow)}
-.c3 footer{background:#161412;color:#f1ede5}
-.c3 footer .big a{color:var(--yellow)}
-.c3 .btn{display:inline-block;margin-block-start:2rem;background:var(--fg);color:var(--bg);padding:.9rem 1.4rem;border-radius:999px;text-decoration:none;font:600 1rem/1 var(--body)}
+/* =================== D3 · Print =================== */
+.d3{--radius:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.dark .d3{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.d3 .ph{position:relative}
+.d3 .ph::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at center,var(--shadow) 32%,transparent 36%) 0 0/5px 5px;mix-blend-mode:multiply;opacity:.35}
+body[data-hover="reveal"] .d3 a:hover .ph::after{opacity:0}
+.d3 .masthead{display:grid;grid-template-columns:1fr auto;gap:1rem;border-block:3px double var(--fg);padding-block:.75rem;margin-block-start:1rem}
+.d3 .hero{padding-block:calc(var(--space-l)/2) var(--space-l)}
+.d3 .hero-grid{display:grid;gap:1.5rem;margin-block-start:2.5rem}
+@media (min-width:52em){.d3 .hero-grid{grid-template-columns:1fr 2fr;align-items:start}}
+.d3 .hero h1.display{font-size:clamp(3.4rem,1rem + 9vw,12rem)}
+.d3 .hero .lead{margin-block-start:2rem}
+.d3 .hero .ph{aspect-ratio:4/5}
+.d3 .fig{display:flex;justify-content:space-between;gap:1rem;padding-block:.5rem;border-block-start:1px solid var(--fg);color:var(--mid)}
+.d3 .head-row{border-block-start:3px double var(--fg)}
+.d3 .grid{display:grid;gap:clamp(1rem,2vw,2rem);padding-block:1.5rem var(--space-l)}
+@media (min-width:52em){.d3 .grid{grid-template-columns:repeat(6,1fr)}.d3 .grid li:nth-child(1){grid-column:1/5;grid-row:1/3}.d3 .grid li:nth-child(2),.d3 .grid li:nth-child(3){grid-column:5/7}}
+.d3 .grid a{display:block;text-decoration:none}
+.d3 .grid li:nth-child(1) .ph{aspect-ratio:4/3}
+.d3 .grid .ph{aspect-ratio:3/2}
+.d3 .grid h3{font:700 var(--step-0)/1.3 var(--display);margin-block-start:.25rem}
+.d3 .grid li:nth-child(1) h3{font:900 var(--step-2)/1 var(--display);letter-spacing:-.03em}
+.d3 .grid a:hover h3{text-decoration:underline;text-underline-offset:.2em}
+.d3 .grid p:not(.fig){color:var(--mid);font-size:.95rem;max-inline-size:44ch}
+.d3 .statement{padding-block:var(--space-l);border-block-start:3px double var(--fg);display:grid;gap:2rem}
+@media (min-width:52em){.d3 .statement{grid-template-columns:1fr 2fr}}
+.d3 .statement p{font:700 var(--step-2)/1.15 var(--display);letter-spacing:-.025em;max-inline-size:30ch}
+.d3 .stats li{border:1px solid var(--fg);background:none}
+.d3 .cs-open{display:flex;flex-direction:column-reverse}
+.d3 .cs-open .wrap{padding-block:var(--space-l) 2rem}
+.d3 .cs-open .ph{aspect-ratio:21/9}
 
 /* ---------- prototype chrome (NOT part of the design) ---------- */
 .proto-bar{position:fixed;inset-block-end:16px;inset-inline-start:50%;transform:translateX(-50%);z-index:999;display:flex;align-items:center;gap:4px;padding:6px;border-radius:999px;background:#ff00aa;color:#fff;font:600 13px/1 "JetBrains Mono",monospace;box-shadow:0 6px 24px #0006,0 0 0 2px #fff;max-inline-size:calc(100vw - 16px);flex-wrap:wrap;justify-content:center}
 .proto-bar button{all:unset;cursor:pointer;padding:8px 12px;border-radius:999px}
 .proto-bar button:hover,.proto-bar button:focus-visible{background:#0003}
 .proto-bar button:focus-visible{outline:2px solid #fff}
-.proto-bar output{padding-inline:8px;min-inline-size:13ch;text-align:center}
-.proto-contrast{position:fixed;inset-block-end:76px;inset-inline-end:16px;z-index:999;background:#111;color:#eee;font:12px/1.5 "JetBrains Mono",monospace;padding:12px 14px;border-radius:12px;box-shadow:0 6px 24px #0008;max-inline-size:min(26rem,calc(100vw - 32px))}
-.proto-contrast[hidden]{display:none}
-.proto-contrast table{border-collapse:collapse}
-.proto-contrast td{padding:2px 6px;white-space:nowrap}
-.proto-contrast .sw{display:inline-block;inline-size:12px;block-size:12px;border:1px solid #888;vertical-align:-2px;margin-inline-end:2px}
-.proto-contrast .ok{color:#7ee787}.proto-contrast .lg{color:#e3b341}.proto-contrast .no{color:#ff7b72}
+.proto-bar output{padding-inline:8px;min-inline-size:14ch;text-align:center}
+.proto-panel{position:fixed;inset-block-end:76px;z-index:999;background:#111;color:#eee;font:12px/1.5 "JetBrains Mono",monospace;padding:12px 14px;border-radius:12px;box-shadow:0 6px 24px #0008;max-inline-size:min(26rem,calc(100vw - 32px))}
+.proto-panel[hidden]{display:none}
+.proto-contrast{inset-inline-end:16px}
+.proto-tune{inset-inline-start:16px}
+.proto-panel table{border-collapse:collapse}
+.proto-panel td{padding:2px 6px;white-space:nowrap}
+.proto-panel .sw{display:inline-block;inline-size:12px;block-size:12px;border:1px solid #888;vertical-align:-2px;margin-inline-end:2px}
+.proto-panel .ok{color:#7ee787}.proto-panel .lg{color:#e3b341}.proto-panel .no{color:#ff7b72}
+.proto-tune fieldset{border:0;padding:0;margin:0 0 10px}
+.proto-tune legend{padding:0;margin-block-end:4px;color:#aaa}
+.proto-tune label{display:inline-flex;align-items:center;gap:4px;margin-inline-end:10px;cursor:pointer}
 </style>
 </head>
-<body>
-<!--
-  The three variants share markup; only the variant class differs. The markup is cloned
-  from the template below by the script, so structure stays identical and yellow usage is
-  the only thing that changes.
--->
-<template id="page">
-  <header><div class="wrap">
+<body data-hover="reveal">
+
+<!-- duotone filters: table values are rewritten by the tune panel -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="duo-light" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values=".2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  0 0 0 1 0"/>
+    <feComponentTransfer><feFuncR type="gamma" exponent=".7"/><feFuncG type="gamma" exponent=".7"/><feFuncB type="gamma" exponent=".7"/></feComponentTransfer>
+    <feComponentTransfer><feFuncR type="table"/><feFuncG type="table"/><feFuncB type="table"/></feComponentTransfer>
+  </filter>
+  <filter id="duo-dark" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values=".2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  .2126 .7152 .0722 0 0  0 0 0 1 0"/>
+    <feComponentTransfer><feFuncR type="gamma" exponent=".7"/><feFuncG type="gamma" exponent=".7"/><feFuncB type="gamma" exponent=".7"/></feComponentTransfer>
+    <feComponentTransfer><feFuncR type="table"/><feFuncG type="table"/><feFuncB type="table"/></feComponentTransfer>
+  </filter>
+</svg>
+
+<template id="t-header">
+  <header class="site"><div class="wrap">
     <a class="logo" href="#">Name<span class="stop">.</span></a>
     <nav aria-label="Main" class="mono"><ul><li><a href="#">Work</a></li><li><a href="#">About</a></li><li><a href="#">Contact</a></li></ul></nav>
   </div></header>
+</template>
+
+<!-- D1 Contained -->
+<template id="t-d1">
   <main>
     <section class="hero wrap">
-      <!-- PLACEHOLDER: positioning line (short, ~4 words) -->
-      <h1>Lorem <span class="hl mark">ipsum</span> dolor sit<span class="stop">.</span></h1>
-      <div class="hero-foot">
-        <span class="mono accent">Role slot — Lisbon</span>
-        <!-- PLACEHOLDER: supporting sentence -->
-        <p>Consectetur adipiscing elit, sed do <em>eiusmod</em> tempor incididunt ut labore.</p>
-      </div>
+      <!-- PLACEHOLDER: positioning line -->
+      <h1 class="display">Lorem ipsum dolor sit<span class="stop">.</span></h1>
+      <div class="hero-foot"><span class="mono accent">Role slot — Lisbon</span><p class="lead">Consectetur adipiscing elit, sed do <em>eiusmod</em> tempor incididunt ut labore.</p></div>
     </section>
-    <section class="wrap" aria-labelledby="work-h">
-      <div class="head-row"><h2 class="mono" id="work-h">Selected work</h2><span class="mono">(03)</span></div>
+    <section class="wrap" aria-labelledby="d1-work">
+      <div class="head-row"><h2 class="mono" id="d1-work">Selected work</h2><span class="mono accent">(03)</span></div>
       <ol class="cards">
-        <li class="card"><a href="#cs"><div class="cover duo"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=1067&fit=crop&q=70&auto=format" width="800" height="1067" alt="" loading="lazy"></div><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur.</p><span class="mono">Industry · 2025–26</span></a></li>
-        <li class="card"><a href="#cs"><div class="cover duo"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=1067&fit=crop&q=70&auto=format" width="800" height="1067" alt="" loading="lazy"></div><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam quis nostrud.</p><span class="mono">Client · 2019–23</span></a></li>
-        <li class="card"><a href="#cs"><div class="cover duo"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1067&fit=crop&q=70&auto=format" width="800" height="1067" alt="" loading="lazy"></div><h3>Case study three title</h3><p>Outcome: duis aute irure dolor in reprehenderit.</p><span class="mono">Industry · 2024</span></a></li>
+        <li class="card"><a href="#d1-cs"><div class="ph"><img data-img="a" data-w="800" data-h="1067" alt=""></div><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur.</p><span class="mono">Industry · 2025–26</span></a></li>
+        <li class="card"><a href="#d1-cs"><div class="ph"><img data-img="b" data-w="800" data-h="1067" alt=""></div><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam quis nostrud.</p><span class="mono">Client · 2019–23</span></a></li>
+        <li class="card"><a href="#d1-cs"><div class="ph"><img data-img="c" data-w="800" data-h="1067" alt=""></div><h3>Case study three title</h3><p>Outcome: duis aute irure dolor in reprehenderit.</p><span class="mono">Industry · 2024</span></a></li>
       </ol>
     </section>
     <section class="wrap statement" aria-label="About">
-      <div>
-        <!-- PLACEHOLDER: About teaser, sentence-style -->
-        <p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec <span class="mark">odio praesent</span> libero. <a href="#">More about me</a></p>
-        <a class="btn" href="#">Get in touch</a>
-      </div>
-      <div class="portrait duo"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=640&h=800&fit=crop&q=70&auto=format" width="640" height="800" alt="" loading="lazy"></div>
+      <div><p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec odio praesent libero. <a href="#">More about me</a></p><a class="btn" href="#">Get in touch</a></div>
+      <div class="ph"><img data-img="p" data-w="640" data-h="800" alt=""></div>
     </section>
   </main>
-  <footer><div class="wrap">
+</template>
+
+<!-- D2 Bleed -->
+<template id="t-d2">
+  <main>
+    <section class="hero">
+      <div class="text">
+        <span class="mono accent">Role slot — Lisbon</span>
+        <!-- PLACEHOLDER: positioning line -->
+        <h1 class="display">Lorem ipsum dolor sit<span class="stop">.</span></h1>
+        <p class="lead">Consectetur adipiscing elit, sed do <em>eiusmod</em> tempor incididunt ut labore.</p>
+      </div>
+      <div class="ph"><img data-img="p" data-w="1200" data-h="1500" alt=""></div>
+    </section>
+    <section class="wrap" aria-labelledby="d2-work">
+      <div class="head-row"><h2 class="mono" id="d2-work">Selected work</h2><span class="mono accent">(03)</span></div>
+      <ol class="rows">
+        <li class="row"><a href="#d2-cs"><div class="ph"><img data-img="a" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">01</span><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur adipiscing.</p><span class="mono meta">Industry · 2025–26</span></div></a></li>
+        <li class="row"><a href="#d2-cs"><div class="ph"><img data-img="b" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">02</span><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam quis nostrud exercitation.</p><span class="mono meta">Client · 2019–23</span></div></a></li>
+        <li class="row"><a href="#d2-cs"><div class="ph"><img data-img="c" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">03</span><h3>Case study three title</h3><p>Outcome: duis aute irure dolor in reprehenderit in voluptate.</p><span class="mono meta">Industry · 2024</span></div></a></li>
+      </ol>
+    </section>
+    <section class="band" aria-label="About">
+      <div class="ph"><img data-img="t" data-w="2000" data-h="1100" alt=""></div>
+      <div class="inner"><p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec odio praesent libero. <a href="#">More about me</a></p></div>
+    </section>
+  </main>
+</template>
+
+<!-- D3 Print -->
+<template id="t-d3">
+  <main>
+    <section class="hero wrap">
+      <div class="masthead"><span class="mono">Role slot — Lisbon</span><span class="mono">Vol. 2 · 2026</span></div>
+      <div class="hero-grid">
+        <figure><div class="ph"><img data-img="p" data-w="640" data-h="800" alt=""></div><figcaption class="mono fig"><span>Fig. 00</span><span>Portrait</span></figcaption></figure>
+        <div>
+          <!-- PLACEHOLDER: positioning line -->
+          <h1 class="display">Lorem ipsum dolor sit<span class="stop">.</span></h1>
+          <p class="lead">Consectetur adipiscing elit, sed do <em>eiusmod</em> tempor incididunt ut labore.</p>
+        </div>
+      </div>
+    </section>
+    <section class="wrap" aria-labelledby="d3-work">
+      <div class="head-row"><h2 class="mono" id="d3-work">Selected work</h2><span class="mono accent">(03)</span></div>
+      <ol class="grid">
+        <li><a href="#d3-cs"><div class="ph"><img data-img="a" data-w="1200" data-h="900" alt=""></div><p class="mono fig"><span>Fig. 01</span><span>Industry · 2025–26</span></p><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur adipiscing elit.</p></a></li>
+        <li><a href="#d3-cs"><div class="ph"><img data-img="b" data-w="900" data-h="600" alt=""></div><p class="mono fig"><span>Fig. 02</span><span>Client · 2019–23</span></p><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam.</p></a></li>
+        <li><a href="#d3-cs"><div class="ph"><img data-img="c" data-w="900" data-h="600" alt=""></div><p class="mono fig"><span>Fig. 03</span><span>Industry · 2024</span></p><h3>Case study three title</h3><p>Outcome: duis aute irure dolor.</p></a></li>
+      </ol>
+    </section>
+    <section class="wrap statement" aria-label="About">
+      <span class="mono">About</span>
+      <div><p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec odio praesent libero. <a href="#">More about me</a></p><a class="btn" href="#">Get in touch</a></div>
+    </section>
+  </main>
+</template>
+
+<template id="t-footer-cs">
+  <footer class="site"><div class="wrap">
     <span class="mono">Contact</span>
     <!-- PLACEHOLDER: contact call to action -->
-    <p class="big"><a href="#"><span class="mark">Lorem</span> ipsum →</a></p>
+    <p class="big"><a href="#">Lorem ipsum →</a></p>
     <div class="row mono"><span>© Name Surname</span><span>Footer slot</span></div>
   </div></footer>
-
-  <p class="proto-divider" id="cs">↓ Case study page ↓</p>
+  <p class="proto-divider" data-cs>↓ Case study page ↓</p>
   <article>
     <header class="cs-open">
-      <div class="duo" aria-hidden="true"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1800&h=1100&fit=crop&q=70&auto=format" width="1800" height="1100" alt="" loading="lazy"></div>
+      <div class="ph" aria-hidden="true"><img data-img="s" data-w="1800" data-h="1000" alt=""></div>
       <div class="wrap">
         <span class="mono">Case study — 01</span>
-        <h1>Case study one title</h1>
+        <h1><span>Case study one title</span></h1>
         <!-- PLACEHOLDER: outcome -->
-        <p><span class="outcome">Outcome: lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</span></p>
+        <p class="outcome"><span>Outcome: lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</span></p>
       </div>
     </header>
     <div class="wrap">
@@ -232,104 +321,151 @@ a{color:inherit}
       </dl>
       <h2 class="visually-hidden">Results</h2>
       <ol class="stats">
-        <li><span class="mono">Result 01</span><strong>Result claim one lorem ipsum.</strong><small>Evidence slot</small></li>
-        <li><span class="mono">Result 02</span><strong>Result claim two dolor sit.</strong><small>Evidence slot</small></li>
-        <li><span class="mono">Result 03</span><strong>Result claim three amet.</strong><small>Evidence slot</small></li>
+        <li><span class="mono accent">Result 01</span><strong>Result claim one lorem ipsum.</strong><small>Evidence slot</small></li>
+        <li><span class="mono accent">Result 02</span><strong>Result claim two dolor sit.</strong><small>Evidence slot</small></li>
+        <li><span class="mono accent">Result 03</span><strong>Result claim three amet.</strong><small>Evidence slot</small></li>
       </ol>
       <div class="prose">
         <h2>Challenge</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud <a href="#">exercitation ullamco</a> laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <figure><div class="frame duo"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1500&h=1000&fit=crop&q=70&auto=format" width="1500" height="1000" alt="" loading="lazy"></div><figcaption class="mono">Figure caption slot</figcaption></figure>
+        <figure><div class="ph"><img data-img="f" data-w="1800" data-h="1000" alt=""></div><figcaption class="mono">Figure caption slot</figcaption></figure>
         <h2>Approach</h2>
         <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra.</p>
         <p class="mono" style="margin-block-start:3rem"><a href="#">Next: Case study two title →</a></p>
       </div>
     </div>
   </article>
 </template>
 
-<div class="v c1" data-key="C1" data-name="Surface" hidden></div>
-<div class="v c2" data-key="C2" data-name="Marker" hidden></div>
-<div class="v c3" data-key="C3" data-name="Duotone" hidden></div>
+<div class="v d1" data-key="D1" data-name="Contained" hidden></div>
+<div class="v d2" data-key="D2" data-name="Bleed" hidden></div>
+<div class="v d3" data-key="D3" data-name="Print" hidden></div>
 
 <!-- ============================ prototype chrome ============================ -->
-<div class="proto-contrast" hidden aria-live="polite"></div>
+<form class="proto-panel proto-tune" hidden>
+  <fieldset><legend>Yellow</legend>
+    <label><input type="radio" name="yellow" value="#f6d200" checked><span class="sw" style="background:#f6d200"></span>f6d200</label>
+    <label><input type="radio" name="yellow" value="#ffd400"><span class="sw" style="background:#ffd400"></span>ffd400</label>
+    <label><input type="radio" name="yellow" value="#ffe24a"><span class="sw" style="background:#ffe24a"></span>ffe24a lemon</label><br>
+    <label><input type="radio" name="yellow" value="#f2c200"><span class="sw" style="background:#f2c200"></span>f2c200 warm</label>
+    <label><input type="radio" name="yellow" value="#e8b400"><span class="sw" style="background:#e8b400"></span>e8b400 mustard</label>
+  </fieldset>
+  <fieldset><legend>Duotone shadow</legend>
+    <label><input type="radio" name="shadow" value="#161412" checked><span class="sw" style="background:#161412"></span>ink</label>
+    <label><input type="radio" name="shadow" value="#1a2340"><span class="sw" style="background:#1a2340"></span>navy</label>
+    <label><input type="radio" name="shadow" value="#2b1d0e"><span class="sw" style="background:#2b1d0e"></span>brown</label><br>
+    <label><input type="radio" name="shadow" value="#2a1430"><span class="sw" style="background:#2a1430"></span>plum</label>
+    <label><input type="radio" name="shadow" value="#0f2e2a"><span class="sw" style="background:#0f2e2a"></span>teal</label>
+  </fieldset>
+  <fieldset><legend>Dark-mode duotone</legend>
+    <label><input type="radio" name="darkduo" value="same" checked>same as light</label>
+    <label><input type="radio" name="darkduo" value="dim">dimmed (shadow = page)</label>
+  </fieldset>
+  <fieldset><legend>Hover on Work images</legend>
+    <label><input type="radio" name="hover" value="reveal" checked>reveal colour</label>
+    <label><input type="radio" name="hover" value="zoom">slight zoom</label>
+    <label><input type="radio" name="hover" value="none">none</label>
+  </fieldset>
+</form>
+<div class="proto-panel proto-contrast" hidden aria-live="polite"></div>
 <div class="proto-bar" role="toolbar" aria-label="Prototype variant switcher">
   <button type="button" data-step="-1" aria-label="Previous variant">←</button>
   <output></output>
   <button type="button" data-step="1" aria-label="Next variant">→</button>
   <button type="button" data-theme-btn>theme: light</button>
+  <button type="button" data-tune-btn aria-pressed="false">tune</button>
   <button type="button" data-contrast-btn aria-pressed="false">contrast</button>
 </div>
 <script>
 (() => {
-  const tpl = document.getElementById('page');
+  // Unsplash stand-ins (hotlinked). a/b/c = Work, p = portrait, s = case-study cover, f = figure, t = band
+  const IMG = { a:'1460925895917-afdab827c52f', b:'1551288049-bebda4e38f71', c:'1498050108023-c5249f4df085',
+                p:'1500648767791-00dcc994a43e', s:'1497366216548-37526070297c', f:'1517694712202-14dd9538aa97', t:'1522202176988-66273c2fd55f' };
+  const src = (k, w, h) => `https://images.unsplash.com/photo-${IMG[k]}?w=${w}&h=${h}&fit=crop&q=70&auto=format`;
+
   const variants = [...document.querySelectorAll('.v')];
-  variants.forEach(v => v.append(tpl.content.cloneNode(true)));
-  // only the duotone variant treats images; the others keep the .duo hook inert
+  for (const v of variants) {
+    const id = v.dataset.key.toLowerCase();
+    v.append(document.getElementById('t-header').content.cloneNode(true),
+             document.getElementById('t-' + id).content.cloneNode(true),
+             document.getElementById('t-footer-cs').content.cloneNode(true));
+    v.querySelector('[data-cs]').id = id + '-cs';
+    v.querySelectorAll('img[data-img]').forEach(i => { i.width = i.dataset.w; i.height = i.dataset.h; i.loading = 'lazy'; i.src = src(i.dataset.img, i.dataset.w, i.dataset.h); });
+  }
+
   const keys = variants.map(v => v.dataset.key);
-  const out = document.querySelector('.proto-bar output');
-  const themeBtn = document.querySelector('[data-theme-btn]');
-  const cBtn = document.querySelector('[data-contrast-btn]');
-  const panel = document.querySelector('.proto-contrast');
+  const $ = s => document.querySelector(s);
+  const out = $('.proto-bar output'), themeBtn = $('[data-theme-btn]'), tuneBtn = $('[data-tune-btn]'), cBtn = $('[data-contrast-btn]');
+  const tune = $('.proto-tune'), contrast = $('.proto-contrast');
   const themes = ['light', 'dark', 'auto'];
   const mq = matchMedia('(prefers-color-scheme: dark)');
   const params = new URLSearchParams(location.search);
-  let current = keys.includes(params.get('variant')) ? params.get('variant') : 'C1';
-  let theme = themes.includes(params.get('theme')) ? params.get('theme') : 'light';
-  let showContrast = params.get('contrast') === '1';
+  const st = {
+    v: keys.includes(params.get('variant')) ? params.get('variant') : 'D1',
+    theme: themes.includes(params.get('theme')) ? params.get('theme') : 'light',
+    tune: params.get('tune') === '1', contrast: params.get('contrast') === '1',
+    yellow: params.get('yellow') || '#f6d200', shadow: params.get('shadow') || '#161412',
+    darkduo: params.get('darkduo') || 'same', hover: params.get('hover') || 'reveal',
+  };
+  for (const n of ['yellow', 'shadow', 'darkduo', 'hover']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
+
+  const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
+  function setFilter(id, dark, light) {
+    const [d, l] = [hex(dark), hex(light)];
+    const f = document.getElementById(id);
+    ['R', 'G', 'B'].forEach((c, i) => f.querySelector('feFunc' + c + '[type=table]').setAttribute('tableValues', `${d[i]} ${l[i]}`));
+  }
 
   const lum = rgb => { const c = rgb.map(v => v / 255).map(v => v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4); return .2126*c[0] + .7152*c[1] + .0722*c[2]; };
-  const parse = s => { s = s.trim(); if (s.startsWith('#')) { if (s.length === 4) s = '#' + [...s.slice(1)].map(c => c + c).join(''); return [1,3,5].map(i => parseInt(s.slice(i, i+2), 16)); } const m = s.match(/[\d.]+/g); return m ? m.slice(0,3).map(Number) : [0,0,0]; };
+  const parse = s => { s = s.trim(); if (s.startsWith('#')) return [1,3,5].map(i => parseInt(s.slice(i, i+2), 16)); const m = s.match(/[\d.]+/g); return m ? m.slice(0,3).map(Number) : [0,0,0]; };
   const ratio = (a, b) => { const [x, y] = [lum(parse(a)), lum(parse(b))].sort((p, q) => q - p); return (x + .05) / (y + .05); };
-
   function renderContrast(v) {
-    const cs = getComputedStyle(v);
-    const t = n => cs.getPropertyValue(n).trim();
-    const bg = t('--bg'), card = t('--card');
-    const accentRaw = getComputedStyle(v.querySelector('.hero-foot .mono')).color;
+    const cs = getComputedStyle(v), t = n => cs.getPropertyValue(n).trim();
+    const bg = t('--bg');
     const pairs = [
-      ['text / bg', t('--fg'), bg, 4.5],
-      ['muted / bg', t('--mid'), bg, 4.5],
-      ['muted / card', t('--mid'), card, 4.5],
-      ['ink / yellow', t('--on-yellow'), t('--yellow'), 4.5],
-      ['yellow / bg', t('--yellow'), bg, 3],
-      ['accent text / bg', accentRaw, bg, 4.5],
-      ['line / bg (decor)', t('--line'), bg, 0],
+      ['text / bg', t('--fg'), bg, 4.5], ['muted / bg', t('--mid'), bg, 4.5], ['muted / card', t('--mid'), t('--card'), 4.5],
+      ['accent text / bg', getComputedStyle(v.querySelector('.mono.accent')).color, bg, 4.5],
+      ['ink / yellow', t('--on-yellow'), t('--yellow'), 4.5], ['yellow / footer ink', t('--yellow'), '#161412', 4.5],
+      ['yellow / bg', t('--yellow'), bg, 3], ['duo shadow / yellow', t('--shadow'), t('--yellow'), 0],
     ];
-    panel.innerHTML = `<strong>${current} · ${document.body.classList.contains('dark') ? 'dark' : 'light'}</strong><table>${pairs.map(([n, a, b, need]) => {
+    contrast.innerHTML = `<strong>${st.v} · ${document.body.classList.contains('dark') ? 'dark' : 'light'}</strong><table>${pairs.map(([n, a, b, need]) => {
       const r = ratio(a, b); const cls = need === 0 ? '' : r >= 4.5 ? 'ok' : r >= 3 ? 'lg' : 'no';
-      const verdict = need === 0 ? 'decorative' : r >= 4.5 ? 'AA text' : r >= 3 ? 'large/UI only' : 'fails';
+      const verdict = need === 0 ? 'image range' : r >= 4.5 ? 'AA text' : r >= 3 ? 'large/UI only' : 'fails';
       return `<tr><td><span class="sw" style="background:${a}"></span><span class="sw" style="background:${b}"></span></td><td>${n}</td><td class="${cls}">${r.toFixed(2)}:1</td><td class="${cls}">${verdict}</td></tr>`;
     }).join('')}</table>`;
   }
 
   function render() {
-    variants.forEach(v => { v.hidden = v.dataset.key !== current; });
-    const v = variants.find(v => v.dataset.key === current);
-    out.textContent = `${current} (${v.dataset.name})`;
-    document.body.classList.toggle('dark', theme === 'dark' || (theme === 'auto' && mq.matches));
-    themeBtn.textContent = `theme: ${theme}`;
-    cBtn.setAttribute('aria-pressed', showContrast);
-    panel.hidden = !showContrast;
-    if (showContrast) renderContrast(v);
-    params.set('variant', current); params.set('theme', theme); params.set('contrast', showContrast ? '1' : '0');
+    variants.forEach(v => { v.hidden = v.dataset.key !== st.v; v.style.setProperty('--yellow', st.yellow); v.style.setProperty('--shadow', st.shadow); });
+    const v = variants.find(v => v.dataset.key === st.v);
+    const dark = st.theme === 'dark' || (st.theme === 'auto' && mq.matches);
+    document.body.classList.toggle('dark', dark);
+    document.body.dataset.hover = st.hover;
+    setFilter('duo-light', st.shadow, st.yellow);
+    setFilter('duo-dark', st.darkduo === 'dim' ? '#1f1d1a' : st.shadow, st.yellow);
+    out.textContent = `${st.v} (${v.dataset.name})`;
+    themeBtn.textContent = `theme: ${st.theme}`;
+    tuneBtn.setAttribute('aria-pressed', st.tune); tune.hidden = !st.tune;
+    cBtn.setAttribute('aria-pressed', st.contrast); contrast.hidden = !st.contrast;
+    if (st.contrast) renderContrast(v);
+    for (const [k, val] of Object.entries(st)) params.set(k === 'v' ? 'variant' : k, typeof val === 'boolean' ? (val ? '1' : '0') : val);
     history.replaceState(null, '', `?${params}${location.hash}`);
   }
-  const step = n => { current = keys[(keys.indexOf(current) + n + keys.length) % keys.length]; render(); };
-  const cycleTheme = () => { theme = themes[(themes.indexOf(theme) + 1) % themes.length]; render(); };
+  const step = n => { st.v = keys[(keys.indexOf(st.v) + n + keys.length) % keys.length]; render(); };
+  const cycleTheme = () => { st.theme = themes[(themes.indexOf(st.theme) + 1) % themes.length]; render(); };
 
   document.querySelectorAll('[data-step]').forEach(b => b.addEventListener('click', () => step(+b.dataset.step)));
   themeBtn.addEventListener('click', cycleTheme);
-  cBtn.addEventListener('click', () => { showContrast = !showContrast; render(); });
+  tuneBtn.addEventListener('click', () => { st.tune = !st.tune; render(); });
+  cBtn.addEventListener('click', () => { st.contrast = !st.contrast; render(); });
+  tune.addEventListener('change', e => { st[e.target.name] = e.target.value; render(); });
   mq.addEventListener('change', render);
   addEventListener('keydown', e => {
     if (e.target.closest('input, textarea, [contenteditable]') || e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === 'ArrowLeft') step(-1);
     else if (e.key === 'ArrowRight') step(1);
     else if (e.key === 't' || e.key === 'T') cycleTheme();
-    else if (e.key === 'c' || e.key === 'C') { showContrast = !showContrast; render(); }
+    else if (e.key === 'c' || e.key === 'C') { st.contrast = !st.contrast; render(); }
   });
   render();
 })();
