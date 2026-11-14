@@ -31,7 +31,7 @@
 <title>PROTOTYPE 008 · Visual direction · round 7</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:ital,wght@0,400..700;1,400..700&family=Geist+Mono:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 *,*::before,*::after{box-sizing:border-box}
 body,h1,h2,h3,p,dl,dd,figure,ol,ul{margin:0}
@@ -70,6 +70,8 @@ a{color:inherit}
 .v h1.display{font:var(--dw) var(--step-6)/.86 var(--display);letter-spacing:calc(-.055em * var(--dt));margin-inline-start:-.04em}
 .v .lead{font:400 var(--step-2)/1.2 var(--display);letter-spacing:calc(-.02em * var(--dt));max-inline-size:26ch}
 .v em{font:italic 400 1.1em/1 var(--italic)}
+/* round 7b: italic = Geist Italic (default) or Instrument Serif; Bricolage has no italic */
+html[data-italic="geist"] .v em{font-family:var(--body);font-style:italic;font-size:1em;font-weight:inherit;line-height:inherit;letter-spacing:normal}
 .v .head-row{display:flex;justify-content:space-between;align-items:baseline;padding-block:1rem;border-block-start:1px solid var(--fg)}
 .v .prose a,.v .statement a{color:var(--accent-text);text-underline-offset:.2em}
 .v .btn{display:inline-block;margin-block-start:2rem;background:var(--fg);color:var(--bg);padding:.9rem 1.4rem;border-radius:999px;text-decoration:none;font:600 1rem/1 var(--body)}
@@ -398,6 +400,10 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     <label><input type="radio" name="rm" value="system" checked>follow system</label>
     <label><input type="radio" name="rm" value="on">force on</label>
   </fieldset>
+  <fieldset><legend>Italic words</legend>
+    <label><input type="radio" name="italic" value="geist" checked>Geist Italic</label>
+    <label><input type="radio" name="italic" value="serif">Instrument Serif</label>
+  </fieldset>
   <fieldset><legend>Hover on Work images</legend>
     <label><input type="radio" name="hover" value="reveal" checked>reveal colour</label>
     <label><input type="radio" name="hover" value="zoom">slight zoom</label>
@@ -479,9 +485,9 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     theme: themes.includes(params.get('theme')) ? params.get('theme') : 'light',
     tune: params.get('tune') === '1', contrast: params.get('contrast') === '1',
     yellow: params.get('yellow') || '#f2c200', shadow: params.get('shadow') || '#161412',
-    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal', rm: params.get('rm') === 'on' ? 'on' : 'system',
+    darkduo: params.get('darkduo') || 'same', lift: params.get('lift') || '.5', hover: params.get('hover') || 'reveal', rm: params.get('rm') === 'on' ? 'on' : 'system', italic: params.get('italic') === 'serif' ? 'serif' : 'geist',
   };
-  for (const n of ['yellow', 'shadow', 'darkduo', 'hover', 'lift', 'rm']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
+  for (const n of ['yellow', 'shadow', 'darkduo', 'hover', 'lift', 'rm', 'italic']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
 
   const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
   function setFilter(id, dark, light) {
@@ -516,6 +522,7 @@ html.rm::view-transition-new(root){animation:fade-in .15s ease both}
     document.body.classList.toggle('dark', dark);
     document.body.dataset.hover = st.hover;
     document.documentElement.dataset.motion = v.dataset.motion;
+    document.documentElement.dataset.italic = st.italic;
     document.documentElement.classList.toggle('rm', st.rm === 'on');
     document.querySelectorAll('feFuncR[type=gamma],feFuncG[type=gamma],feFuncB[type=gamma]').forEach(f => f.setAttribute('exponent', st.lift));
     setFilter('duo-light', st.shadow, st.yellow);
