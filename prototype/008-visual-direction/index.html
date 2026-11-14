@@ -1,21 +1,20 @@
 <!doctype html>
 <!--
-  PROTOTYPE, round 3 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
+  PROTOTYPE, round 4 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
   Round 1 (e737601): owner picked C Hybrid. Round 2 (7d9107d): owner picked C3 Duotone.
-  Round 3 keeps the Hybrid type and the duotone rule (yellow lives in the photos; ink carries text;
-  dark mustard for text accents in light mode, true yellow in dark mode) and explores:
-    D1 Contained — duotone photos inside rounded cards and figures (round-2 C3, now an SVG filter).
-    D2 Bleed     — photos take space: hero image bleeds off the edge, Work as big alternating rows.
-    D3 Print     — square corners, dot-screen + paper grain, numbered "Fig." captions, zine feel.
-  "tune" in the bar swaps the yellow, the shadow tone and the hover behaviour live (values are the
-  owner's call; the panel is for comparing). "contrast" shows live ratios. Theme: button or T.
+  Round 3 (0c50389): owner picked the warm yellow (#f2c200) and asked to mix D1 Contained and D2 Bleed.
+  Round 4 assembles each variant from parts of both:
+    M1 Bleed hero, contained body — portrait bleeds beside the headline; Work as cards; About with a small photo; full-bleed Case study opener.
+    M2 Contained hero, bleed body — giant headline alone; Work as big alternating rows; About as a photo band; contained Case study cover.
+    M3 Bleed scale, rounded       — Bleed's sizes everywhere, but every photo keeps Contained's rounded corners and gutter inset.
+  "tune" still swaps yellow (default now warm), shadow tone, dark-mode duotone and hover. "contrast" shows ratios. Theme: button or T.
   Images: Unsplash stand-ins (hotlinked). Copy is placeholder. Open this file in a browser.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PROTOTYPE 008 · Visual direction · round 3</title>
+<title>PROTOTYPE 008 · Visual direction · round 4</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;0,900;1,900&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -32,7 +31,7 @@ a{color:inherit}
 /* =================== shared: Hybrid type + duotone rule =================== */
 .v{
   --bg:#f7f4ed; --fg:#161412; --mid:#5a544f; --line:#dcd6ca; --card:#ece7dd;
-  --yellow:#f6d200; --shadow:#161412; --on-yellow:#161412; --accent-text:#6b5600;
+  --yellow:#f2c200; --shadow:#161412; --on-yellow:#161412; --accent-text:#6b5600;
   --display:"Hanken Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace; --italic:"Instrument Serif",Georgia,serif;
   --step-0:clamp(1rem,.95rem + .3vw,1.2rem);
   --step-2:clamp(1.6rem,1.2rem + 1.8vw,2.8rem);
@@ -94,87 +93,63 @@ body[data-hover="zoom"] .v a:hover .ph img{transform:scale(1.04)}
 .v .cs-open h1{font:900 var(--step-4)/.9 var(--display);letter-spacing:-.045em;max-inline-size:16ch;margin-block:1.5rem}
 .v .cs-open .outcome{font:400 var(--step-2)/1.25 var(--display);letter-spacing:-.02em;max-inline-size:30ch}
 
-/* =================== D1 · Contained =================== */
-.d1 .hero{padding-block:calc(var(--space-l)/2) var(--space-l)}
-.d1 .hero-foot{display:grid;gap:1.5rem;margin-block-start:clamp(2rem,5vw,4rem)}
-@media (min-width:52em){.d1 .hero-foot{grid-template-columns:1fr 1fr 1fr}.d1 .hero-foot .lead{grid-column:2/4}}
-.d1 .cards{display:grid;gap:clamp(1rem,2vw,2rem);padding-block:1.5rem var(--space-l)}
-@media (min-width:52em){.d1 .cards{grid-template-columns:repeat(3,1fr)}}
-.d1 .card a{text-decoration:none;display:block}
-.d1 .card .ph{aspect-ratio:3/4;border-radius:var(--radius)}
-.d1 .card h3{margin-block-start:1rem;font:700 var(--step-0)/1.3 var(--display)}
-.d1 .card a:hover h3{text-decoration:underline;text-underline-offset:.25em}
-.d1 .card p{color:var(--mid);font-size:.95rem}
-.d1 .card .mono{display:block;margin-block-start:.5rem;color:var(--mid)}
-.d1 .statement{padding-block:var(--space-l);border-block-start:1px solid var(--fg);display:grid;gap:2rem;align-items:end}
-@media (min-width:52em){.d1 .statement{grid-template-columns:2fr 1fr}}
-.d1 .statement p{font:700 var(--step-2)/1.15 var(--display);letter-spacing:-.025em;max-inline-size:30ch}
-.d1 .statement .ph{aspect-ratio:4/5;border-radius:var(--radius);max-inline-size:22rem}
-.d1 .cs-open{display:flex;flex-direction:column-reverse}
-.d1 .cs-open .wrap{padding-block:var(--space-l) 2rem}
-.d1 .cs-open .ph{aspect-ratio:21/9;border-radius:var(--radius);margin-inline:var(--gutter)}
+/* =================== parts: Contained =================== */
+.hero-c{padding-block:calc(var(--space-l)/2) var(--space-l)}
+.hero-c .hero-foot{display:grid;gap:1.5rem;margin-block-start:clamp(2rem,5vw,4rem)}
+@media (min-width:52em){.hero-c .hero-foot{grid-template-columns:1fr 1fr 1fr}.hero-c .hero-foot .lead{grid-column:2/4}}
+.cards{display:grid;gap:clamp(1rem,2vw,2rem);padding-block:1.5rem var(--space-l)}
+@media (min-width:52em){.cards{grid-template-columns:repeat(3,1fr)}}
+.card a{text-decoration:none;display:block}
+.card .ph{aspect-ratio:3/4;border-radius:var(--radius)}
+.card h3{margin-block-start:1rem;font:700 var(--step-0)/1.3 var(--display)}
+.card a:hover h3{text-decoration:underline;text-underline-offset:.25em}
+.card p{color:var(--mid);font-size:.95rem}
+.card .mono{display:block;margin-block-start:.5rem;color:var(--mid)}
+.statement{padding-block:var(--space-l);border-block-start:1px solid var(--fg);display:grid;gap:2rem;align-items:end}
+@media (min-width:52em){.statement{grid-template-columns:2fr 1fr}}
+.statement p{font:700 var(--step-2)/1.15 var(--display);letter-spacing:-.025em;max-inline-size:30ch}
+.statement .ph{aspect-ratio:4/5;border-radius:var(--radius);max-inline-size:22rem}
+.cs-c .cs-open{display:flex;flex-direction:column-reverse}
+.cs-c .cs-open .wrap{padding-block:var(--space-l) 2rem}
+.cs-c .cs-open .ph{aspect-ratio:21/9;border-radius:var(--radius);margin-inline:var(--gutter)}
 
-/* =================== D2 · Bleed =================== */
-.d2 .hero{display:grid;gap:2rem;padding-block-start:calc(var(--space-l)/3)}
-@media (min-width:60em){.d2 .hero{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;align-items:end;min-block-size:min(88vh,60rem)}}
-.d2 .hero .text{padding-inline:var(--gutter);padding-block-end:var(--space-l);position:relative;z-index:1}
-.d2 .hero h1.display{font-size:clamp(3.4rem,1rem + 9vw,12rem)}
-@media (min-width:60em){.d2 .hero h1.display{margin-inline-end:-30%}}
-.d2 .hero .lead{margin-block-start:2rem}
-.d2 .hero .ph{block-size:100%;min-block-size:24rem}
-@media (max-width:59.99em){.d2 .hero .ph{aspect-ratio:4/3;min-block-size:0}}
-.d2 .rows{padding-block:1.5rem var(--space-l)}
-.d2 .row a{display:grid;gap:1.5rem;text-decoration:none;padding-block:clamp(2rem,4vw,4rem);border-block-end:1px solid var(--line)}
-@media (min-width:52em){.d2 .row a{grid-template-columns:7fr 5fr;gap:clamp(2rem,4vw,4rem);align-items:center}.d2 .row:nth-child(even) .ph{order:2}}
-.d2 .row .ph{aspect-ratio:16/10}
-.d2 .row h3{font:900 var(--step-4)/.92 var(--display);letter-spacing:-.04em;margin-block:.75rem 1rem}
-.d2 .row a:hover h3{text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.1em}
-.d2 .row p{color:var(--mid);max-inline-size:36ch}
-.d2 .row .meta{display:block;margin-block-start:1rem;color:var(--mid)}
-.d2 .band{position:relative;min-block-size:min(80vh,40rem);display:grid;align-items:end}
-.d2 .band .ph{position:absolute;inset:0}
-.d2 .band .inner{position:relative;padding:var(--space-l) var(--gutter) var(--gutter)}
-.d2 .band p{display:inline;background:#161412;color:#f1ede5;font:700 var(--step-2)/1.35 var(--display);letter-spacing:-.02em;padding:.05em .2em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
-.d2 .band p a{color:var(--yellow)}
-.d2 .cs-open{position:relative;color:#f7f4ed;background:#161412}
-.d2 .cs-open .ph{position:absolute;inset:0}
-.d2 .cs-open .ph img{opacity:.6}
-.d2 .cs-open .wrap{position:relative;min-block-size:min(85vh,48rem);display:flex;flex-direction:column;justify-content:flex-end;padding-block:var(--space-l)}
-.d2 .cs-open h1 span,.d2 .cs-open .outcome span{background:#161412;box-decoration-break:clone;-webkit-box-decoration-break:clone;padding-inline:.15em}
-.d2 .cs-open .outcome{color:var(--yellow)}
-.d2 .prose figure .ph{border-radius:0;aspect-ratio:21/9}
+/* =================== parts: Bleed =================== */
+.hero-b{display:grid;gap:2rem;padding-block-start:calc(var(--space-l)/3)}
+@media (min-width:60em){.hero-b{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;align-items:end;min-block-size:min(88vh,60rem)}}
+.hero-b .text{padding-inline:var(--gutter);padding-block-end:var(--space-l);position:relative;z-index:1}
+.hero-b h1.display{font-size:clamp(3.4rem,1rem + 9vw,12rem)}
+@media (min-width:60em){.hero-b h1.display{margin-inline-end:-30%}}
+.hero-b .lead{margin-block-start:2rem}
+.hero-b .ph{block-size:100%;min-block-size:24rem}
+@media (max-width:59.99em){.hero-b .ph{aspect-ratio:4/3;min-block-size:0;block-size:auto}}
+.rows{padding-block:1.5rem var(--space-l)}
+.row a{display:grid;gap:1.5rem;text-decoration:none;padding-block:clamp(2rem,4vw,4rem);border-block-end:1px solid var(--line)}
+@media (min-width:52em){.row a{grid-template-columns:7fr 5fr;gap:clamp(2rem,4vw,4rem);align-items:center}.row:nth-child(even) .ph{order:2}}
+.row .ph{aspect-ratio:16/10}
+.row h3{font:900 var(--step-4)/.92 var(--display);letter-spacing:-.04em;margin-block:.75rem 1rem}
+.row a:hover h3{text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.1em}
+.row p{color:var(--mid);max-inline-size:36ch}
+.row .meta{display:block;margin-block-start:1rem;color:var(--mid)}
+.band{position:relative;min-block-size:min(80vh,40rem);display:grid;align-items:end}
+.band .ph{position:absolute;inset:0}
+.band .inner{position:relative;padding:var(--space-l) var(--gutter) var(--gutter)}
+.band p{display:inline;background:#161412;color:#f1ede5;font:700 var(--step-2)/1.35 var(--display);letter-spacing:-.02em;padding:.05em .2em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.band p a{color:var(--yellow)}
+.cs-b .cs-open{position:relative;color:#f7f4ed;background:#161412}
+.cs-b .cs-open .ph{position:absolute;inset:0}
+.cs-b .cs-open .ph img{opacity:.6}
+.cs-b .cs-open .wrap{position:relative;min-block-size:min(85vh,48rem);display:flex;flex-direction:column;justify-content:flex-end;padding-block:var(--space-l)}
+.cs-b .cs-open h1 span,.cs-b .cs-open .outcome span{background:#161412;box-decoration-break:clone;-webkit-box-decoration-break:clone;padding-inline:.15em}
+.cs-b .cs-open .outcome{color:var(--yellow)}
+.cs-b .prose figure .ph{border-radius:0;aspect-ratio:21/9}
 
-/* =================== D3 · Print =================== */
-.d3{--radius:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.dark .d3{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.d3 .ph{position:relative}
-.d3 .ph::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at center,var(--shadow) 32%,transparent 36%) 0 0/5px 5px;mix-blend-mode:multiply;opacity:.35}
-body[data-hover="reveal"] .d3 a:hover .ph::after{opacity:0}
-.d3 .masthead{display:grid;grid-template-columns:1fr auto;gap:1rem;border-block:3px double var(--fg);padding-block:.75rem;margin-block-start:1rem}
-.d3 .hero{padding-block:calc(var(--space-l)/2) var(--space-l)}
-.d3 .hero-grid{display:grid;gap:1.5rem;margin-block-start:2.5rem}
-@media (min-width:52em){.d3 .hero-grid{grid-template-columns:1fr 2fr;align-items:start}}
-.d3 .hero h1.display{font-size:clamp(3.4rem,1rem + 9vw,12rem)}
-.d3 .hero .lead{margin-block-start:2rem}
-.d3 .hero .ph{aspect-ratio:4/5}
-.d3 .fig{display:flex;justify-content:space-between;gap:1rem;padding-block:.5rem;border-block-start:1px solid var(--fg);color:var(--mid)}
-.d3 .head-row{border-block-start:3px double var(--fg)}
-.d3 .grid{display:grid;gap:clamp(1rem,2vw,2rem);padding-block:1.5rem var(--space-l)}
-@media (min-width:52em){.d3 .grid{grid-template-columns:repeat(6,1fr)}.d3 .grid li:nth-child(1){grid-column:1/5;grid-row:1/3}.d3 .grid li:nth-child(2),.d3 .grid li:nth-child(3){grid-column:5/7}}
-.d3 .grid a{display:block;text-decoration:none}
-.d3 .grid li:nth-child(1) .ph{aspect-ratio:4/3}
-.d3 .grid .ph{aspect-ratio:3/2}
-.d3 .grid h3{font:700 var(--step-0)/1.3 var(--display);margin-block-start:.25rem}
-.d3 .grid li:nth-child(1) h3{font:900 var(--step-2)/1 var(--display);letter-spacing:-.03em}
-.d3 .grid a:hover h3{text-decoration:underline;text-underline-offset:.2em}
-.d3 .grid p:not(.fig){color:var(--mid);font-size:.95rem;max-inline-size:44ch}
-.d3 .statement{padding-block:var(--space-l);border-block-start:3px double var(--fg);display:grid;gap:2rem}
-@media (min-width:52em){.d3 .statement{grid-template-columns:1fr 2fr}}
-.d3 .statement p{font:700 var(--step-2)/1.15 var(--display);letter-spacing:-.025em;max-inline-size:30ch}
-.d3 .stats li{border:1px solid var(--fg);background:none}
-.d3 .cs-open{display:flex;flex-direction:column-reverse}
-.d3 .cs-open .wrap{padding-block:var(--space-l) 2rem}
-.d3 .cs-open .ph{aspect-ratio:21/9}
+/* =================== M3 · bleed scale, contained shape =================== */
+.round .hero-b .ph{border-radius:var(--radius);margin-inline-end:var(--gutter);margin-block-end:var(--gutter)}
+@media (max-width:59.99em){.round .hero-b .ph{margin-inline:var(--gutter)}}
+.round .row .ph{border-radius:var(--radius)}
+.round .band{margin-inline:var(--gutter);border-radius:var(--radius);overflow:hidden}
+.round .cs-b .cs-open{margin:var(--gutter) var(--gutter) 0;border-radius:var(--radius);overflow:hidden}
+.round .cs-b .prose figure .ph{border-radius:var(--radius)}
 
 /* ---------- prototype chrome (NOT part of the design) ---------- */
 .proto-bar{position:fixed;inset-block-end:16px;inset-inline-start:50%;transform:translateX(-50%);z-index:999;display:flex;align-items:center;gap:4px;padding:6px;border-radius:999px;background:#ff00aa;color:#fff;font:600 13px/1 "JetBrains Mono",monospace;box-shadow:0 6px 24px #0006,0 0 0 2px #fff;max-inline-size:calc(100vw - 16px);flex-wrap:wrap;justify-content:center}
@@ -218,33 +193,16 @@ body[data-hover="reveal"] .d3 a:hover .ph::after{opacity:0}
   </div></header>
 </template>
 
-<!-- D1 Contained -->
-<template id="t-d1">
-  <main>
-    <section class="hero wrap">
+<!-- page parts; each variant is assembled from them (data-parts) -->
+<template id="t-hero-c">
+  <section class="hero hero-c wrap">
       <!-- PLACEHOLDER: positioning line -->
       <h1 class="display">Lorem ipsum dolor sit<span class="stop">.</span></h1>
       <div class="hero-foot"><span class="mono accent">Role slot — Lisbon</span><p class="lead">Consectetur adipiscing elit, sed do <em>eiusmod</em> tempor incididunt ut labore.</p></div>
     </section>
-    <section class="wrap" aria-labelledby="d1-work">
-      <div class="head-row"><h2 class="mono" id="d1-work">Selected work</h2><span class="mono accent">(03)</span></div>
-      <ol class="cards">
-        <li class="card"><a href="#d1-cs"><div class="ph"><img data-img="a" data-w="800" data-h="1067" alt=""></div><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur.</p><span class="mono">Industry · 2025–26</span></a></li>
-        <li class="card"><a href="#d1-cs"><div class="ph"><img data-img="b" data-w="800" data-h="1067" alt=""></div><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam quis nostrud.</p><span class="mono">Client · 2019–23</span></a></li>
-        <li class="card"><a href="#d1-cs"><div class="ph"><img data-img="c" data-w="800" data-h="1067" alt=""></div><h3>Case study three title</h3><p>Outcome: duis aute irure dolor in reprehenderit.</p><span class="mono">Industry · 2024</span></a></li>
-      </ol>
-    </section>
-    <section class="wrap statement" aria-label="About">
-      <div><p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec odio praesent libero. <a href="#">More about me</a></p><a class="btn" href="#">Get in touch</a></div>
-      <div class="ph"><img data-img="p" data-w="640" data-h="800" alt=""></div>
-    </section>
-  </main>
 </template>
-
-<!-- D2 Bleed -->
-<template id="t-d2">
-  <main>
-    <section class="hero">
+<template id="t-hero-b">
+  <section class="hero hero-b">
       <div class="text">
         <span class="mono accent">Role slot — Lisbon</span>
         <!-- PLACEHOLDER: positioning line -->
@@ -253,50 +211,39 @@ body[data-hover="reveal"] .d3 a:hover .ph::after{opacity:0}
       </div>
       <div class="ph"><img data-img="p" data-w="1200" data-h="1500" alt=""></div>
     </section>
-    <section class="wrap" aria-labelledby="d2-work">
-      <div class="head-row"><h2 class="mono" id="d2-work">Selected work</h2><span class="mono accent">(03)</span></div>
-      <ol class="rows">
-        <li class="row"><a href="#d2-cs"><div class="ph"><img data-img="a" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">01</span><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur adipiscing.</p><span class="mono meta">Industry · 2025–26</span></div></a></li>
-        <li class="row"><a href="#d2-cs"><div class="ph"><img data-img="b" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">02</span><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam quis nostrud exercitation.</p><span class="mono meta">Client · 2019–23</span></div></a></li>
-        <li class="row"><a href="#d2-cs"><div class="ph"><img data-img="c" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">03</span><h3>Case study three title</h3><p>Outcome: duis aute irure dolor in reprehenderit in voluptate.</p><span class="mono meta">Industry · 2024</span></div></a></li>
+</template>
+<template id="t-work-cards">
+  <section class="wrap" aria-labelledby="work-h">
+      <div class="head-row"><h2 class="mono" id="work-h">Selected work</h2><span class="mono accent">(03)</span></div>
+      <ol class="cards">
+        <li class="card"><a href="#cs"><div class="ph"><img data-img="a" data-w="800" data-h="1067" alt=""></div><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur.</p><span class="mono">Industry · 2025–26</span></a></li>
+        <li class="card"><a href="#cs"><div class="ph"><img data-img="b" data-w="800" data-h="1067" alt=""></div><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam quis nostrud.</p><span class="mono">Client · 2019–23</span></a></li>
+        <li class="card"><a href="#cs"><div class="ph"><img data-img="c" data-w="800" data-h="1067" alt=""></div><h3>Case study three title</h3><p>Outcome: duis aute irure dolor in reprehenderit.</p><span class="mono">Industry · 2024</span></a></li>
       </ol>
     </section>
-    <section class="band" aria-label="About">
+</template>
+<template id="t-work-rows">
+  <section class="wrap" aria-labelledby="work-h">
+      <div class="head-row"><h2 class="mono" id="work-h">Selected work</h2><span class="mono accent">(03)</span></div>
+      <ol class="rows">
+        <li class="row"><a href="#cs"><div class="ph"><img data-img="a" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">01</span><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur adipiscing.</p><span class="mono meta">Industry · 2025–26</span></div></a></li>
+        <li class="row"><a href="#cs"><div class="ph"><img data-img="b" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">02</span><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam quis nostrud exercitation.</p><span class="mono meta">Client · 2019–23</span></div></a></li>
+        <li class="row"><a href="#cs"><div class="ph"><img data-img="c" data-w="1400" data-h="875" alt=""></div><div><span class="mono accent">03</span><h3>Case study three title</h3><p>Outcome: duis aute irure dolor in reprehenderit in voluptate.</p><span class="mono meta">Industry · 2024</span></div></a></li>
+      </ol>
+    </section>
+</template>
+<template id="t-about-c">
+  <section class="wrap statement" aria-label="About">
+      <div><p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec odio praesent libero. <a href="#">More about me</a></p><a class="btn" href="#">Get in touch</a></div>
+      <div class="ph"><img data-img="p" data-w="640" data-h="800" alt=""></div>
+    </section>
+</template>
+<template id="t-about-b">
+  <section class="band" aria-label="About">
       <div class="ph"><img data-img="t" data-w="2000" data-h="1100" alt=""></div>
       <div class="inner"><p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec odio praesent libero. <a href="#">More about me</a></p></div>
     </section>
-  </main>
 </template>
-
-<!-- D3 Print -->
-<template id="t-d3">
-  <main>
-    <section class="hero wrap">
-      <div class="masthead"><span class="mono">Role slot — Lisbon</span><span class="mono">Vol. 2 · 2026</span></div>
-      <div class="hero-grid">
-        <figure><div class="ph"><img data-img="p" data-w="640" data-h="800" alt=""></div><figcaption class="mono fig"><span>Fig. 00</span><span>Portrait</span></figcaption></figure>
-        <div>
-          <!-- PLACEHOLDER: positioning line -->
-          <h1 class="display">Lorem ipsum dolor sit<span class="stop">.</span></h1>
-          <p class="lead">Consectetur adipiscing elit, sed do <em>eiusmod</em> tempor incididunt ut labore.</p>
-        </div>
-      </div>
-    </section>
-    <section class="wrap" aria-labelledby="d3-work">
-      <div class="head-row"><h2 class="mono" id="d3-work">Selected work</h2><span class="mono accent">(03)</span></div>
-      <ol class="grid">
-        <li><a href="#d3-cs"><div class="ph"><img data-img="a" data-w="1200" data-h="900" alt=""></div><p class="mono fig"><span>Fig. 01</span><span>Industry · 2025–26</span></p><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur adipiscing elit.</p></a></li>
-        <li><a href="#d3-cs"><div class="ph"><img data-img="b" data-w="900" data-h="600" alt=""></div><p class="mono fig"><span>Fig. 02</span><span>Client · 2019–23</span></p><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam.</p></a></li>
-        <li><a href="#d3-cs"><div class="ph"><img data-img="c" data-w="900" data-h="600" alt=""></div><p class="mono fig"><span>Fig. 03</span><span>Industry · 2024</span></p><h3>Case study three title</h3><p>Outcome: duis aute irure dolor.</p></a></li>
-      </ol>
-    </section>
-    <section class="wrap statement" aria-label="About">
-      <span class="mono">About</span>
-      <div><p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec odio praesent libero. <a href="#">More about me</a></p><a class="btn" href="#">Get in touch</a></div>
-    </section>
-  </main>
-</template>
-
 <template id="t-footer-cs">
   <footer class="site"><div class="wrap">
     <span class="mono">Contact</span>
@@ -337,17 +284,17 @@ body[data-hover="reveal"] .d3 a:hover .ph::after{opacity:0}
   </article>
 </template>
 
-<div class="v d1" data-key="D1" data-name="Contained" hidden></div>
-<div class="v d2" data-key="D2" data-name="Bleed" hidden></div>
-<div class="v d3" data-key="D3" data-name="Print" hidden></div>
+<div class="v m1 cs-b" data-key="M1" data-name="Bleed hero, contained body" data-parts="hero-b work-cards about-c" hidden></div>
+<div class="v m2 cs-c" data-key="M2" data-name="Contained hero, bleed body" data-parts="hero-c work-rows about-b" hidden></div>
+<div class="v m3 cs-b round" data-key="M3" data-name="Bleed scale, rounded" data-parts="hero-b work-rows about-b" hidden></div>
 
 <!-- ============================ prototype chrome ============================ -->
 <form class="proto-panel proto-tune" hidden>
   <fieldset><legend>Yellow</legend>
-    <label><input type="radio" name="yellow" value="#f6d200" checked><span class="sw" style="background:#f6d200"></span>f6d200</label>
+    <label><input type="radio" name="yellow" value="#f6d200"><span class="sw" style="background:#f6d200"></span>f6d200</label>
     <label><input type="radio" name="yellow" value="#ffd400"><span class="sw" style="background:#ffd400"></span>ffd400</label>
     <label><input type="radio" name="yellow" value="#ffe24a"><span class="sw" style="background:#ffe24a"></span>ffe24a lemon</label><br>
-    <label><input type="radio" name="yellow" value="#f2c200"><span class="sw" style="background:#f2c200"></span>f2c200 warm</label>
+    <label><input type="radio" name="yellow" value="#f2c200" checked><span class="sw" style="background:#f2c200"></span>f2c200 warm</label>
     <label><input type="radio" name="yellow" value="#e8b400"><span class="sw" style="background:#e8b400"></span>e8b400 mustard</label>
   </fieldset>
   <fieldset><legend>Duotone shadow</legend>
@@ -385,11 +332,14 @@ body[data-hover="reveal"] .d3 a:hover .ph::after{opacity:0}
 
   const variants = [...document.querySelectorAll('.v')];
   for (const v of variants) {
-    const id = v.dataset.key.toLowerCase();
-    v.append(document.getElementById('t-header').content.cloneNode(true),
-             document.getElementById('t-' + id).content.cloneNode(true),
-             document.getElementById('t-footer-cs').content.cloneNode(true));
-    v.querySelector('[data-cs]').id = id + '-cs';
+    const key = v.dataset.key.toLowerCase();
+    const tpl = id => document.getElementById('t-' + id).content.cloneNode(true);
+    v.append(tpl('header'), document.createElement('main'), tpl('footer-cs'));
+    v.dataset.parts.split(' ').forEach(p => v.querySelector('main').append(tpl(p)));
+    v.querySelector('[data-cs]').id = key + '-cs';
+    v.querySelectorAll('a[href="#cs"]').forEach(a => a.setAttribute('href', '#' + key + '-cs'));
+    v.querySelectorAll('[id="work-h"]').forEach(e => e.id = key + '-work');
+    v.querySelectorAll('[aria-labelledby="work-h"]').forEach(e => e.setAttribute('aria-labelledby', key + '-work'));
     v.querySelectorAll('img[data-img]').forEach(i => { i.width = i.dataset.w; i.height = i.dataset.h; i.loading = 'lazy'; i.src = src(i.dataset.img, i.dataset.w, i.dataset.h); });
   }
 
@@ -401,10 +351,10 @@ body[data-hover="reveal"] .d3 a:hover .ph::after{opacity:0}
   const mq = matchMedia('(prefers-color-scheme: dark)');
   const params = new URLSearchParams(location.search);
   const st = {
-    v: keys.includes(params.get('variant')) ? params.get('variant') : 'D1',
+    v: keys.includes(params.get('variant')) ? params.get('variant') : 'M1',
     theme: themes.includes(params.get('theme')) ? params.get('theme') : 'light',
     tune: params.get('tune') === '1', contrast: params.get('contrast') === '1',
-    yellow: params.get('yellow') || '#f6d200', shadow: params.get('shadow') || '#161412',
+    yellow: params.get('yellow') || '#f2c200', shadow: params.get('shadow') || '#161412',
     darkduo: params.get('darkduo') || 'same', hover: params.get('hover') || 'reveal',
   };
   for (const n of ['yellow', 'shadow', 'darkduo', 'hover']) { const r = tune.querySelector(`input[name=${n}][value="${st[n]}"]`); if (r) r.checked = true; }
