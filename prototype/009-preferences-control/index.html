@@ -12,6 +12,9 @@
     JS                   : "off" shows the no-JS Site: controls hidden, everything follows the OS.
     theme change         : snap, or a short crossfade.
     clear saved          : forget the saved choices (each variant saves under PROTOTYPE-009:<variant> in localStorage).
+  Round 1 verdict (owner): A, theme button only; motion follows the system setting, no Site control. Theme change: fade.
+  Round 2 details (owner): the choice is remembered across visits (localStorage); flipping to the theme that matches the OS
+  drops the saved choice, so the Site follows the OS again; under reduced motion the theme fade stays, shortened to 0.15s.
   Reload the page to see what a saved choice does on the next visit. Click a Work row for the Case study; the logo goes back.
   Control labels are placeholder wording; the owner writes the real copy. Images: Unsplash stand-ins (hotlinked).
 -->
@@ -307,7 +310,7 @@ body{padding-block-end:240px;background:#161412}
   };
   const keys = Object.keys(VARIANTS);
   const params = new URLSearchParams(location.search);
-  const sim = { theme: 'light', motion: 'no-preference', js: true, fade: false };
+  const sim = { theme: 'light', motion: 'no-preference', js: true, fade: true };
   let vk = keys.includes(params.get('variant')) ? params.get('variant') : 'A';
 
   // ---------- OS (simulated or real) ----------
@@ -360,7 +363,7 @@ body{padding-block-end:240px;background:#161412}
     const before = html.classList.contains('dark');
     const run = () => { apply(); sync(); };
     const wouldChange = effective().dark !== before;
-    if (animateTheme && sim.fade && wouldChange && !html.classList.contains('rm') && document.startViewTransition) document.startViewTransition(run);
+    if (animateTheme && sim.fade && wouldChange && document.startViewTransition) document.startViewTransition(run); // html.rm shortens it to 0.15s
     else run();
     renderState();
   }
@@ -389,7 +392,11 @@ body{padding-block-end:240px;background:#161412}
     const b = e.target.closest('[data-act]');
     if (!b) { if (!e.target.closest('.pc-panel')) closeMenus(); return; }
     const act = b.dataset.act;
-    if (act === 'theme-flip') setPref('theme', effective().dark ? 'light' : 'dark');
+    if (act === 'theme-flip') { // round 2: a choice that matches the OS is dropped, so the Site follows the OS again
+      const next = effective().dark ? 'light' : 'dark';
+      if ((next === 'dark') === osDark()) { prefs = { ...prefs }; delete prefs.theme; try { localStorage.removeItem(storeKey()); } catch {} render(true); }
+      else setPref('theme', next);
+    }
     else if (act === 'theme-cycle') { const o = VARIANTS.B.theme; setPref('theme', o[(o.indexOf(prefs.theme || 'system') + 1) % o.length]); }
     else if (act === 'motion-toggle') setPref('motion', effective().reduce ? 'full' : 'reduced');
     else if (act === 'menu') { const open = b.getAttribute('aria-expanded') !== 'true'; closeMenus(b); b.setAttribute('aria-expanded', open); document.getElementById(b.getAttribute('aria-controls')).hidden = !open; }
