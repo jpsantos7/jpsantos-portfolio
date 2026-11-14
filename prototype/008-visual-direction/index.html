@@ -1,405 +1,231 @@
 <!doctype html>
 <!--
-  PROTOTYPE — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
-  Three structurally different variants of Home + one Case study, switchable via ?variant=A|B|C
-  (floating bar, or ← / → keys). Theme: auto / light / dark via the bar, or the T key.
-  All copy is placeholder (lorem + slot names): the owner writes every word (authorship protocol).
-  Fonts load from Google Fonts for speed of prototyping only; the real Site self-hosts.
-  Run: open this file in a browser (double-click). Nothing here is production code.
+  PROTOTYPE, round 2 — throwaway. Ticket 008 "Visual direction: type, space, colour, layout".
+  Round 1 (A Editorial, B Stark, C Hybrid) is in commit e737601; the owner picked C (Hybrid).
+  Round 2 keeps C's structure and type, and asks one question: how should yellow be used,
+  given yellow on the light background is ~1.35:1 (fails text and UI contrast)?
+    C1 Surface  — yellow only as a background, always with dark ink on it.
+    C2 Marker   — yellow only as small marks (full stop, highlight, rules); ink carries everything.
+    C3 Duotone  — yellow lives in the images (yellow/ink duotone); a dark-mustard ink for text accents in light.
+  Light and dark for every variant: theme button or T. "contrast" in the bar shows live ratios.
+  Images: Unsplash (hotlinked), stand-ins for style only. Copy is placeholder.
+  Run: open this file in a browser. Nothing here is production code.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PROTOTYPE 008 · Visual direction</title>
+<title>PROTOTYPE 008 · Visual direction · round 2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;0,900;1,700;1,900&family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,700;0,900;1,900&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* ---------- shared reset (not part of the evaluation) ---------- */
 *,*::before,*::after{box-sizing:border-box}
 body,h1,h2,h3,p,dl,dd,figure,ol,ul{margin:0}
 ol,ul{padding:0;list-style:none}
-img{display:block;max-inline-size:100%}
+img{display:block;max-inline-size:100%;block-size:auto}
 a{color:inherit}
 .v[hidden]{display:none!important}
 .visually-hidden{position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-.page-split{block-size:0;border:0;margin:0}
-/* label marking where the Case study page starts; prototype chrome */
-.proto-divider{font:500 12px/1 "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:10px;background:repeating-linear-gradient(45deg,#ff00aa22 0 10px,transparent 10px 20px);color:#a0006a;border-block:1px dashed #a0006a}
+.proto-divider{font:500 12px/1 "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:10px;background:repeating-linear-gradient(45deg,#ff00aa22 0 10px,transparent 10px 20px);color:#a0006a;border-block:1px dashed #a0006a;margin:0}
 
-/* =====================================================================
-   VARIANT A — Editorial
-   Refs: piccalil.li (serif body + heavy grotesque), tej.as (sentence sections,
-   serif italic accent), set.studio (one word italic, red full stop).
-   Warm paper, one red accent, serif reading body, ruled masthead.
-   ===================================================================== */
-.v-a{
-  --paper:#f6f1e8; --ink:#1c1a19; --mid:#5d5753; --rule:#1c1a19; --accent:#d4231b; --tint:#ece4d6;
-  --display:"Hanken Grotesk",system-ui,sans-serif; --serif:"Source Serif 4",Georgia,serif; --italic:"Instrument Serif",Georgia,serif;
-  --step-0:clamp(1.0625rem,1rem + .35vw,1.3rem);
-  --step-1:clamp(1.3rem,1.15rem + .7vw,1.75rem);
-  --step-3:clamp(2rem,1.4rem + 3vw,4rem);
-  --step-5:clamp(3.2rem,1.5rem + 8.5vw,10rem);
-  --gutter:clamp(1rem,4vw,3rem); --space-l:clamp(3rem,2rem + 5vw,7rem);
-  background:var(--paper); color:var(--ink); font:400 var(--step-0)/1.55 var(--serif);
-}
-.dark .v-a{--paper:#171514;--ink:#efe9df;--mid:#a59d95;--rule:#efe9df;--accent:#ff5a4a;--tint:#24201d}
-.v-a .wrap{max-inline-size:84rem;margin-inline:auto;padding-inline:var(--gutter)}
-.v-a .masthead{border-block-end:2px solid var(--rule)}
-.v-a .masthead .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:1rem;padding-block:1.25rem}
-.v-a .wordmark{font:italic 400 var(--step-1)/1 var(--italic)}
-.v-a nav ul{display:flex;gap:clamp(1rem,3vw,2.5rem);font:500 .95rem/1 var(--display);letter-spacing:.02em}
-.v-a nav a{text-decoration-thickness:1px;text-underline-offset:.3em}
-.v-a .hero{padding-block:var(--space-l) calc(var(--space-l)/1.5)}
-.v-a .hero h1{font:900 var(--step-5)/.9 var(--display);letter-spacing:-.045em;max-inline-size:14ch}
-.v-a .hero h1 em{font:italic 400 1.08em/1 var(--italic);letter-spacing:-.01em}
-.v-a .hero h1 .stop{color:var(--accent)}
-.v-a .lede{margin-block-start:2rem;max-inline-size:34ch;font:italic 400 var(--step-1)/1.4 var(--serif);color:var(--mid)}
-.v-a .section-title{font:900 var(--step-3)/1 var(--display);letter-spacing:-.03em;padding-block:var(--space-l) 1.5rem;border-block-end:1px solid var(--rule)}
-.v-a .section-title .stop{color:var(--accent)}
-.v-a .work li{display:grid;grid-template-columns:minmax(0,3rem) minmax(0,1fr);gap:1rem;padding-block:2rem;border-block-end:1px solid var(--rule)}
-@media (min-width:48em){.v-a .work li{grid-template-columns:5rem minmax(0,1fr) 14rem;gap:2rem}}
-.v-a .work .num{font:italic 400 var(--step-3)/1 var(--italic);color:var(--accent)}
-.v-a .work h3{font:700 var(--step-1)/1.15 var(--display);letter-spacing:-.01em}
-.v-a .work h3 a{text-decoration:none}
-.v-a .work h3 a:hover{text-decoration:underline}
-.v-a .work .outcome{margin-block-start:.5rem;max-inline-size:52ch}
-.v-a .work .meta{grid-column:2;font:400 .85rem/1.4 var(--display);color:var(--mid)}
-@media (min-width:48em){.v-a .work .meta{grid-column:3;text-align:end}}
-.v-a .about-teaser{display:grid;gap:2rem;padding-block:var(--space-l)}
-@media (min-width:48em){.v-a .about-teaser{grid-template-columns:1fr 1fr}}
-.v-a .about-teaser p{max-inline-size:60ch}
-.v-a .about-teaser p:first-child::first-letter{float:inline-start;font:900 4.2em/.8 var(--display);margin-inline-end:.08em;margin-block-start:.08em}
-.v-a .cta{background:var(--ink);color:var(--paper)}
-.v-a .cta .wrap{padding-block:var(--space-l)}
-.v-a .cta p{font:900 var(--step-3)/1 var(--display);letter-spacing:-.03em;max-inline-size:18ch}
-.v-a .cta a{display:inline-block;margin-block-start:1.5rem;font:italic 400 var(--step-1)/1 var(--italic)}
-.v-a footer .wrap{padding-block:2rem;font:400 .85rem/1.4 var(--display);color:var(--mid);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-/* A — case study: single centred reading column, ruled "At a glance" box */
-.v-a .cs{padding-block:var(--space-l)}
-.v-a .cs-head{max-inline-size:44rem;margin-inline:auto;text-align:center}
-.v-a .kicker{font:500 .8rem/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
-.v-a .cs h1{margin-block:1rem;font:900 var(--step-3)/1 var(--display);letter-spacing:-.035em}
-.v-a .cs .lede{margin-inline:auto}
-.v-a .cs-body{max-inline-size:40rem;margin-inline:auto;margin-block-start:var(--space-l)}
-.v-a .cs-body > * + *{margin-block-start:1.2em}
-.v-a .glance{border-block:2px solid var(--rule);padding-block:1rem;display:grid;grid-template-columns:auto 1fr;gap:.4rem 1.5rem;font:400 .95rem/1.4 var(--display)}
-.v-a .glance dt{color:var(--mid)}
-.v-a .cs-body h2{font:700 var(--step-1)/1.2 var(--display);margin-block-start:2.2em}
-.v-a .results{display:grid;gap:1.5rem;margin-block:2.5rem}
-.v-a .results li{border-inline-start:4px solid var(--accent);padding-inline-start:1.25rem;font:italic 400 var(--step-1)/1.3 var(--italic)}
-.v-a .results small{display:block;margin-block-start:.4rem;font:400 .85rem/1.4 var(--display);color:var(--mid)}
-
-/* =====================================================================
-   VARIANT B — Stark / minimal
-   Refs: victorberbel.work (one sentence, black→grey, 2-col intro, tiny dot),
-   littlewebsite.co (hairlines, minimal chrome), ecrin.digital (light-weight grotesque).
-   One family (Inter), near-monochrome, a 12-column grid, text-only Work index.
-   ===================================================================== */
-.v-b{
-  --bg:#ffffff; --fg:#111111; --mid:#6e6e6e; --faint:#b4b4b4; --line:#e3e3e3; --dot:#ff5b00;
-  --sans:"Inter",system-ui,sans-serif;
-  --step-0:clamp(.95rem,.9rem + .2vw,1.05rem);
-  --step-2:clamp(1.5rem,1.1rem + 1.9vw,2.75rem);
-  --gutter:clamp(1rem,3vw,2rem); --space-l:clamp(3rem,2rem + 6vw,9rem);
-  background:var(--bg); color:var(--fg); font:400 var(--step-0)/1.5 var(--sans); letter-spacing:-.005em;
-}
-.dark .v-b{--bg:#0e0e0e;--fg:#f2f2f2;--mid:#8f8f8f;--faint:#555;--line:#262626}
-.v-b .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:var(--gutter);padding-inline:var(--gutter)}
-@media (min-width:56em){.v-b .grid{grid-template-columns:repeat(12,minmax(0,1fr))}}
-.v-b .full{grid-column:1/-1}
-.v-b header{padding-block:1.25rem;align-items:baseline}
-.v-b header .name{grid-column:1/3;font-weight:500}
-.v-b header nav{grid-column:3/-1;justify-self:end}
-@media (min-width:56em){.v-b header nav{grid-column:5/9;justify-self:start}.v-b header .clock{grid-column:10/-1;justify-self:end;color:var(--mid)}}
-@media (max-width:55.99em){.v-b header .clock{display:none}}
-.v-b nav ul{display:flex;gap:1.5rem}
-.v-b nav a{text-decoration:none}
-.v-b nav a:hover,.v-b nav a[aria-current]{text-decoration:underline;text-underline-offset:.25em}
-.v-b .intro{padding-block:var(--space-l)}
-.v-b .intro .side{grid-column:1/-1;color:var(--mid);margin-block-end:1.5rem}
-.v-b .intro .side span{display:block}
-.v-b .intro h1{grid-column:1/-1;font:500 var(--step-2)/1.15 var(--sans);letter-spacing:-.025em}
-@media (min-width:56em){.v-b .intro .side{grid-column:1/5;margin:0}.v-b .intro h1{grid-column:5/-1}}
-.v-b .intro h1 .quiet{color:var(--faint)}
-.v-b .dot{display:inline-block;inline-size:.5em;block-size:.5em;border-radius:50%;background:var(--dot);margin-inline-end:.5em;vertical-align:.1em}
-.v-b .label{grid-column:1/-1;color:var(--mid);padding-block:1rem;border-block-start:1px solid var(--line)}
-@media (min-width:56em){.v-b .label{grid-column:1/5}}
-.v-b .index{grid-column:1/-1}
-@media (min-width:56em){.v-b .index{grid-column:5/-1}}
-.v-b .index li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.25rem 1rem;padding-block:1rem;border-block-start:1px solid var(--line)}
-.v-b .index li:last-child{border-block-end:1px solid var(--line)}
-.v-b .index a{text-decoration:none;font-weight:500}
-.v-b .index a:hover{text-decoration:underline;text-underline-offset:.25em}
-.v-b .index .yr{color:var(--mid);font-variant-numeric:tabular-nums}
-.v-b .index .outcome{grid-column:1/-1;color:var(--mid);max-inline-size:56ch}
-.v-b .block{padding-block:var(--space-l) 0}
-.v-b .block p{grid-column:1/-1;max-inline-size:56ch}
-@media (min-width:56em){.v-b .block p{grid-column:5/11}}
-.v-b .block p + p{margin-block-start:1em}
-.v-b footer{padding-block:var(--space-l) 1.5rem;color:var(--mid)}
-.v-b footer .big{grid-column:1/-1;color:var(--fg);font:500 var(--step-2)/1.15 var(--sans);letter-spacing:-.025em;padding-block-end:var(--space-l)}
-.v-b footer .big a{text-underline-offset:.15em;text-decoration-thickness:1px}
-.v-b footer .left{grid-column:1/3}.v-b footer .right{grid-column:3/-1;justify-self:end}
-/* B — case study: sticky meta column left, text right */
-.v-b .cs{padding-block:var(--space-l)}
-.v-b .cs-meta{grid-column:1/-1;color:var(--mid);font-size:.9rem;margin-block-end:2rem}
-@media (min-width:56em){.v-b .cs-meta{grid-column:1/4;position:sticky;inset-block-start:1.5rem;align-self:start}}
-.v-b .cs-meta dl{display:grid;gap:.9rem}
-.v-b .cs-meta dt{color:var(--fg)}
-.v-b .cs-main{grid-column:1/-1}
-@media (min-width:56em){.v-b .cs-main{grid-column:5/12}}
-.v-b .cs-main h1{font:500 var(--step-2)/1.15 var(--sans);letter-spacing:-.025em}
-.v-b .cs-main .outcome{margin-block-start:1rem;font:500 var(--step-2)/1.15 var(--sans);letter-spacing:-.025em;color:var(--faint)}
-.v-b .cs-main h2{font-size:var(--step-0);font-weight:500;margin-block:3rem 1rem;padding-block-start:1rem;border-block-start:1px solid var(--line)}
-.v-b .cs-main p{max-inline-size:60ch}
-.v-b .cs-main p + p{margin-block-start:1em}
-.v-b .figure{aspect-ratio:16/10;background:var(--line);margin-block:3rem;display:grid;place-items:center;color:var(--mid);font-size:.85rem}
-.v-b .results li{display:grid;grid-template-columns:2rem 1fr;padding-block:1rem;border-block-start:1px solid var(--line)}
-.v-b .results li small{grid-column:2;color:var(--mid)}
-
-/* =====================================================================
-   VARIANT C — Hybrid: big display type on a stark structure
-   Refs: set.studio (gigantic tight headline, tall work cards, one accent),
-   tej.as (mono caps labels, cream/near-black, follows prefers-color-scheme),
-   endcap.design / piccalil.li (one full-colour block for the Case study opener).
-   ===================================================================== */
-.v-c{
-  --bg:#f4f1ea; --fg:#0f0d0d; --mid:#57514d; --line:#d9d3c7; --accent:#e8362c; --block:#e2f06a; --block-ink:#0f0d0d; --card:#e7e1d5;
+/* =================== shared Hybrid structure (chosen in round 1) =================== */
+.v{
+  /* light */
+  --bg:#f7f4ed; --fg:#161412; --mid:#5a544f; --line:#dcd6ca; --card:#ece7dd;
+  --yellow:#f6d200; --on-yellow:#161412; --accent-text:var(--fg);
   --display:"Hanken Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace; --italic:"Instrument Serif",Georgia,serif;
   --step-0:clamp(1rem,.95rem + .3vw,1.2rem);
   --step-2:clamp(1.6rem,1.2rem + 1.8vw,2.8rem);
   --step-6:clamp(3.6rem,1rem + 13vw,17rem);
   --gutter:clamp(1rem,4vw,3.5rem); --space-l:clamp(3.5rem,2rem + 7vw,10rem);
+  --radius:1.25rem;
   background:var(--bg); color:var(--fg); font:400 var(--step-0)/1.6 var(--body);
 }
-.dark .v-c{--bg:#0f0d0d;--fg:#f2efe9;--mid:#a49c97;--line:#2c2826;--accent:#ff5046;--card:#1c1918}
-.v-c .wrap{padding-inline:var(--gutter)}
-.v-c .mono{font:500 .75rem/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase}
-.v-c header .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:1.25rem;flex-wrap:wrap;gap:1rem}
-.v-c .logo{font:900 1.25rem/1 var(--display);letter-spacing:-.03em}
-.v-c .logo span{color:var(--accent)}
-.v-c nav ul{display:flex;gap:clamp(1rem,3vw,2.5rem)}
-.v-c nav a{text-decoration:none}
-.v-c nav a:hover{text-decoration:underline;text-underline-offset:.3em}
-.v-c .hero{padding-block:calc(var(--space-l)/2) var(--space-l)}
-.v-c .hero h1{font:900 var(--step-6)/.84 var(--display);letter-spacing:-.055em;margin-inline-start:-.04em}
-.v-c .hero h1 .stop{color:var(--accent)}
-.v-c .hero-foot{display:grid;gap:1.5rem;margin-block-start:clamp(2rem,5vw,4rem)}
-@media (min-width:52em){.v-c .hero-foot{grid-template-columns:1fr 1fr 1fr}.v-c .hero-foot p{grid-column:2/4}}
-.v-c .hero-foot p{font:400 var(--step-2)/1.2 var(--display);letter-spacing:-.02em;max-inline-size:26ch}
-.v-c .hero-foot p em{font:italic 400 1.1em/1 var(--italic)}
-.v-c .head-row{display:flex;justify-content:space-between;align-items:baseline;padding-block:1rem;border-block-start:1px solid var(--fg)}
-.v-c .cards{display:grid;gap:clamp(1rem,2vw,2rem);padding-block:1.5rem var(--space-l)}
-@media (min-width:52em){.v-c .cards{grid-template-columns:repeat(3,1fr)}}
-.v-c .card a{text-decoration:none;display:block}
-.v-c .card .cover{aspect-ratio:3/4;border-radius:1.25rem;background:var(--card);display:grid;place-items:center;color:var(--mid);transition:transform .3s}
-@media (prefers-reduced-motion:no-preference){.v-c .card a:hover .cover{transform:translateY(-4px)}}
-.v-c .card h3{margin-block-start:1rem;font:700 var(--step-0)/1.3 var(--display)}
-.v-c .card p{color:var(--mid);font-size:.95rem}
-.v-c .card .mono{display:block;margin-block-start:.5rem;color:var(--mid)}
-.v-c .statement{padding-block:var(--space-l);border-block-start:1px solid var(--fg)}
-.v-c .statement p{font:700 var(--step-2)/1.15 var(--display);letter-spacing:-.025em;max-inline-size:30ch}
-.v-c .statement p em{font:italic 400 1.1em/1 var(--italic)}
-.v-c footer{background:var(--fg);color:var(--bg)}
-.v-c footer .wrap{padding-block:var(--space-l) 1.5rem}
-.v-c footer .big{font:900 var(--step-6)/.84 var(--display);letter-spacing:-.055em}
-.v-c footer .big a{text-decoration:none}
-.v-c footer .big a:hover{color:var(--accent)}
-.v-c footer .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-block-start:var(--space-l)}
-/* C — case study: full-colour outcome block, stat tiles, then reading column */
-.v-c .cs-open{background:var(--block);color:var(--block-ink)}
-.v-c .cs-open .wrap{padding-block:var(--space-l)}
-.v-c .cs-open h1{font:900 clamp(2.5rem,1rem + 6vw,7rem)/.9 var(--display);letter-spacing:-.045em;max-inline-size:16ch;margin-block:1.5rem}
-.v-c .cs-open .outcome{font:400 var(--step-2)/1.2 var(--display);letter-spacing:-.02em;max-inline-size:30ch}
-.v-c .glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr));border-block-end:1px solid var(--line)}
-.v-c .glance div{padding:1.25rem var(--gutter) 1.25rem 0;border-block-end:1px solid var(--line)}
-.v-c .glance dt{color:var(--mid)}
-.v-c .glance dd{font:500 1rem/1.4 var(--display);margin-block-start:.35rem}
-.v-c .stats{display:grid;gap:1rem;padding-block:var(--space-l) 0}
-@media (min-width:52em){.v-c .stats{grid-template-columns:repeat(3,1fr)}}
-.v-c .stats li{background:var(--card);border-radius:1.25rem;padding:1.5rem;min-block-size:14rem;display:flex;flex-direction:column;justify-content:space-between;gap:1rem}
-.v-c .stats strong{font:900 var(--step-2)/1 var(--display);letter-spacing:-.03em}
-.v-c .stats small{color:var(--mid)}
-.v-c .prose{max-inline-size:40rem;margin-inline:auto;padding-block:var(--space-l)}
-.v-c .prose h2{font:700 var(--step-2)/1.1 var(--display);letter-spacing:-.025em;margin-block:2.5em .6em}
-.v-c .prose h2:first-child{margin-block-start:0}
-.v-c .prose p + p{margin-block-start:1em}
+/* dark: warm charcoal, not near-black (round-1 feedback: too dark) */
+.dark .v{--bg:#1f1d1a; --fg:#f1ede5; --mid:#a9a198; --line:#3a3631; --card:#2a2723; --accent-text:var(--yellow)}
+.v :focus-visible{outline:3px solid var(--fg);outline-offset:3px;box-shadow:0 0 0 6px var(--yellow)}
+.v .wrap{padding-inline:var(--gutter)}
+.v .mono{font:500 .75rem/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.v header .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:1.25rem;flex-wrap:wrap;gap:1rem}
+.v .logo{font:900 1.25rem/1 var(--display);letter-spacing:-.03em;text-decoration:none}
+.v nav ul{display:flex;gap:clamp(1rem,3vw,2.5rem)}
+.v nav a{text-decoration:none}
+.v nav a:hover{text-decoration:underline;text-underline-offset:.3em}
+.v .hero{padding-block:calc(var(--space-l)/2) var(--space-l)}
+.v .hero h1{font:900 var(--step-6)/.86 var(--display);letter-spacing:-.055em;margin-inline-start:-.04em}
+.v .hero-foot{display:grid;gap:1.5rem;margin-block-start:clamp(2rem,5vw,4rem)}
+@media (min-width:52em){.v .hero-foot{grid-template-columns:1fr 1fr 1fr}.v .hero-foot p{grid-column:2/4}}
+.v .hero-foot p{font:400 var(--step-2)/1.2 var(--display);letter-spacing:-.02em;max-inline-size:26ch}
+.v .hero-foot em,.v .statement em{font:italic 400 1.1em/1 var(--italic)}
+.v .head-row{display:flex;justify-content:space-between;align-items:baseline;padding-block:1rem;border-block-start:1px solid var(--fg)}
+.v .cards{display:grid;gap:clamp(1rem,2vw,2rem);padding-block:1.5rem var(--space-l)}
+@media (min-width:52em){.v .cards{grid-template-columns:repeat(3,1fr)}}
+.v .card a{text-decoration:none;display:block}
+.v .cover{aspect-ratio:3/4;border-radius:var(--radius);overflow:hidden;background:var(--card)}
+.v .cover img{inline-size:100%;block-size:100%;object-fit:cover}
+@media (prefers-reduced-motion:no-preference){.v .cover img{transition:transform .4s cubic-bezier(.2,.7,.2,1)}.v .card a:hover .cover img{transform:scale(1.03)}}
+.v .card h3{margin-block-start:1rem;font:700 var(--step-0)/1.3 var(--display)}
+.v .card a:hover h3{text-decoration:underline;text-underline-offset:.25em}
+.v .card p{color:var(--mid);font-size:.95rem}
+.v .card .mono{display:block;margin-block-start:.5rem;color:var(--mid)}
+.v .statement{padding-block:var(--space-l);border-block-start:1px solid var(--fg);display:grid;gap:2rem;align-items:end}
+@media (min-width:52em){.v .statement{grid-template-columns:2fr 1fr}}
+.v .statement p{font:700 var(--step-2)/1.15 var(--display);letter-spacing:-.025em;max-inline-size:30ch}
+.v .portrait{aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;max-inline-size:22rem}
+.v .portrait img{inline-size:100%;block-size:100%;object-fit:cover}
+.v footer .wrap{padding-block:var(--space-l) 1.5rem}
+.v footer .big{font:900 var(--step-6)/.86 var(--display);letter-spacing:-.055em}
+.v footer .big a{text-decoration:none}
+.v footer .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-block-start:var(--space-l)}
+/* case study */
+.v .cs-open .wrap{padding-block:var(--space-l)}
+.v .cs-open h1{font:900 clamp(2.5rem,1rem + 6vw,7rem)/.9 var(--display);letter-spacing:-.045em;max-inline-size:16ch;margin-block:1.5rem}
+.v .cs-open .outcome{font:400 var(--step-2)/1.2 var(--display);letter-spacing:-.02em;max-inline-size:30ch}
+.v .cs-cover{aspect-ratio:21/9;overflow:hidden;border-radius:var(--radius);background:var(--card)}
+.v .cs-cover img{inline-size:100%;block-size:100%;object-fit:cover}
+.v .glance{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr));border-block-end:1px solid var(--line)}
+.v .glance div{padding:1.25rem var(--gutter) 1.25rem 0;border-block-end:1px solid var(--line)}
+.v .glance dt{color:var(--mid)}
+.v .glance dd{font:500 1rem/1.4 var(--display);margin-block-start:.35rem}
+.v .stats{display:grid;gap:1rem;padding-block:var(--space-l) 0}
+@media (min-width:52em){.v .stats{grid-template-columns:repeat(3,1fr)}}
+.v .stats li{background:var(--card);border-radius:var(--radius);padding:1.5rem;min-block-size:14rem;display:flex;flex-direction:column;justify-content:space-between;gap:1rem}
+.v .stats strong{font:900 var(--step-2)/1 var(--display);letter-spacing:-.03em}
+.v .stats small{color:var(--mid)}
+.v .prose{max-inline-size:40rem;margin-inline:auto;padding-block:var(--space-l)}
+.v .prose h2{font:700 var(--step-2)/1.1 var(--display);letter-spacing:-.025em;margin-block:2.5em .6em}
+.v .prose h2:first-child{margin-block-start:0}
+.v .prose p + p{margin-block-start:1em}
+.v .prose figure{margin-block:2.5rem;margin-inline:calc(-1 * min(8rem, var(--gutter)))}
+.v .prose figure .frame{border-radius:var(--radius);overflow:hidden;aspect-ratio:3/2;background:var(--card)}
+.v .prose figure img{inline-size:100%;block-size:100%;object-fit:cover}
+.v .prose figcaption{margin-block-start:.75rem;color:var(--mid)}
+.v .prose a{text-underline-offset:.2em}
 
-/* ---------- prototype switcher (NOT part of the design) ---------- */
-.proto-bar{position:fixed;inset-block-end:16px;inset-inline-start:50%;transform:translateX(-50%);z-index:999;display:flex;align-items:center;gap:4px;padding:6px;border-radius:999px;background:#ff00aa;color:#fff;font:600 13px/1 "JetBrains Mono",monospace;box-shadow:0 6px 24px #0006,0 0 0 2px #fff}
+/* C1/C2: case-study image sits under the opener as a wide cover */
+.c1 .cs-open,.c2 .cs-open{display:flex;flex-direction:column-reverse}
+.c1 .cs-open .duo,.c2 .cs-open .duo{aspect-ratio:21/9;margin:0 var(--gutter) var(--gutter);border-radius:var(--radius);overflow:hidden}
+.c1 .cs-open .duo img,.c2 .cs-open .duo img{inline-size:100%;block-size:100%;object-fit:cover}
+
+/* =================== C1 · Surface: yellow is only ever a background =================== */
+.c1 .hl{background:var(--yellow);color:var(--on-yellow);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding-inline:.06em}
+.c1 .hero h1 .hl{padding-inline:.08em .04em;background:linear-gradient(var(--yellow),var(--yellow)) 0 72%/100% .8em no-repeat}
+.c1 .logo span{background:var(--yellow);color:var(--on-yellow);padding-inline:.15em;margin-inline-start:.1em}
+.c1 .prose a,.c1 .statement a{text-decoration-thickness:2px}
+.c1 .prose a:hover,.c1 .statement a:hover{background:var(--yellow);color:var(--on-yellow)}
+.c1 .cs-open{background:var(--yellow);color:var(--on-yellow)}
+.c1 .stats li:first-child{background:var(--yellow);color:var(--on-yellow)}
+.c1 .stats li:first-child small{color:var(--on-yellow)}
+.c1 footer{background:var(--yellow);color:var(--on-yellow)}
+.c1 .btn{display:inline-block;margin-block-start:2rem;background:var(--fg);color:var(--bg);padding:.9rem 1.4rem;border-radius:999px;text-decoration:none;font:600 1rem/1 var(--body)}
+
+/* =================== C2 · Marker: yellow only as small marks; ink carries the meaning =================== */
+.c2 .stop{color:var(--yellow);-webkit-text-stroke:.012em var(--fg)}
+.dark .c2 .stop{-webkit-text-stroke:0}
+.c2 .mark{background:linear-gradient(transparent 62%,var(--yellow) 62%,var(--yellow) 92%,transparent 92%);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.dark .c2 .mark{background:none;color:var(--yellow)}
+.c2 .head-row{border-block-start:4px solid var(--yellow);box-shadow:0 -1px 0 var(--fg)}
+.c2 .prose a,.c2 .statement a{text-decoration-color:var(--fg);text-decoration-thickness:1px}
+.c2 .prose a:hover,.c2 .statement a:hover{text-decoration-color:var(--yellow);text-decoration-thickness:.3em;text-underline-offset:-.05em;text-decoration-skip-ink:none}
+.dark .c2 .prose a,.dark .c2 .statement a{color:var(--yellow);text-decoration-color:var(--yellow)}
+.c2 .cs-open{border-block-end:1px solid var(--fg)}
+.c2 .cs-open .wrap{border-inline-start:10px solid var(--yellow);margin-inline-start:var(--gutter);padding-inline-start:calc(var(--gutter) - 10px);margin-block:var(--gutter)}
+.c2 .stats strong::before{content:"";display:block;inline-size:2.5rem;block-size:.4rem;background:var(--yellow);margin-block-end:1rem;outline:1px solid var(--fg)}
+.dark .c2 .stats strong::before{outline:0}
+.c2 footer{border-block-start:1px solid var(--fg)}
+.c2 footer .big a:hover .mark{color:inherit}
+.c2 .btn{display:inline-block;margin-block-start:2rem;background:var(--fg);color:var(--bg);padding:.9rem 1.4rem;border-radius:999px;text-decoration:none;font:600 1rem/1 var(--body);box-shadow:inset 0 -4px 0 var(--yellow)}
+
+/* =================== C3 · Duotone: yellow lives in the photography =================== */
+.c3{--accent-text:#6b5600}
+.dark .c3{--accent-text:var(--yellow)}
+.c3 .duo{background:var(--yellow);position:relative}
+.c3 .duo img{filter:grayscale(1) contrast(1.15) brightness(1.05);mix-blend-mode:multiply}
+@media (prefers-reduced-motion:no-preference){.c3 .card a:hover .duo img{filter:none;mix-blend-mode:normal;transition:filter .3s}}
+.c3 .logo span,.c3 .stop{color:var(--accent-text)}
+.c3 .mono.accent,.c3 .head-row .mono:last-child{color:var(--accent-text)}
+.c3 .prose a,.c3 .statement a{color:var(--accent-text);text-decoration-thickness:1px}
+.c3 .cs-open{position:relative;color:#f7f4ed;background:#161412}
+.c3 .cs-open .duo{position:absolute;inset:0;overflow:hidden}
+.c3 .cs-open .duo img{inline-size:100%;block-size:100%;object-fit:cover;opacity:.55}
+.c3 .cs-open .wrap{position:relative;min-block-size:min(80vh,44rem);display:flex;flex-direction:column;justify-content:flex-end}
+.c3 .cs-open h1,.c3 .cs-open .outcome{background:#161412;box-decoration-break:clone;-webkit-box-decoration-break:clone;display:inline;padding-inline:.15em}
+.c3 .cs-open .outcome{color:var(--yellow)}
+.c3 footer{background:#161412;color:#f1ede5}
+.c3 footer .big a{color:var(--yellow)}
+.c3 .btn{display:inline-block;margin-block-start:2rem;background:var(--fg);color:var(--bg);padding:.9rem 1.4rem;border-radius:999px;text-decoration:none;font:600 1rem/1 var(--body)}
+
+/* ---------- prototype chrome (NOT part of the design) ---------- */
+.proto-bar{position:fixed;inset-block-end:16px;inset-inline-start:50%;transform:translateX(-50%);z-index:999;display:flex;align-items:center;gap:4px;padding:6px;border-radius:999px;background:#ff00aa;color:#fff;font:600 13px/1 "JetBrains Mono",monospace;box-shadow:0 6px 24px #0006,0 0 0 2px #fff;max-inline-size:calc(100vw - 16px);flex-wrap:wrap;justify-content:center}
 .proto-bar button{all:unset;cursor:pointer;padding:8px 12px;border-radius:999px}
 .proto-bar button:hover,.proto-bar button:focus-visible{background:#0003}
 .proto-bar button:focus-visible{outline:2px solid #fff}
-.proto-bar output{padding-inline:8px;min-inline-size:15ch;text-align:center}
+.proto-bar output{padding-inline:8px;min-inline-size:13ch;text-align:center}
+.proto-contrast{position:fixed;inset-block-end:76px;inset-inline-end:16px;z-index:999;background:#111;color:#eee;font:12px/1.5 "JetBrains Mono",monospace;padding:12px 14px;border-radius:12px;box-shadow:0 6px 24px #0008;max-inline-size:min(26rem,calc(100vw - 32px))}
+.proto-contrast[hidden]{display:none}
+.proto-contrast table{border-collapse:collapse}
+.proto-contrast td{padding:2px 6px;white-space:nowrap}
+.proto-contrast .sw{display:inline-block;inline-size:12px;block-size:12px;border:1px solid #888;vertical-align:-2px;margin-inline-end:2px}
+.proto-contrast .ok{color:#7ee787}.proto-contrast .lg{color:#e3b341}.proto-contrast .no{color:#ff7b72}
 </style>
 </head>
 <body>
-
-<!-- ================================ VARIANT A ================================ -->
-<div class="v v-a" data-key="A" data-name="Editorial" hidden>
-  <header class="masthead"><div class="wrap">
-    <a class="wordmark" href="#">Name Surname</a>
-    <nav aria-label="Main"><ul><li><a href="#">Work</a></li><li><a href="#">About</a></li><li><a href="#">Contact</a></li></ul></nav>
-  </div></header>
-  <main>
-    <section class="hero wrap">
-      <!-- PLACEHOLDER: positioning line -->
-      <h1>Lorem ipsum <em>dolor</em> sit amet consectetur<span class="stop">.</span></h1>
-      <!-- PLACEHOLDER: one-sentence lede -->
-      <p class="lede">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.</p>
-    </section>
-    <section class="wrap" aria-labelledby="a-work">
-      <h2 class="section-title" id="a-work">Selected work<span class="stop">.</span></h2>
-      <ol class="work">
-        <li><span class="num">01</span><div><h3><a href="#a-cs">Case study one title</a></h3><p class="outcome">Outcome: lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</p></div><p class="meta">Industry · 2025–2026</p></li>
-        <li><span class="num">02</span><div><h3><a href="#a-cs">Case study two title</a></h3><p class="outcome">Outcome: ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p></div><p class="meta">Client · 2019–2023</p></li>
-        <li><span class="num">03</span><div><h3><a href="#a-cs">Case study three title</a></h3><p class="outcome">Outcome: duis aute irure dolor in reprehenderit in voluptate velit esse.</p></div><p class="meta">Industry · 2024</p></li>
-      </ol>
-    </section>
-    <section class="wrap about-teaser" aria-label="About">
-      <!-- PLACEHOLDER: About teaser -->
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam. Sed nisi nulla quis sem at nibh elementum imperdiet.</p>
-      <p>Duis sagittis ipsum praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa vestibulum lacinia arcu eget nulla. <a href="#">More about me</a>.</p>
-    </section>
-    <section class="cta"><div class="wrap">
-      <!-- PLACEHOLDER: contact call to action -->
-      <p>Lorem ipsum dolor sit amet, consectetur?</p><a href="#">Get in touch →</a>
-    </div></section>
-  </main>
-  <footer><div class="wrap"><span>© Name Surname</span><span>Footer slot</span></div></footer>
-
-  <p class="proto-divider" id="a-cs">↓ Case study page ↓</p>
-  <article class="cs wrap">
-    <header class="cs-head">
-      <p class="kicker">Case study</p>
-      <h1>Case study one title</h1>
-      <!-- PLACEHOLDER: outcome (lede) -->
-      <p class="lede">Outcome: lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.</p>
-    </header>
-    <div class="cs-body">
-      <dl class="glance" aria-label="At a glance">
-        <dt>Role</dt><dd>Role slot</dd><dt>Team</dt><dd>Team slot</dd><dt>Period</dt><dd>2025–2026</dd><dt>Employer</dt><dd>Employer slot</dd><dt>Industry</dt><dd>Industry · scale</dd><dt>Stack</dt><dd>Item, item, item, item</dd>
-      </dl>
-      <h2>Challenge</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <h2>Approach</h2>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <p>Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.</p>
-      <h2>Results</h2>
-      <ol class="results">
-        <li>Result claim one, lorem ipsum dolor sit amet.<small>Evidence slot</small></li>
-        <li>Result claim two, consectetur adipiscing elit.<small>Evidence slot</small></li>
-      </ol>
-      <p><a href="#">Next case study →</a></p>
-    </div>
-  </article>
-</div>
-
-<!-- ================================ VARIANT B ================================ -->
-<div class="v v-b" data-key="B" data-name="Stark" hidden>
-  <header class="grid">
-    <a class="name" href="#" style="text-decoration:none">Name Surname</a>
-    <nav aria-label="Main"><ul><li><a href="#" aria-current="page">Work</a></li><li><a href="#">About</a></li><li><a href="#">Contact</a></li></ul></nav>
-    <span class="clock">Lisbon, PT</span>
-  </header>
-  <main>
-    <section class="grid intro">
-      <p class="side"><span>Role slot</span><span>© 2008–2026</span></p>
-      <!-- PLACEHOLDER: positioning line (one sentence, second half quiet) -->
-      <h1>Lorem ipsum dolor sit amet, consectetur adipiscing elit <span class="quiet">sed do eiusmod tempor incididunt ut labore et dolore magna.</span></h1>
-    </section>
-    <section class="grid" aria-labelledby="b-work">
-      <h2 class="label" id="b-work"><span class="dot" aria-hidden="true"></span>Selected work</h2>
-      <ol class="index">
-        <li><a href="#b-cs">Case study one title</a><span class="yr">2025–26</span><p class="outcome">Outcome: lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></li>
-        <li><a href="#b-cs">Case study two title</a><span class="yr">2019–23</span><p class="outcome">Outcome: ut enim ad minim veniam, quis nostrud exercitation.</p></li>
-        <li><a href="#b-cs">Case study three title</a><span class="yr">2024</span><p class="outcome">Outcome: duis aute irure dolor in reprehenderit in voluptate.</p></li>
-      </ol>
-    </section>
-    <section class="grid block" aria-label="About">
-      <h2 class="label">About</h2>
-      <!-- PLACEHOLDER: About teaser -->
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam. Sed nisi nulla quis sem at nibh elementum imperdiet. <a href="#">More</a></p>
-    </section>
-  </main>
-  <footer class="grid">
-    <!-- PLACEHOLDER: contact call to action -->
-    <p class="big">Lorem ipsum dolor sit amet. <a href="#">Get in touch</a></p>
-    <span class="left">© Name Surname</span><span class="right">Footer slot</span>
-  </footer>
-
-  <p class="proto-divider" id="b-cs">↓ Case study page ↓</p>
-  <article class="grid cs">
-    <aside class="cs-meta" aria-label="At a glance">
-      <dl><div><dt>Role</dt><dd>Role slot</dd></div><div><dt>Team</dt><dd>Team slot</dd></div><div><dt>Period</dt><dd>2025–2026</dd></div><div><dt>Employer</dt><dd>Employer slot</dd></div><div><dt>Industry</dt><dd>Industry · scale</dd></div><div><dt>Stack</dt><dd>Item, item, item</dd></div></dl>
-    </aside>
-    <div class="cs-main">
-      <h1>Case study one title</h1>
-      <!-- PLACEHOLDER: outcome -->
-      <p class="outcome">Outcome: lorem ipsum dolor sit amet, consectetur adipiscing elit sed do.</p>
-      <div class="figure">cover image (optional)</div>
-      <h2>Challenge</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <h2>Approach</h2>
-      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <p>Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit.</p>
-      <h2>Results</h2>
-      <ol class="results">
-        <li><span>1</span>Result claim one, lorem ipsum dolor sit amet.<small>Evidence slot</small></li>
-        <li><span>2</span>Result claim two, consectetur adipiscing elit.<small>Evidence slot</small></li>
-      </ol>
-      <h2>Next</h2>
-      <p><a href="#">Case study two title →</a></p>
-    </div>
-  </article>
-</div>
-
-<!-- ================================ VARIANT C ================================ -->
-<div class="v v-c" data-key="C" data-name="Hybrid" hidden>
+<!--
+  The three variants share markup; only the variant class differs. The markup is cloned
+  from the template below by the script, so structure stays identical and yellow usage is
+  the only thing that changes.
+-->
+<template id="page">
   <header><div class="wrap">
-    <a class="logo" href="#" style="text-decoration:none">Name<span>.</span></a>
+    <a class="logo" href="#">Name<span class="stop">.</span></a>
     <nav aria-label="Main" class="mono"><ul><li><a href="#">Work</a></li><li><a href="#">About</a></li><li><a href="#">Contact</a></li></ul></nav>
   </div></header>
   <main>
     <section class="hero wrap">
       <!-- PLACEHOLDER: positioning line (short, ~4 words) -->
-      <h1>Lorem ipsum dolor sit<span class="stop">.</span></h1>
+      <h1>Lorem <span class="hl mark">ipsum</span> dolor sit<span class="stop">.</span></h1>
       <div class="hero-foot">
-        <span class="mono">Role slot — Lisbon</span>
+        <span class="mono accent">Role slot — Lisbon</span>
         <!-- PLACEHOLDER: supporting sentence -->
         <p>Consectetur adipiscing elit, sed do <em>eiusmod</em> tempor incididunt ut labore.</p>
       </div>
     </section>
-    <section class="wrap" aria-labelledby="c-work">
-      <div class="head-row"><h2 class="mono" id="c-work">Selected work</h2><span class="mono">(03)</span></div>
+    <section class="wrap" aria-labelledby="work-h">
+      <div class="head-row"><h2 class="mono" id="work-h">Selected work</h2><span class="mono">(03)</span></div>
       <ol class="cards">
-        <li class="card"><a href="#c-cs"><div class="cover mono">cover</div><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur.</p><span class="mono">Industry · 2025–26</span></a></li>
-        <li class="card"><a href="#c-cs"><div class="cover mono">cover</div><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam quis nostrud.</p><span class="mono">Client · 2019–23</span></a></li>
-        <li class="card"><a href="#c-cs"><div class="cover mono">cover</div><h3>Case study three title</h3><p>Outcome: duis aute irure dolor in reprehenderit.</p><span class="mono">Industry · 2024</span></a></li>
+        <li class="card"><a href="#cs"><div class="cover duo"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=1067&fit=crop&q=70&auto=format" width="800" height="1067" alt="" loading="lazy"></div><h3>Case study one title</h3><p>Outcome: lorem ipsum dolor sit amet consectetur.</p><span class="mono">Industry · 2025–26</span></a></li>
+        <li class="card"><a href="#cs"><div class="cover duo"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=1067&fit=crop&q=70&auto=format" width="800" height="1067" alt="" loading="lazy"></div><h3>Case study two title</h3><p>Outcome: ut enim ad minim veniam quis nostrud.</p><span class="mono">Client · 2019–23</span></a></li>
+        <li class="card"><a href="#cs"><div class="cover duo"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=1067&fit=crop&q=70&auto=format" width="800" height="1067" alt="" loading="lazy"></div><h3>Case study three title</h3><p>Outcome: duis aute irure dolor in reprehenderit.</p><span class="mono">Industry · 2024</span></a></li>
       </ol>
     </section>
     <section class="wrap statement" aria-label="About">
-      <!-- PLACEHOLDER: About teaser, sentence-style -->
-      <p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec odio praesent libero. <a href="#">More about me</a></p>
+      <div>
+        <!-- PLACEHOLDER: About teaser, sentence-style -->
+        <p>Lorem ipsum dolor sit amet, consectetur <em>adipiscing</em> elit integer nec <span class="mark">odio praesent</span> libero. <a href="#">More about me</a></p>
+        <a class="btn" href="#">Get in touch</a>
+      </div>
+      <div class="portrait duo"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=640&h=800&fit=crop&q=70&auto=format" width="640" height="800" alt="" loading="lazy"></div>
     </section>
   </main>
   <footer><div class="wrap">
     <span class="mono">Contact</span>
     <!-- PLACEHOLDER: contact call to action -->
-    <p class="big"><a href="#">Lorem ipsum →</a></p>
+    <p class="big"><a href="#"><span class="mark">Lorem</span> ipsum →</a></p>
     <div class="row mono"><span>© Name Surname</span><span>Footer slot</span></div>
   </div></footer>
 
-  <p class="proto-divider" id="c-cs">↓ Case study page ↓</p>
+  <p class="proto-divider" id="cs">↓ Case study page ↓</p>
   <article>
-    <header class="cs-open"><div class="wrap">
-      <span class="mono">Case study — 01</span>
-      <h1>Case study one title</h1>
-      <!-- PLACEHOLDER: outcome -->
-      <p class="outcome">Outcome: lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</p>
-    </div></header>
+    <header class="cs-open">
+      <div class="duo" aria-hidden="true"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1800&h=1100&fit=crop&q=70&auto=format" width="1800" height="1100" alt="" loading="lazy"></div>
+      <div class="wrap">
+        <span class="mono">Case study — 01</span>
+        <h1>Case study one title</h1>
+        <!-- PLACEHOLDER: outcome -->
+        <p><span class="outcome">Outcome: lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</span></p>
+      </div>
+    </header>
     <div class="wrap">
       <dl class="glance" aria-label="At a glance">
         <div><dt class="mono">Role</dt><dd>Role slot</dd></div><div><dt class="mono">Team</dt><dd>Team slot</dd></div><div><dt class="mono">Period</dt><dd>2025–2026</dd></div><div><dt class="mono">Employer</dt><dd>Employer slot</dd></div><div><dt class="mono">Industry</dt><dd>Industry · scale</dd></div><div><dt class="mono">Stack</dt><dd>Item, item, item</dd></div>
@@ -412,7 +238,8 @@ a{color:inherit}
       </ol>
       <div class="prose">
         <h2>Challenge</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud <a href="#">exercitation ullamco</a> laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <figure><div class="frame duo"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1500&h=1000&fit=crop&q=70&auto=format" width="1500" height="1000" alt="" loading="lazy"></div><figcaption class="mono">Figure caption slot</figcaption></figure>
         <h2>Approach</h2>
         <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         <p>Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra.</p>
@@ -420,48 +247,89 @@ a{color:inherit}
       </div>
     </div>
   </article>
-</div>
+</template>
 
-<!-- ============================ prototype switcher ============================ -->
+<div class="v c1" data-key="C1" data-name="Surface" hidden></div>
+<div class="v c2" data-key="C2" data-name="Marker" hidden></div>
+<div class="v c3" data-key="C3" data-name="Duotone" hidden></div>
+
+<!-- ============================ prototype chrome ============================ -->
+<div class="proto-contrast" hidden aria-live="polite"></div>
 <div class="proto-bar" role="toolbar" aria-label="Prototype variant switcher">
   <button type="button" data-step="-1" aria-label="Previous variant">←</button>
-  <output aria-live="polite"></output>
+  <output></output>
   <button type="button" data-step="1" aria-label="Next variant">→</button>
-  <button type="button" data-theme-btn aria-label="Cycle theme">theme: auto</button>
+  <button type="button" data-theme-btn>theme: light</button>
+  <button type="button" data-contrast-btn aria-pressed="false">contrast</button>
 </div>
 <script>
 (() => {
+  const tpl = document.getElementById('page');
   const variants = [...document.querySelectorAll('.v')];
+  variants.forEach(v => v.append(tpl.content.cloneNode(true)));
+  // only the duotone variant treats images; the others keep the .duo hook inert
   const keys = variants.map(v => v.dataset.key);
   const out = document.querySelector('.proto-bar output');
   const themeBtn = document.querySelector('[data-theme-btn]');
-  const themes = ['auto', 'light', 'dark'];
+  const cBtn = document.querySelector('[data-contrast-btn]');
+  const panel = document.querySelector('.proto-contrast');
+  const themes = ['light', 'dark', 'auto'];
   const mq = matchMedia('(prefers-color-scheme: dark)');
   const params = new URLSearchParams(location.search);
-  let current = keys.includes(params.get('variant')) ? params.get('variant') : 'A';
-  let theme = themes.includes(params.get('theme')) ? params.get('theme') : 'auto';
+  let current = keys.includes(params.get('variant')) ? params.get('variant') : 'C1';
+  let theme = themes.includes(params.get('theme')) ? params.get('theme') : 'light';
+  let showContrast = params.get('contrast') === '1';
+
+  const lum = rgb => { const c = rgb.map(v => v / 255).map(v => v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4); return .2126*c[0] + .7152*c[1] + .0722*c[2]; };
+  const parse = s => { s = s.trim(); if (s.startsWith('#')) { if (s.length === 4) s = '#' + [...s.slice(1)].map(c => c + c).join(''); return [1,3,5].map(i => parseInt(s.slice(i, i+2), 16)); } const m = s.match(/[\d.]+/g); return m ? m.slice(0,3).map(Number) : [0,0,0]; };
+  const ratio = (a, b) => { const [x, y] = [lum(parse(a)), lum(parse(b))].sort((p, q) => q - p); return (x + .05) / (y + .05); };
+
+  function renderContrast(v) {
+    const cs = getComputedStyle(v);
+    const t = n => cs.getPropertyValue(n).trim();
+    const bg = t('--bg'), card = t('--card');
+    const accentRaw = getComputedStyle(v.querySelector('.hero-foot .mono')).color;
+    const pairs = [
+      ['text / bg', t('--fg'), bg, 4.5],
+      ['muted / bg', t('--mid'), bg, 4.5],
+      ['muted / card', t('--mid'), card, 4.5],
+      ['ink / yellow', t('--on-yellow'), t('--yellow'), 4.5],
+      ['yellow / bg', t('--yellow'), bg, 3],
+      ['accent text / bg', accentRaw, bg, 4.5],
+      ['line / bg (decor)', t('--line'), bg, 0],
+    ];
+    panel.innerHTML = `<strong>${current} · ${document.body.classList.contains('dark') ? 'dark' : 'light'}</strong><table>${pairs.map(([n, a, b, need]) => {
+      const r = ratio(a, b); const cls = need === 0 ? '' : r >= 4.5 ? 'ok' : r >= 3 ? 'lg' : 'no';
+      const verdict = need === 0 ? 'decorative' : r >= 4.5 ? 'AA text' : r >= 3 ? 'large/UI only' : 'fails';
+      return `<tr><td><span class="sw" style="background:${a}"></span><span class="sw" style="background:${b}"></span></td><td>${n}</td><td class="${cls}">${r.toFixed(2)}:1</td><td class="${cls}">${verdict}</td></tr>`;
+    }).join('')}</table>`;
+  }
 
   function render() {
     variants.forEach(v => { v.hidden = v.dataset.key !== current; });
     const v = variants.find(v => v.dataset.key === current);
     out.textContent = `${current} (${v.dataset.name})`;
-    const dark = theme === 'dark' || (theme === 'auto' && mq.matches);
-    document.body.classList.toggle('dark', dark);
+    document.body.classList.toggle('dark', theme === 'dark' || (theme === 'auto' && mq.matches));
     themeBtn.textContent = `theme: ${theme}`;
-    params.set('variant', current); params.set('theme', theme);
+    cBtn.setAttribute('aria-pressed', showContrast);
+    panel.hidden = !showContrast;
+    if (showContrast) renderContrast(v);
+    params.set('variant', current); params.set('theme', theme); params.set('contrast', showContrast ? '1' : '0');
     history.replaceState(null, '', `?${params}${location.hash}`);
   }
-  function step(n) { current = keys[(keys.indexOf(current) + n + keys.length) % keys.length]; render(); scrollTo(0, 0); }
-  function cycleTheme() { theme = themes[(themes.indexOf(theme) + 1) % themes.length]; render(); }
+  const step = n => { current = keys[(keys.indexOf(current) + n + keys.length) % keys.length]; render(); };
+  const cycleTheme = () => { theme = themes[(themes.indexOf(theme) + 1) % themes.length]; render(); };
 
   document.querySelectorAll('[data-step]').forEach(b => b.addEventListener('click', () => step(+b.dataset.step)));
   themeBtn.addEventListener('click', cycleTheme);
+  cBtn.addEventListener('click', () => { showContrast = !showContrast; render(); });
   mq.addEventListener('change', render);
   addEventListener('keydown', e => {
     if (e.target.closest('input, textarea, [contenteditable]') || e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === 'ArrowLeft') step(-1);
     else if (e.key === 'ArrowRight') step(1);
     else if (e.key === 't' || e.key === 'T') cycleTheme();
+    else if (e.key === 'c' || e.key === 'C') { showContrast = !showContrast; render(); }
   });
   render();
 })();
