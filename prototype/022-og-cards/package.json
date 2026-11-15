@@ -1,0 +1,1 @@
+{"name":"proto-022-og-cards","private":true,"type":"module","scripts":{"og":"node render.mjs"},"dependencies":{"@fontsource/bricolage-grotesque":"^5.3.0","@fontsource/geist":"^5.3.0","@fontsource/geist-mono":"^5.3.0","@resvg/resvg-js":"^2.6.2","satori":"^0.63.2"}}

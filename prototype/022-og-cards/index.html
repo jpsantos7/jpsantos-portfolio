@@ -1,0 +1,57 @@
+<!doctype html>
+<!-- PROTOTYPE 022 OG cards: throwaway. All copy is stand-in. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROTOTYPE 022 · OG cards</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font:14px/1.4 system-ui,sans-serif;background:#e8e6e1;color:#161412;padding:24px 16px 96px}
+h2{font:600 13px/1 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em;margin:40px 0 16px}
+.row{display:flex;flex-wrap:wrap;gap:24px 20px;align-items:flex-start}
+figure{margin:0}
+figure.full{inline-size:100%}
+img{display:block;inline-size:100%;block-size:auto;outline:1px solid #0002}
+.s552{inline-size:min(552px,100%)}
+.s300{inline-size:300px;max-inline-size:100%}
+.full figure,figure.full{max-inline-size:min(1200px,100%)}
+figcaption{font:12px/1.4 ui-monospace,monospace;margin-block-start:6px;color:#4a453f}
+figcaption b{font-weight:600;color:#161412}
+nav{position:fixed;inset-block-end:16px;inset-inline:0;display:flex;justify-content:center;gap:8px;pointer-events:none}
+nav .bar{pointer-events:auto;display:flex;gap:6px;padding:6px;background:#161412;border-radius:999px;box-shadow:0 4px 20px #0005}
+nav a{color:#f1ede5;text-decoration:none;padding:10px 18px;border-radius:999px;font:600 14px/1 system-ui}
+nav a[aria-current=true]{background:#f2c200;color:#161412}
+nav a:focus-visible{outline:3px solid #fff;outline-offset:2px}
+</style>
+</head>
+<body>
+<h1 style="font:600 16px/1.2 system-ui;margin:0">PROTOTYPE 022 · OG cards · surface <span id="cur"></span></h1>
+<div id="app"></div>
+<nav aria-label="Surface"><div class="bar">
+  <a href="?v=a" data-v="a">A yellow</a><a href="?v=b" data-v="b">B ink</a><a href="?v=c" data-v="c">C off-white</a>
+</div></nav>
+<script>
+var cards=[
+ {id:'home',h:'João Santos',s:'Design Engineer'},
+ {id:'cs-account-opening',h:'Account opening for a retail bank',s:"Became the bank's blueprint for new Angular projects"},
+ {id:'cs-bion',h:'BION / Access',s:'Rebuilt the front end the design system now stands on'},
+ {id:'cs-email-builder',h:'Email builder',s:'Made email work one developer can take on'}
+];
+var v=(new URLSearchParams(location.search).get('v')||'a').toLowerCase();
+if('abc'.indexOf(v)<0||v.length!==1)v='a';
+document.getElementById('cur').textContent=v.toUpperCase();
+document.querySelectorAll('nav a').forEach(function(a){a.setAttribute('aria-current',a.dataset.v===v)});
+function esc(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML}
+function fig(c,cls){
+  var f=v+'-'+c.id+'.png',alt=c.h+': '+c.s;
+  return '<figure class="'+cls+'"><img src="out/'+f+'" alt="'+esc(alt)+'" width="1200" height="630"><figcaption><b>'+f+'</b><br>og:image:alt = '+esc(alt)+'</figcaption></figure>';
+}
+var out='';
+[['Full (scaled to fit)','full'],['552px (LinkedIn feed)','s552'],['300px (chat / thumbnail)','s300']].forEach(function(g){
+  out+='<h2>'+g[0]+'</h2><div class="row">'+cards.map(function(c){return fig(c,g[1])}).join('')+'</div>';
+});
+document.getElementById('app').innerHTML=out;
+</script>
+</body>
+</html>
