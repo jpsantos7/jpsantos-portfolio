@@ -2,4 +2,5 @@
 :root {
   --gutter: var(--space-gutter);
   --leading-standard: 1.5;
+  --leading-tight: 1.1;
 }

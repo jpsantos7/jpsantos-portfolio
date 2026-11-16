@@ -40,7 +40,7 @@ ol[role="list"] {
 /* Set core body defaults */
 body {
   min-block-size: 100dvb;
-  line-height: 1.5;
+  line-height: var(--leading-standard);
 }
 
 /* Set shorter line heights on headings and interactive elements */
@@ -51,7 +51,7 @@ h4,
 button,
 input,
 label {
-  line-height: 1.1;
+  line-height: var(--leading-tight);
 }
 
 /* Balance text wrapping on headings */

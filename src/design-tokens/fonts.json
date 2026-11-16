@@ -1,6 +1,6 @@
 {
   "title": "Fonts",
-  "description": "Four families from Visual direction. Files and @font-face are ticket 030; the fallback stacks are placeholders pending the owner.",
+  "description": "Four families from Visual direction, each with a system fallback stack (owner accepted 2026-11-16). Files and @font-face are ticket 030.",
   "items": [
     {
       "name": "heading",
