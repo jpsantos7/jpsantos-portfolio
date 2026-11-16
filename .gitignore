@@ -1,4 +1,12 @@
-node_modules
-dist
+node_modules/
+dist/
+.astro/
+.netlify/
+.lighthouseci/
+test-results/
+playwright-report/
+.env
+.env.*
+!.env.example
 .DS_Store
 BEFORE_PUSH_TO_REPOSITORY.md

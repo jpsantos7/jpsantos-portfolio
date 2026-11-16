@@ -1,0 +1,55 @@
+{
+  "name": "jpsantos-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=26.0.0 <27"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "^8.2.14",
+    "astro": "^7.4.12"
+  },
+  "overrides": {
+    "eslint-plugin-jsx-a11y": {
+      "eslint": "$eslint"
+    }
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@axe-core/playwright": "^4.14.0",
+    "@eslint/js": "^10.0.1",
+    "@lhci/cli": "^0.16.1",
+    "@playwright/test": "^1.65.1",
+    "eslint": "^10.15.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "globals": "^17.14.0",
+    "html-validate": "^11.21.1",
+    "postcss-html": "^2.0.1",
+    "prettier": "^3.10.1",
+    "prettier-plugin-astro": "^1.1.2",
+    "stylelint": "^18.0.0",
+    "stylelint-config-standard": "^41.0.0",
+    "typescript": "~6.0",
+    "typescript-eslint": "^8.73.0",
+    "vitest": "^5.1.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/noindex-headers.mjs dist",
+    "preview": "astro preview",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check:types": "astro check",
+    "lint:css": "stylelint --allow-empty-input \"src/**/*.{css,astro}\"",
+    "test": "vitest run",
+    "validate:html": "html-validate dist",
+    "budgets": "node scripts/check-budgets.mjs dist",
+    "test:e2e": "playwright test",
+    "lhci": "lhci autorun",
+    "check:fast": "npm run lint && npm run format:check && npm run check:types && npm run lint:css && npm test && npm run build && npm run validate:html && npm run budgets",
+    "check": "npm run check:fast && npm run test:e2e && npm run lhci"
+  }
+}

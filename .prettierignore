@@ -1,0 +1,13 @@
+dist
+.astro
+.netlify
+.lighthouseci
+test-results
+playwright-report
+package-lock.json
+# Harness and documentation are formatted by hand
+docs
+.agents
+.claude
+.mcp.json
+*.md

@@ -14,3 +14,5 @@ Each library or platform gets one docs source, decided with the owner when it is
 | eslint-plugin-astro | GitHub README (ota-meshi/eslint-plugin-astro) | Includes the jsx-a11y config for `.astro` templates |
 | prettier-plugin-astro | GitHub README (withastro/prettier-plugin-astro) | |
 | axe-core | GitHub docs (dequelabs/axe-core, incl. rule descriptions) | Used through `@axe-core/playwright`. The paid axe DevTools / axe MCP is not used |
+| html-validate | html-validate.org, read with `defuddle` | Run on the built HTML in `dist` |
+| Lighthouse CI | GitHub docs (GoogleChrome/lighthouse-ci: `docs/configuration.md`, `docs/getting-started.md`), read with `defuddle` | `@lhci/cli`; performance budget gate |
