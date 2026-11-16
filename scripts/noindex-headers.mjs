@@ -28,6 +28,7 @@ export function writeHeaders(distDir, context) {
   const file = join(distDir, "_headers");
   // Append, so a `_headers` copied from `public/` is kept.
   const existing = existsSync(file) ? readFileSync(file, "utf8") : "";
+  if (existing.includes(content)) return false; // already present: idempotent
   const separator = existing === "" || existing.endsWith("\n") ? "" : "\n";
   appendFileSync(file, `${separator}${content}`);
   return true;

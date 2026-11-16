@@ -36,6 +36,14 @@ describe("noindex headers", () => {
     );
   });
 
+  it("is idempotent: running twice writes the block once", () => {
+    const dir = mkdtempSync(join(tmpdir(), "headers-twice-"));
+    writeHeaders(dir, "branch-deploy");
+    writeHeaders(dir, "branch-deploy");
+    const text = readFileSync(join(dir, "_headers"), "utf8");
+    expect(text.split("X-Robots-Tag: noindex")).toHaveLength(2);
+  });
+
   it("works as the build step", () => {
     const dir = mkdtempSync(join(tmpdir(), "headers-cli-"));
     const run = (context: string) =>
