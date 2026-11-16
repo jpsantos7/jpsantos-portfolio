@@ -1,0 +1,23 @@
+/* Chrome for the dev-only CSS test page. Bundled only when the page is. */
+.css-test-panel {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  border: 1px solid var(--color-line);
+  padding: var(--space-m);
+}
+
+.css-test-box {
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  padding: var(--space-xs);
+}
+
+.css-test-swatch {
+  padding: var(--space-s);
+  border: 1px solid var(--color-line);
+}
+
+.css-test-scale {
+  background: var(--color-card);
+  block-size: 1rem;
+}

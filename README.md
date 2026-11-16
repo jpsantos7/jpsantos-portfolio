@@ -18,6 +18,16 @@ npm run build      # static build in dist/
 npm run preview    # serve dist/ locally
 ```
 
+## CSS
+
+Design tokens are JSON in `src/design-tokens/`. `npm run dev` and `npm run build` first run `src/css-utils/build-tokens.mjs` (npm `predev` and `prebuild`), which writes the gitignored `src/css/global/tokens.css` and `src/css/utilities/generated.css`. The script fails the build if any type step is flagged for WCAG 1.4.4. `src/css/global.css` is the ordered import list, imported once by `src/layouts/Base.astro`.
+
+A dev-only test page at `/dev/css-test` shows every composition, utility family, the focus ring and both themes. It is always available under `npm run dev`. It is left out of `npm run build` unless you set `CSS_TEST_PAGE=1` (the `css-test-page` integration in `astro.config.mjs` injects the route):
+
+```sh
+CSS_TEST_PAGE=1 npm run build && npm run preview
+```
+
 ## Checks
 
 `npm run check` runs every gate and must pass before any merge. GitHub enforces this only on `production`, through the CI `check` job.

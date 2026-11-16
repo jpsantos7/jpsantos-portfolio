@@ -1,0 +1,5 @@
+/* Custom properties that are not generated from tokens. */
+:root {
+  --gutter: var(--space-gutter);
+  --leading-standard: 1.5;
+}

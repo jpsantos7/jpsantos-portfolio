@@ -1,0 +1,158 @@
+---
+// Dev-only CSS test page. Mounted by src/integrations/css-test-page.mjs under
+// `astro dev`, or in a build when CSS_TEST_PAGE=1. All copy is placeholder text.
+import Base from "../layouts/Base.astro";
+import "./css-test.css";
+
+const colours = ["bg", "fg", "muted", "line", "card"];
+const spaces = [
+  "3xs",
+  "2xs",
+  "xs",
+  "s",
+  "m",
+  "l",
+  "xl",
+  "2xl",
+  "3xl",
+  "gutter",
+  "section",
+];
+const steps = [0, 1, 2, 3, 4, 5, 6];
+---
+
+<Base title="PLACEHOLDER: CSS test page title">
+  <main class="wrapper region flow flow-space-l">
+    <h1>PLACEHOLDER: CSS test page heading</h1>
+    <!-- PLACEHOLDER: test page intro, not visitor-facing -->
+
+    <section class="flow" aria-labelledby="t-themes">
+      <h2 id="t-themes">PLACEHOLDER: colour themes</h2>
+      <div class="switcher">
+        <div class="css-test-panel flow" data-theme="light">
+          <h3>PLACEHOLDER: light</h3>
+          <p>PLACEHOLDER: body text on bg</p>
+          <p class="text-muted">PLACEHOLDER: muted text on bg</p>
+          <p class="bg-yellow text-ink css-test-swatch">
+            PLACEHOLDER: ink on yellow
+          </p>
+        </div>
+        <div class="css-test-panel flow" data-theme="dark">
+          <h3>PLACEHOLDER: dark</h3>
+          <p>PLACEHOLDER: body text on bg</p>
+          <p class="text-muted">PLACEHOLDER: muted text on bg</p>
+          <p class="bg-yellow text-ink css-test-swatch">
+            PLACEHOLDER: ink on yellow
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="flow" aria-labelledby="t-colour">
+      <h2 id="t-colour">PLACEHOLDER: colour utilities</h2>
+      <div class="grid">
+        {colours.map((name) => (
+          <p
+            class={`css-test-swatch bg-${name} text-${name === "fg" || name === "muted" ? "bg" : "fg"}`}
+          >
+            PLACEHOLDER: bg-{name}
+          </p>
+        ))}
+        <p class="css-test-swatch bg-yellow text-ink">
+          PLACEHOLDER: bg-yellow, text-ink
+        </p>
+      </div>
+    </section>
+
+    <section class="flow" aria-labelledby="t-type">
+      <h2 id="t-type">PLACEHOLDER: type steps</h2>
+      {steps.map((n) => (
+        <p style={`font-size: var(--size-step-${n}); line-height: 1.1`}>
+          PLACEHOLDER: step {n}
+        </p>
+      ))}
+    </section>
+
+    <section class="flow" aria-labelledby="t-space">
+      <h2 id="t-space">
+        PLACEHOLDER: space, flow-space-*, gutter-*, region-space-*
+      </h2>
+      {spaces.map((name) => (
+        <div class="flow-space-s" style={`inline-size: var(--space-${name})`}>
+          <div class="css-test-scale" />
+        </div>
+      ))}
+      <div class="flow flow-space-3xl css-test-box">
+        <p>PLACEHOLDER: flow-space-3xl item</p>
+        <p>PLACEHOLDER: flow-space-3xl item</p>
+      </div>
+      <div class="cluster gutter-xl css-test-box">
+        <span>PLACEHOLDER: gutter-xl</span>
+        <span>PLACEHOLDER: gutter-xl</span>
+      </div>
+      <div class="region region-space-xl css-test-box">
+        PLACEHOLDER: region-space-xl
+      </div>
+    </section>
+
+    <section class="flow" aria-labelledby="t-comp">
+      <h2 id="t-comp">PLACEHOLDER: compositions</h2>
+      <h3>PLACEHOLDER: wrapper (this page) and flow (this page)</h3>
+      <h3>PLACEHOLDER: switcher</h3>
+      <div class="switcher">
+        <div class="css-test-box">PLACEHOLDER: one</div>
+        <div class="css-test-box">PLACEHOLDER: two</div>
+      </div>
+      <h3>PLACEHOLDER: cluster</h3>
+      <div class="cluster">
+        <span class="css-test-box">PLACEHOLDER: a</span>
+        <span class="css-test-box">PLACEHOLDER: b</span>
+        <span class="css-test-box">PLACEHOLDER: c</span>
+      </div>
+      <h3>PLACEHOLDER: repel</h3>
+      <div class="repel">
+        <span class="css-test-box">PLACEHOLDER: start</span>
+        <span class="css-test-box">PLACEHOLDER: end</span>
+      </div>
+      <h3>PLACEHOLDER: sidebar</h3>
+      <div class="sidebar">
+        <div class="css-test-box">PLACEHOLDER: sidebar</div>
+        <div class="css-test-box">PLACEHOLDER: main content</div>
+      </div>
+      <h3>PLACEHOLDER: grid</h3>
+      <div class="grid">
+        <div class="css-test-box">PLACEHOLDER: 1</div>
+        <div class="css-test-box">PLACEHOLDER: 2</div>
+        <div class="css-test-box">PLACEHOLDER: 3</div>
+      </div>
+      <div class="grid" data-layout="halves">
+        <div class="css-test-box">PLACEHOLDER: half</div>
+        <div class="css-test-box">PLACEHOLDER: half</div>
+      </div>
+      <div class="grid" data-layout="thirds">
+        <div class="css-test-box">PLACEHOLDER: third</div>
+        <div class="css-test-box">PLACEHOLDER: third</div>
+        <div class="css-test-box">PLACEHOLDER: third</div>
+      </div>
+    </section>
+
+    <section class="flow" aria-labelledby="t-util">
+      <h2 id="t-util">PLACEHOLDER: utilities</h2>
+      <p>
+        PLACEHOLDER: visually-hidden text follows
+        <span class="visually-hidden">PLACEHOLDER: hidden</span>
+      </p>
+    </section>
+
+    <section class="flow" aria-labelledby="t-focus">
+      <h2 id="t-focus">PLACEHOLDER: focus ring</h2>
+      <div class="cluster">
+        <a href="#t-focus">PLACEHOLDER: link</a>
+        <button type="button">PLACEHOLDER: button</button>
+        <a class="bg-yellow text-ink css-test-swatch" href="#t-focus">
+          PLACEHOLDER: link on yellow
+        </a>
+      </div>
+    </section>
+  </main>
+</Base>

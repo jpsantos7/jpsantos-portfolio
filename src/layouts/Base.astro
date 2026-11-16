@@ -1,0 +1,25 @@
+---
+// Minimal base layout. Ticket 032 builds the real one (header, footer, landmarks).
+// global.css is imported once, first, so every page shares one ordered stylesheet.
+import "../css/global.css";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Stops the default /favicon.ico request until ticket 031 adds the real icon. -->
+    <link rel="icon" href="data:," />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

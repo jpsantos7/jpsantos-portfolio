@@ -1,0 +1,8 @@
+/*
+REGION UTILITY
+Consistent block padding for page sections. The default is the
+`section` space token; set --region-space (or a region-space-* class) to change it.
+*/
+.region {
+  padding-block: var(--region-space, var(--space-section));
+}

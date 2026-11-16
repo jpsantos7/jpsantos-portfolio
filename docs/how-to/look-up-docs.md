@@ -16,3 +16,5 @@ Each library or platform gets one docs source, decided with the owner when it is
 | axe-core | GitHub docs (dequelabs/axe-core, incl. rule descriptions) | Used through `@axe-core/playwright`. The paid axe DevTools / axe MCP is not used |
 | html-validate | html-validate.org, read with `defuddle` | Run on the built HTML in `dist` |
 | Lighthouse CI | GitHub docs (GoogleChrome/lighthouse-ci: `docs/configuration.md`, `docs/getting-started.md`), read with `defuddle` | `@lhci/cli`; performance budget gate |
+| utopia-core | GitHub README (trys/utopia-core), read with `defuddle` | Fluid type and space maths; `calculateClamp` and `checkWCAG` are used by `src/css-utils/generate.mjs` |
+| CUBE boilerplate | github.com/Set-Creative-Studio/cube-boilerplate, pinned at commit `f8c626c` | Source for the reset, global styles, compositions and utilities (ported to logical properties and `vi`) |

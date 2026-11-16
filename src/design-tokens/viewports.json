@@ -1,0 +1,6 @@
+{
+  "title": "Viewports",
+  "description": "Viewport range in px for every fluid token (owner decision 2026-11-16).",
+  "min": 320,
+  "max": 1440
+}

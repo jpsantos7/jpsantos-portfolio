@@ -1,0 +1,13 @@
+/*
+WRAPPER COMPOSITION
+A common wrapper/container
+
+CUSTOM PROPERTIES AND CONFIGURATION
+--wrapper-max-width (100vi): the preferred width, clamped between 16rem and 80rem.
+*/
+.wrapper {
+  margin-inline: auto;
+  max-inline-size: clamp(16rem, var(--wrapper-max-width, 100vi), 80rem);
+  padding-inline: var(--gutter);
+  position: relative;
+}

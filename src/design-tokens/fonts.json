@@ -1,0 +1,22 @@
+{
+  "title": "Fonts",
+  "description": "Four families from Visual direction. Files and @font-face are ticket 030; the fallback stacks are placeholders pending the owner.",
+  "items": [
+    {
+      "name": "heading",
+      "value": ["Bricolage Grotesque", "system-ui", "sans-serif"]
+    },
+    {
+      "name": "body",
+      "value": ["Geist", "system-ui", "sans-serif"]
+    },
+    {
+      "name": "label",
+      "value": ["Geist Mono", "ui-monospace", "monospace"]
+    },
+    {
+      "name": "emphasis",
+      "value": ["Fraunces", "Georgia", "serif"]
+    }
+  ]
+}

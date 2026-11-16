@@ -1,0 +1,101 @@
+{
+  "title": "Spacing",
+  "description": "Fluid space in px, min at the min viewport and max at the max viewport. 3xs to 3xl is a Utopia space scale from step-0 (16px to 19.2px, multipliers .25 .5 .75 1 1.5 2 3 4 6) with its one-up pairs; gutter and section are from Visual direction (ticket 008).",
+  "items": [
+    {
+      "name": "3xs",
+      "min": 4,
+      "max": 5
+    },
+    {
+      "name": "2xs",
+      "min": 8,
+      "max": 10
+    },
+    {
+      "name": "xs",
+      "min": 12,
+      "max": 14
+    },
+    {
+      "name": "s",
+      "min": 16,
+      "max": 19
+    },
+    {
+      "name": "m",
+      "min": 24,
+      "max": 29
+    },
+    {
+      "name": "l",
+      "min": 32,
+      "max": 38
+    },
+    {
+      "name": "xl",
+      "min": 48,
+      "max": 58
+    },
+    {
+      "name": "2xl",
+      "min": 64,
+      "max": 77
+    },
+    {
+      "name": "3xl",
+      "min": 96,
+      "max": 115
+    },
+    {
+      "name": "3xs-2xs",
+      "min": 4,
+      "max": 10
+    },
+    {
+      "name": "2xs-xs",
+      "min": 8,
+      "max": 14
+    },
+    {
+      "name": "xs-s",
+      "min": 12,
+      "max": 19
+    },
+    {
+      "name": "s-m",
+      "min": 16,
+      "max": 29
+    },
+    {
+      "name": "m-l",
+      "min": 24,
+      "max": 38
+    },
+    {
+      "name": "l-xl",
+      "min": 32,
+      "max": 58
+    },
+    {
+      "name": "xl-2xl",
+      "min": 48,
+      "max": 77
+    },
+    {
+      "name": "2xl-3xl",
+      "min": 64,
+      "max": 115
+    },
+    {
+      "name": "gutter",
+      "min": 16,
+      "max": 56
+    },
+    {
+      "name": "section",
+      "min": 56,
+      "max": 160
+    }
+  ]
+}
