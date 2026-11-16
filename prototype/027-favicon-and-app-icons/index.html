@@ -144,6 +144,11 @@ const marks = {
       return `<rect width="100" height="100" rx="${r}" fill="${INK}"/>
       <text x="${sm?40:42}" y="${sm?80:72}" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="${sm?88:o.mask?56:68}" fill="${PAPER}">J</text>
       <circle cx="${sm?77:70}" cy="${sm?72:66}" r="${sm?11:o.mask?6:8}" fill="${Y}"/>`}},
+  e:{name:'E · "jp." on ink (B style)', desc:'Lowercase initials plus the full stop, in B\'s style: off-white Bricolage 800 on an ink square, with a yellow full stop. At small sizes the full stop is drawn larger so it survives 16px. Like B, it stays ink in dark mode.',
+    draw:(s,o)=>{const sm=s<=32;const r=o.mask?0:(sm?14:18);
+      const fs=sm?60:o.mask?38:56, y=sm?60:o.mask?56:58, dot=sm?1.3:1;
+      return `<rect width="100" height="100" rx="${r}" fill="${INK}"/>
+      <text x="50" y="${y}" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="${fs}" letter-spacing="${sm?-5:-3}" fill="${PAPER}">jp<tspan fill="${Y}" font-size="${fs*dot}">.</tspan></text>`}},
   c:{name:'C · Full stop only', desc:'No letters, just the yellow full stop as a disc. It has an ink ring in light mode and none in dark mode. Readable at 16px, but it says nothing about who the site belongs to.',
     draw:(s,o)=>{const sm=s<=32;
       if(o.mask) return `<rect width="100" height="100" fill="${INK}"/><circle cx="50" cy="50" r="22" fill="${Y}"/>`;
