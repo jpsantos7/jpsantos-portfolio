@@ -19,7 +19,8 @@ const base = {
   },
   colors: {
     items: [
-      { name: "bg", light: "#f7f4ed", dark: "#1f1d1a" },
+      { name: "bg", light: "#f7f4ed", dark: "#1f1d1a", textUtility: false },
+      { name: "fg", light: "#161412", dark: "#f1ede5" },
       { name: "yellow", value: "#f2c200", textUtility: false },
       { name: "ink", value: "#161412" },
     ],
@@ -68,7 +69,7 @@ describe("token generator", () => {
   });
 
   it("generates text and bg utilities per colour", () => {
-    expect(utilitiesCss).toContain(".text-bg {\n  color: var(--color-bg);\n}");
+    expect(utilitiesCss).toContain(".text-fg {\n  color: var(--color-fg);\n}");
     expect(utilitiesCss).toContain(
       ".bg-bg {\n  background-color: var(--color-bg);\n}",
     );
@@ -76,8 +77,18 @@ describe("token generator", () => {
     expect(utilitiesCss).toContain(".bg-yellow {");
   });
 
-  it("never generates a yellow text utility", () => {
+  it("generates text utilities only where textUtility is not false", () => {
+    const text = [...utilitiesCss.matchAll(/^\.text-([\w-]+) \{/gm)].map(
+      (m) => m[1],
+    );
+    expect(text).toEqual(["fg", "ink"]);
     expect(utilitiesCss).not.toContain(".text-yellow");
+    expect(utilitiesCss).not.toContain(".text-bg");
+  });
+
+  it("generates a bg utility for every colour", () => {
+    for (const name of ["bg", "fg", "yellow", "ink"])
+      expect(utilitiesCss).toContain(`.bg-${name} {`);
   });
 
   it("generates no margin, padding or type utilities", () => {

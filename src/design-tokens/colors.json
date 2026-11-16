@@ -1,11 +1,12 @@
 {
   "title": "Colors",
-  "description": "Colour tokens from Visual direction (ticket 008). Light and dark values are written once as light-dark(). Single-value colours have no theme pair. textUtility: false means no text-* utility is generated.",
+  "description": "Colour tokens from Visual direction (ticket 008). Light and dark values are written once as light-dark(). Single-value colours have no theme pair. Every colour gets a bg-* utility; text-* utilities exist only for fg, muted and ink (textUtility: false on bg, line, card and yellow; owner decision 2026-11-16).",
   "items": [
     {
       "name": "bg",
       "light": "#f7f4ed",
-      "dark": "#1f1d1a"
+      "dark": "#1f1d1a",
+      "textUtility": false
     },
     {
       "name": "fg",
@@ -20,12 +21,14 @@
     {
       "name": "line",
       "light": "#dcd6ca",
-      "dark": "#3a3631"
+      "dark": "#3a3631",
+      "textUtility": false
     },
     {
       "name": "card",
       "light": "#ece7dd",
-      "dark": "#2a2723"
+      "dark": "#2a2723",
+      "textUtility": false
     },
     {
       "name": "yellow",

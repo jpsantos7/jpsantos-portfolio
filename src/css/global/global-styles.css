@@ -24,6 +24,9 @@ body {
   font-size: var(--size-step-0);
   font-family: var(--font-body);
   line-height: var(--leading-standard);
+
+  /* Long words wrap instead of forcing horizontal scroll (WCAG 1.4.10). */
+  overflow-wrap: break-word;
 }
 
 /*

@@ -53,7 +53,12 @@ const steps = [0, 1, 2, 3, 4, 5, 6];
       <div class="grid">
         {colours.map((name) => (
           <p
-            class={`css-test-swatch bg-${name} text-${name === "fg" || name === "muted" ? "bg" : "fg"}`}
+            class={`css-test-swatch bg-${name} ${name === "fg" || name === "muted" ? "" : "text-fg"}`}
+            style={
+              name === "fg" || name === "muted"
+                ? "color: var(--color-bg)"
+                : undefined
+            }
           >
             PLACEHOLDER: bg-{name}
           </p>
