@@ -11,8 +11,6 @@ const physicalProperties = [
   "right",
   "bottom",
   "left",
-  "float",
-  "clear",
 ];
 
 export default {
@@ -32,6 +30,9 @@ export default {
       },
       { message: "Use the logical value (authorship protocol rule 9)." },
     ],
-    "unit-disallowed-list": [["vw"], { message: "vw units are not allowed." }],
+    "unit-disallowed-list": [
+      ["vw", "dvw", "svw", "lvw"],
+      { message: "vw units are not allowed." },
+    ],
   },
 };

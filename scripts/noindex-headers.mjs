@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 /**
@@ -25,7 +25,11 @@ export function writeHeaders(distDir, context) {
   const content = headersFor(context);
   if (content === null) return false;
   mkdirSync(distDir, { recursive: true });
-  writeFileSync(join(distDir, "_headers"), content);
+  const file = join(distDir, "_headers");
+  // Append, so a `_headers` copied from `public/` is kept.
+  const existing = existsSync(file) ? readFileSync(file, "utf8") : "";
+  const separator = existing === "" || existing.endsWith("\n") ? "" : "\n";
+  appendFileSync(file, `${separator}${content}`);
   return true;
 }
 

@@ -38,6 +38,21 @@ describe("stylelint config", () => {
     );
   });
 
+  it("fails on dynamic, small and large vw units", async () => {
+    for (const unit of ["dvw", "svw", "lvw"]) {
+      expect(await lint(`a {\n  inline-size: 50${unit};\n}\n`)).toContain(
+        "unit-disallowed-list",
+      );
+    }
+  });
+
+  it("allows logical float and fails physical float", async () => {
+    expect(await lint("a {\n  float: inline-start;\n}\n")).toEqual([]);
+    expect(await lint("a {\n  float: left;\n}\n")).toContain(
+      "declaration-property-value-disallowed-list",
+    );
+  });
+
   it("lints <style> blocks in .astro files", async () => {
     const astro =
       "<p>x</p>\n<style>\n  p {\n    margin-right: 0;\n  }\n</style>\n";

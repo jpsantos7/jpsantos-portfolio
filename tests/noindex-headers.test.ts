@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -24,6 +24,15 @@ describe("noindex headers", () => {
     expect(writeHeaders(dir, "branch-deploy")).toBe(true);
     expect(readFileSync(join(dir, "_headers"), "utf8")).toBe(
       "/*\n  X-Robots-Tag: noindex\n",
+    );
+  });
+
+  it("appends to an existing _headers instead of overwriting it", () => {
+    const dir = mkdtempSync(join(tmpdir(), "headers-append-"));
+    writeFileSync(join(dir, "_headers"), "/a\n  X-Test: 1");
+    writeHeaders(dir, "deploy-preview");
+    expect(readFileSync(join(dir, "_headers"), "utf8")).toBe(
+      "/a\n  X-Test: 1\n/*\n  X-Robots-Tag: noindex\n",
     );
   });
 
