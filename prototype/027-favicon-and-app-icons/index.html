@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PROTOTYPE 027 · Favicon and app icons</title>
+<!--
+  PROTOTYPE 027 — throwaway, never merged.
+  Question: what mark do the favicon, Apple touch icon and manifest icons use?
+  Four marks, switchable via ?v=a|b|c|d or the bottom bar (← → keys too).
+  Each mark is shown at real sizes (16, 32, 180, 512 maskable) in context:
+  browser tabs (light and dark chrome), a phone home screen, and the header.
+  The browser tab of THIS page also shows the current mark (drawn on a canvas).
+  Letters are stand-ins drawn with web fonts; the real icons would be outlined paths.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@1,9..144,300..600&display=swap">
+<link id="fav" rel="icon" href="data:,">
+<style>
+:root{
+  --bg:#f7f4ed;--fg:#161412;--muted:#5a544f;--line:#dcd6ca;--card:#ece7dd;
+  --yellow:#f2c200;--ink:#161412;--paper:#f7f4ed;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Geist",system-ui,sans-serif;
+  --mono:"Geist Mono",ui-monospace,monospace;
+  --italic:"Fraunces",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#1f1d1a;--fg:#f1ede5;--muted:#a9a198;--line:#3a3631;--card:#2a2723}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:1rem/1.5 var(--body);padding:2rem clamp(1rem,4vw,3.5rem) 7rem}
+h1{font:800 clamp(1.8rem,1rem + 3vw,3rem)/1 var(--display);letter-spacing:-.03em;margin:0 0 .5rem}
+h2{font:500 .75rem/1 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:3rem 0 1rem}
+p{max-inline-size:60ch;margin:0 0 1rem}
+.note{color:var(--muted);font-size:.9rem}
+.row{display:flex;flex-wrap:wrap;gap:2rem;align-items:end}
+.cell{display:grid;gap:.5rem;justify-items:start}
+.cell span{font:500 .7rem/1 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+
+/* icon slots: the mark is injected as SVG */
+.ico{display:block}
+.ico svg{display:block;inline-size:100%;block-size:100%}
+.px{image-rendering:pixelated}
+.zoom{outline:1px solid var(--line)}
+
+/* browser tab mock */
+.chrome{border-radius:10px;padding:.5rem .5rem 0;inline-size:min(100%,30rem)}
+.chrome.light{background:#dee1e6;color:#1f1f1f}
+.chrome.dark{background:#202124;color:#e8eaed}
+.tabs{display:flex;gap:2px}
+.tab{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border-radius:8px 8px 0 0;font:13px/1 system-ui,sans-serif;inline-size:12rem;white-space:nowrap;overflow:hidden}
+.light .tab.on{background:#fff}.dark .tab.on{background:#35363a}
+.tab .ico{inline-size:16px;block-size:16px;flex:none}
+.tab .other{inline-size:16px;block-size:16px;border-radius:3px;flex:none}
+.light .tab .other{background:#9aa0a6}.dark .tab .other{background:#5f6368}
+.bar{block-size:2.25rem;margin-inline:-.5rem;border-radius:0 0 10px 10px}
+.light .bar{background:#fff}.dark .bar{background:#35363a}
+
+/* phone home screen mock */
+.phone{inline-size:18rem;aspect-ratio:9/16;border-radius:2rem;padding:2.5rem 1rem;display:grid;grid-template-columns:repeat(4,1fr);align-content:start;gap:1.25rem .75rem;border:6px solid #111}
+.phone.wall-l{background:linear-gradient(160deg,#c9d6df,#8aa1b1)}
+.phone.wall-d{background:linear-gradient(160deg,#2b2f3a,#0d0f14)}
+.app{display:grid;justify-items:center;gap:.25rem;font:10px/1.1 system-ui,sans-serif;color:#fff;text-shadow:0 1px 2px #0008}
+.app .ico,.app .dummy{inline-size:3rem;block-size:3rem;border-radius:22.5%;overflow:hidden}
+.app .dummy{background:#ffffff55}
+.android .app .ico,.android .app .dummy{border-radius:50%}
+
+/* maskable safe zone */
+.mask{position:relative;inline-size:160px;block-size:160px}
+.mask::after{content:"";position:absolute;inset:10%;border-radius:50%;outline:2px dashed #e11;pointer-events:none}
+
+/* header mock */
+.header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border:1px solid var(--line);border-radius:6px;inline-size:min(100%,40rem)}
+.header nav{display:flex;gap:1.25rem;font-size:.9rem}
+.header .ico{inline-size:2rem;block-size:2rem}
+.header .word{font:800 1.25rem/1 var(--display);letter-spacing:-.03em;display:flex;align-items:center;gap:.6rem}
+
+/* switcher */
+.switch{position:fixed;inset-block-end:1rem;inset-inline-start:50%;translate:-50% 0;display:flex;align-items:center;gap:.5rem;background:#e11;color:#fff;border-radius:999px;padding:.35rem;box-shadow:0 6px 24px #0005;font:600 .85rem/1 system-ui,sans-serif;z-index:9}
+.switch button{all:unset;cursor:pointer;inline-size:2rem;block-size:2rem;display:grid;place-items:center;border-radius:50%;background:#fff2}
+.switch button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.switch output{min-inline-size:16rem;text-align:center}
+</style>
+</head>
+<body>
+
+<h1>Favicon and app icons</h1>
+<p class="note">PROTOTYPE 027. This page is throwaway. The letters are stand-ins drawn from web fonts, and in the build they would be outlined paths. Switch marks with the red bar or the ← → keys. This page's own browser tab also shows the current mark.</p>
+<p id="desc"></p>
+
+<h2>Sizes, actual pixels</h2>
+<div class="row">
+  <div class="cell"><div class="ico" data-s="16" style="inline-size:16px;block-size:16px"></div><span>16</span></div>
+  <div class="cell"><div class="ico" data-s="32" style="inline-size:32px;block-size:32px"></div><span>32</span></div>
+  <div class="cell"><div class="ico" data-s="180" style="inline-size:90px;block-size:90px"></div><span>180 (shown at 90)</span></div>
+  <div class="cell"><div class="ico zoom px" data-s="16" style="inline-size:128px;block-size:128px"></div><span>16 zoomed 8×</span></div>
+</div>
+
+<h2>Browser tab</h2>
+<div class="row">
+  <div class="chrome light"><div class="tabs">
+    <div class="tab"><i class="other"></i>Inbox</div>
+    <div class="tab on"><div class="ico" data-s="16"></div>Work — JP Santos</div>
+  </div><div class="bar"></div></div>
+  <div class="chrome dark"><div class="tabs">
+    <div class="tab"><i class="other"></i>Inbox</div>
+    <div class="tab on"><div class="ico" data-s="16" data-dark></div>Work — JP Santos</div>
+  </div><div class="bar"></div></div>
+</div>
+<p class="note">The dark tab uses the SVG favicon's dark-scheme version, where the mark has one.</p>
+
+<h2>Home screen (Apple touch icon, maskable manifest icon)</h2>
+<div class="row">
+  <div class="phone wall-l" id="ios"></div>
+  <div class="phone wall-d android" id="droid"></div>
+  <div class="cell"><div class="ico mask" data-s="512" data-mask></div><span>maskable 512, red ring = safe zone</span></div>
+</div>
+
+<h2>Next to the header wordmark</h2>
+<div class="row">
+  <div class="header"><span class="word"><span class="ico" data-s="64"></span><span>Name.</span></span><nav><span>Work</span><span>About</span><span>Contact</span></nav></div>
+</div>
+<p class="note">The header wordmark is still the 008 stand-in. This row only checks that the icon and the wordmark feel related.</p>
+
+<div class="switch" role="group" aria-label="Prototype variant">
+  <button type="button" id="prev" aria-label="Previous mark">←</button>
+  <output id="label" aria-live="polite"></output>
+  <button type="button" id="next" aria-label="Next mark">→</button>
+</div>
+
+<script>
+const Y='#f2c200', INK='#161412', PAPER='#f7f4ed';
+// Each mark: draw(size, {dark, mask}) returns SVG markup on a 100×100 grid.
+// Sizes ≤ 32 get a simplified, heavier drawing ("small" flag).
+const marks = {
+  a:{name:'A · JP monogram on yellow', desc:'Initials in Bricolage 800, ink on a yellow square. It is the loudest option and uses yellow as a surface, as 008 allows.',
+    draw:(s,o)=>{const sm=s<=32;const r=o.mask?0:(sm?12:18);
+      return `<rect width="100" height="100" rx="${r}" fill="${Y}"/>
+      <text x="50" y="${sm?71:68}" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="${sm?62:o.mask?44:54}" letter-spacing="${sm?-6:-4}" fill="${INK}">JP</text>`}},
+  b:{name:'B · "J." on ink', desc:'A single initial plus the full stop from the wordmark. The letter is off-white on an ink square and the full stop is yellow. In dark mode it stays ink, because the tile carries its own contrast.',
+    draw:(s,o)=>{const sm=s<=32;const r=o.mask?0:(sm?14:18);
+      return `<rect width="100" height="100" rx="${r}" fill="${INK}"/>
+      <text x="${sm?40:42}" y="${sm?80:72}" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="${sm?88:o.mask?56:68}" fill="${PAPER}">J</text>
+      <circle cx="${sm?77:70}" cy="${sm?72:66}" r="${sm?11:o.mask?6:8}" fill="${Y}"/>`}},
+  c:{name:'C · Full stop only', desc:'No letters, just the yellow full stop as a disc. It has an ink ring in light mode and none in dark mode. Readable at 16px, but it says nothing about who the site belongs to.',
+    draw:(s,o)=>{const sm=s<=32;
+      if(o.mask) return `<rect width="100" height="100" fill="${INK}"/><circle cx="50" cy="50" r="22" fill="${Y}"/>`;
+      if(s>=180) return `<rect width="100" height="100" rx="18" fill="${PAPER}"/><circle cx="50" cy="50" r="24" fill="${Y}" stroke="${INK}" stroke-width="4"/>`;
+      return `<circle cx="50" cy="50" r="${sm?44:40}" fill="${Y}" ${o.dark?'':`stroke="${INK}" stroke-width="${sm?10:6}"`}/>`}},
+  d:{name:'D · "jp" in Fraunces Italic', desc:'Lowercase initials in the emphasis face, ink on off-white with a yellow underline bar. It is the quietest and most editorial of the four. In dark mode it flips to off-white on ink.',
+    draw:(s,o)=>{const sm=s<=32;const dk=o.dark;const bg=dk?INK:PAPER,fg=dk?PAPER:INK;const r=o.mask?0:(sm?12:18);
+      return `<rect width="100" height="100" rx="${r}" fill="${bg}"/>
+      <rect x="${sm?14:o.mask?30:24}" y="${sm?74:o.mask?66:70}" width="${sm?72:o.mask?40:52}" height="${sm?12:8}" fill="${Y}"/>
+      <text x="50" y="${sm?70:o.mask?62:66}" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="${sm?600:500}" font-size="${sm?72:o.mask?44:56}" fill="${fg}">jp</text>`}},
+};
+const keys=Object.keys(marks);
+const svg=(k,s,o={})=>`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${marks[k].draw(s,o)}</svg>`;
+const darkPage=matchMedia('(prefers-color-scheme: dark)');
+
+function phone(el,k){
+  const names=['Mail','Maps','Photos','Notes','Music','Clock','JP Santos','Files'];
+  el.innerHTML=names.map(n=>n==='JP Santos'
+    ?`<div class="app"><div class="ico">${svg(k,180,{mask:el.id==='droid'})}</div>${n}</div>`
+    :`<div class="app"><i class="dummy"></i>${n}</div>`).join('');
+}
+function render(){
+  const k=new URLSearchParams(location.search).get('v');
+  const cur=keys.includes(k)?k:'a';
+  document.querySelectorAll('.ico[data-s]').forEach(el=>{
+    el.innerHTML=svg(cur,+el.dataset.s,{dark:el.hasAttribute('data-dark'),mask:el.hasAttribute('data-mask')});
+  });
+  phone(document.getElementById('ios'),cur);phone(document.getElementById('droid'),cur);
+  document.getElementById('label').textContent=marks[cur].name;
+  document.getElementById('desc').textContent=marks[cur].desc;
+  // real tab favicon: rasterise the 32px drawing (fonts must be loaded first)
+  document.fonts.ready.then(()=>{
+    const img=new Image(),c=document.createElement('canvas');c.width=c.height=64;
+    const src=svg(cur,32,{dark:darkPage.matches}).replace('<svg ','<svg width="64" height="64" ');
+    img.onload=()=>{c.getContext('2d').drawImage(img,0,0,64,64);document.getElementById('fav').href=c.toDataURL()};
+    img.src='data:image/svg+xml,'+encodeURIComponent(src);
+  });
+  return cur;
+}
+function go(step){
+  const cur=render(),i=(keys.indexOf(cur)+step+keys.length)%keys.length;
+  const u=new URL(location);u.searchParams.set('v',keys[i]);history.replaceState(null,'',u);render();
+}
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+addEventListener('keydown',e=>{
+  if(e.target.closest('input,textarea,[contenteditable]'))return;
+  if(e.key==='ArrowLeft')go(-1);if(e.key==='ArrowRight')go(1);
+});
+render();
+</script>
+</body>
+</html>
