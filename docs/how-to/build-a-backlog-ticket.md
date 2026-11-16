@@ -4,12 +4,12 @@ How a build ticket goes from `ready` to `done`. Rules: [authorship-protocol](../
 
 ## Pipeline
 1. **Claim:** pick a `ready` build ticket with no open blockers; set `assignee` and `status: in-progress` ([track-tickets](track-tickets.md)).
-2. **Branch:** `build/NNN-slug` from `v2`, in its own worktree when tickets run in parallel.
+2. **Branch:** `build/NNN-slug` from `main`, in its own worktree when tickets run in parallel.
 3. **Implement:** brief one `implementer` per ticket with the ticket's acceptance criteria. It works test-first where behaviour is testable and finishes with the checks below green. Several implementers may run at once, one ticket each.
 4. **Browser check:** brief `browser-checker` with the local preview URL and the states to cover. Gate: PASS.
 5. **Review:** brief `reviewer` with the branch diff. Gate: PASS. The lead decides which findings to accept; accepted findings go back to the same implementer.
 6. **Owner:** set `status: review`. The owner writes or approves every PLACEHOLDER and visual decision in the diff.
-7. **Merge:** the owner approves the merge into `v2`; set `status: done`.
+7. **Merge:** the owner approves the merge into `main`, only with `npm run check` green (GitHub does not enforce it on `main`); set `status: done`.
 
 ## Checks (the implementer's done)
 - `npm run build` succeeds with no warnings introduced.

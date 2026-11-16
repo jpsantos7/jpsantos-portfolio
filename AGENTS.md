@@ -4,7 +4,7 @@ Personal Site of a design engineer and accessibility specialist, being rebuilt a
 
 ## Paths
 - Repo: `/Users/jsantos/Documents/git/jpsantos-portfolio` (GitHub `jpsantos7/jpsantos-portfolio`).
-- Branches: `production` is what Netlify deploys, so a push to it ships to the live Site and needs the owner's go. `main` integrates; v1 is frozen at tag `v1`; v2 is built on branch `v2`.
+- Branches: `production` is what Netlify deploys, so a push to it ships to the live Site and needs the owner's go. `main` integrates and is where v2 is built, through ticket branches; v1 is frozen at tag `v1`. Only `production` gets branch protection (PR plus a required check, no bypass; set up by the scaffold ticket, per vault ticket 019).
 - Git identity: this repo and the vault are personal. Commit as `jpsantos7 <1482804+jpsantos7@users.noreply.github.com>` (set repo-locally); the global identity is a work one.
 - Vault: `/Users/jsantos/Documents/Obsidian Vaults/Portfolio Vault`
 - QMD collection: `portfolio-vault`
