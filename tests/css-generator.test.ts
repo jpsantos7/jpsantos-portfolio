@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { generate, WcagError } from "../src/css-utils/generate.mjs";
 
@@ -111,5 +112,29 @@ describe("token generator", () => {
       spacing: { items: [{ name: "x", min: 56, max: 160 }] },
     };
     expect(() => generate(wide)).not.toThrow();
+  });
+});
+
+describe("real design tokens", () => {
+  const read = (name: string) =>
+    JSON.parse(
+      readFileSync(
+        new URL(`../src/design-tokens/${name}.json`, import.meta.url),
+        "utf8",
+      ),
+    );
+
+  it("generate without a WCAG flag and give text-* to fg, muted and ink only", () => {
+    const { utilitiesCss } = generate({
+      viewports: read("viewports"),
+      textSizes: read("text-sizes"),
+      spacing: read("spacing"),
+      colors: read("colors"),
+      fonts: read("fonts"),
+    });
+    const text = [...utilitiesCss.matchAll(/^\.text-([\w-]+) \{/gm)].map(
+      (m) => m[1],
+    );
+    expect(text).toEqual(["fg", "muted", "ink"]);
   });
 });

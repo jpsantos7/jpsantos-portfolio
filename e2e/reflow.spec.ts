@@ -20,3 +20,13 @@ for (const route of ["/", "/dev/css-test/"]) {
     expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
   });
 }
+
+// The test page must not ship in the default build.
+test("/dev/css-test is absent from a default build", async ({ request }) => {
+  test.skip(
+    built.includes("/dev/css-test/"),
+    "dist was built with CSS_TEST_PAGE=1",
+  );
+  const response = await request.get("/dev/css-test/");
+  expect(response.status()).toBe(404);
+});

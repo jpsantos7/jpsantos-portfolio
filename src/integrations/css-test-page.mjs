@@ -1,8 +1,22 @@
 /**
- * Injects the CSS test page at /dev/css-test.
- * Always present under `astro dev`; in `astro build` it is added only when the
- * CSS_TEST_PAGE=1 environment variable is set, so the default production build
- * never contains it.
+ * Whether the CSS test page should be injected. Always under `astro dev`; in a
+ * build only when CSS_TEST_PAGE=1. That flag must never reach Netlify, so it
+ * throws there.
+ * @param {string} command Astro command
+ * @param {Record<string, string | undefined>} env
+ */
+export function shouldInjectTestPage(command, env) {
+  const flagged = env["CSS_TEST_PAGE"] === "1";
+  if (flagged && env["NETLIFY"]) {
+    throw new Error(
+      "CSS_TEST_PAGE=1 is set in a Netlify build: the CSS test page must never be deployed. Remove the variable.",
+    );
+  }
+  return command === "dev" || flagged;
+}
+
+/**
+ * Injects the CSS test page at /dev/css-test (see shouldInjectTestPage).
  * @returns {import("astro").AstroIntegration}
  */
 export default function cssTestPage() {
@@ -10,7 +24,7 @@ export default function cssTestPage() {
     name: "css-test-page",
     hooks: {
       "astro:config:setup": ({ command, injectRoute }) => {
-        if (command === "dev" || process.env["CSS_TEST_PAGE"] === "1") {
+        if (shouldInjectTestPage(command, process.env)) {
           injectRoute({
             pattern: "/dev/css-test",
             entrypoint: "./src/dev/css-test.astro",
