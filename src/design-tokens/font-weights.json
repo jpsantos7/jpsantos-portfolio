@@ -1,0 +1,10 @@
+{
+  "title": "Font weights",
+  "description": "Only the weights the Visual direction prototype uses. Bricolage runs 400 to 800, Geist 400 to 700, Geist Mono is 500 only, Fraunces Italic is 400 only. Proposed 2026-11-17, owner to approve.",
+  "items": [
+    { "name": "body", "value": 400 },
+    { "name": "label", "value": 500 },
+    { "name": "strong", "value": 700 },
+    { "name": "heading", "value": 800 }
+  ]
+}

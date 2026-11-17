@@ -3,7 +3,7 @@ import { calculateClamp, checkWCAG } from "utopia-core";
 /**
  * @typedef {{ name: string, min: number, max: number }} FluidToken sizes in px
  * @typedef {{ name: string, light?: string, dark?: string, value?: string, textUtility?: boolean }} ColorToken
- * @typedef {{ name: string, value: string[] }} FontToken
+ * @typedef {{ name: string, value: number }} ValueToken weights (unitless) and tracking (em)
  */
 
 export class WcagError extends Error {
@@ -43,19 +43,6 @@ function fluid({ min, max }, viewports) {
   });
 }
 
-const generic = new Set([
-  "serif",
-  "sans-serif",
-  "monospace",
-  "system-ui",
-  "ui-monospace",
-  "ui-serif",
-  "ui-sans-serif",
-]);
-
-/** @param {string} family */
-const family = (family) => (generic.has(family) ? family : `"${family}"`);
-
 /**
  * Tokens in, CSS out. Pure: reads and writes nothing.
  * @param {{
@@ -63,10 +50,18 @@ const family = (family) => (generic.has(family) ? family : `"${family}"`);
  *   textSizes: { items: FluidToken[] },
  *   spacing: { items: FluidToken[] },
  *   colors: { items: ColorToken[] },
- *   fonts: { items: FontToken[] },
+ *   weights: { items: ValueToken[] },
+ *   tracking: { items: ValueToken[] },
  * }} tokens
  */
-export function generate({ viewports, textSizes, spacing, colors, fonts }) {
+export function generate({
+  viewports,
+  textSizes,
+  spacing,
+  colors,
+  weights,
+  tracking,
+}) {
   // Only type is text, so only type is checked for WCAG 1.4.4.
   const flagged = textSizes.items.flatMap(({ name, min, max }) => {
     const range = checkWCAG({
@@ -89,8 +84,13 @@ export function generate({ viewports, textSizes, spacing, colors, fonts }) {
     const value = c.value ?? `light-dark(${c.light}, ${c.dark})`;
     props.push(`--color-${slug(c.name)}: ${value};`);
   }
-  for (const f of fonts.items) {
-    props.push(`--font-${slug(f.name)}: ${f.value.map(family).join(", ")};`);
+  // Font families are not generated: Astro's Fonts API emits --font-<role>
+  // (family plus optimised fallbacks) from the same fonts.json.
+  for (const w of weights.items) {
+    props.push(`--weight-${slug(w.name)}: ${w.value};`);
+  }
+  for (const t of tracking.items) {
+    props.push(`--tracking-${slug(t.name)}: ${t.value}em;`);
   }
   for (const t of textSizes.items) {
     props.push(`--size-${slug(t.name)}: ${fluid(t, viewports)};`);

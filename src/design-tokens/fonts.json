@@ -1,6 +1,6 @@
 {
   "title": "Fonts",
-  "description": "Four families from Visual direction, each with a system fallback stack (owner accepted 2026-11-16). Files and @font-face are ticket 030.",
+  "description": "Four families from Visual direction, each with a system fallback stack (owner accepted 2026-11-16). Single source: src/fonts.config.mjs builds the Astro Fonts API config from this file, and Astro emits --font-<name> with the optimised fallbacks. Files are in src/assets/fonts (scripts/subset-fonts.sh).",
   "items": [
     {
       "name": "heading",

@@ -15,7 +15,8 @@ try {
     textSizes: read("text-sizes"),
     spacing: read("spacing"),
     colors: read("colors"),
-    fonts: read("fonts"),
+    weights: read("font-weights"),
+    tracking: read("tracking"),
   });
   for (const [path, css] of [
     ["css/global/tokens.css", tokensCss],

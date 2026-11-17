@@ -26,10 +26,16 @@ const base = {
       { name: "ink", value: "#161412" },
     ],
   },
-  fonts: {
+  weights: {
     items: [
-      { name: "body", value: ["Geist", "system-ui", "sans-serif"] },
-      { name: "label", value: ["Geist Mono", "monospace"] },
+      { name: "body", value: 400 },
+      { name: "heading", value: 800 },
+    ],
+  },
+  tracking: {
+    items: [
+      { name: "display", value: -0.033 },
+      { name: "label", value: 0.1 },
     ],
   },
 };
@@ -55,8 +61,18 @@ describe("token generator", () => {
     expect(tokensCss).toContain("--color-yellow: #f2c200;");
   });
 
-  it("quotes named font families and leaves generic ones bare", () => {
-    expect(tokensCss).toContain('--font-label: "Geist Mono", monospace;');
+  it("writes weight tokens as plain numbers", () => {
+    expect(tokensCss).toContain("--weight-body: 400;");
+    expect(tokensCss).toContain("--weight-heading: 800;");
+  });
+
+  it("writes tracking tokens in em, signed as given", () => {
+    expect(tokensCss).toContain("--tracking-display: -0.033em;");
+    expect(tokensCss).toContain("--tracking-label: 0.1em;");
+  });
+
+  it("leaves font families to Astro's Fonts API", () => {
+    expect(tokensCss).not.toContain("--font-");
   });
 
   it("generates flow-space, gutter and region-space per spacing token", () => {
@@ -130,7 +146,8 @@ describe("real design tokens", () => {
       textSizes: read("text-sizes"),
       spacing: read("spacing"),
       colors: read("colors"),
-      fonts: read("fonts"),
+      weights: read("font-weights"),
+      tracking: read("tracking"),
     });
     const text = [...utilitiesCss.matchAll(/^\.text-([\w-]+) \{/gm)].map(
       (m) => m[1],
