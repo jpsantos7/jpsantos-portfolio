@@ -1,6 +1,6 @@
 {
   "title": "Tracking",
-  "description": "Letter-spacing in em. Headings are the prototype tracking times 0.6, collapsed to four steps tied to type size (display h1, heading h2, subheading h3 to h6, lead). Label and emphasis are the prototype values. Proposed 2026-11-17, owner to approve.",
+  "description": "Letter-spacing in em. Headings are the prototype tracking times 0.6, collapsed to four steps tied to type size (display h1, heading h2, subheading h3 to h6, lead). Label and emphasis are the prototype values. Owner approved 2026-11-17.",
   "items": [
     { "name": "display", "value": -0.033 },
     { "name": "heading", "value": -0.025 },

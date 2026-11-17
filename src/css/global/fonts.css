@@ -17,7 +17,8 @@
   differ slightly, since the sample's letter mix is lower-case. That is accepted.
 
   Each src lists the platform's face, then the metric-compatible one that Linux and
-  Android carry: Liberation Sans / Arimo (Arial), Liberation Mono / Cousine
+  ChromeOS carry (Android ships neither Liberation nor Arimo, so it falls through to its
+  generic font, untuned): Liberation Sans / Arimo (Arial), Liberation Mono / Cousine
   (Courier New), Liberation Serif / Tinos (Times New Roman). They share Arial's,
   Courier's and Times' advance widths, and the shaped widths of the sample are
   identical, so one set of overrides serves all.

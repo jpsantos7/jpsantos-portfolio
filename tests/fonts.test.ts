@@ -96,7 +96,7 @@ describe("fallback faces (src/css/global/fonts.css)", () => {
     );
   });
 
-  it("add the Linux and Android look-alikes after each platform face", () => {
+  it("add the Linux and ChromeOS look-alikes after each platform face", () => {
     const wants: Record<string, string[]> = {
       Arial: ["Liberation Sans", "Arimo"],
       "Arial Bold": ["Liberation Sans Bold", "Arimo Bold"],
@@ -130,7 +130,7 @@ describe("weight tokens", () => {
       "utf8",
     ),
   );
-  it("hold the owner-approved prototype weights", () => {
+  it("hold the prototype weights the owner approved on 2026-11-17", () => {
     const byName = Object.fromEntries(
       weights.items.map((w: { name: string; value: number }) => [
         w.name,

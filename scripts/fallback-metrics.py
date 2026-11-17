@@ -20,6 +20,15 @@
 # LiberationSerif-Italic.ttf, LiberationMono-Regular.ttf, Arimo.ttf, Tinos-Italic.ttf,
 # Cousine-Regular.ttf) and also prints their size-adjust, to check the local() fallbacks
 # listed after Arial, Times New Roman and Courier New in fonts.css hold the same overrides.
+#
+# Local fonts the numbers in fonts.css were measured against (name table, version string):
+#   macOS 27.2.1: Arial and Arial Bold "Version 5.01.2x", Times New Roman Italic
+#   "Version 5.00.3x", Courier New "Version 5.00.2x".
+# Confirmed metric-identical to them (+0.00% shaped width of the sample): Liberation Sans
+# Regular and Bold, Liberation Serif Italic, Liberation Mono Regular, all 2.1.5 (also the
+# version of Ubuntu 24.04's fonts-liberation 1:2.1.5-3); Arimo "Version 1.341", Tinos Italic
+# "Version 1.340", Cousine Regular "Version 1.241" (google/fonts at the commit pinned in
+# scripts/subset-fonts.sh). Re-run with --linux if a platform font is updated.
 import io
 import sys
 from pathlib import Path
