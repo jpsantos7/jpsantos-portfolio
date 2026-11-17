@@ -1,10 +1,10 @@
 // Astro Fonts API config, built from src/design-tokens/fonts.json so the family
 // names and fallback stacks have one source. Astro emits --font-<role> (family,
-// optimised fallback, then the stack) and the @font-face rules; see Base.astro.
+// our fallback face, then the stack) and the @font-face rules; see Base.astro.
 //
 // font-display: swap. Text shows at once in the metric-adjusted fallback and
-// swaps when the file arrives; the fallback matches the font's metrics, so the
-// swap shifts nothing (CLS) and text stays readable while fonts load.
+// swaps when the file arrives; the fallback is sized to the font at the weight
+// in use, so the swap shifts nothing (CLS) and text stays readable while fonts load.
 // Subset: Basic Latin, Latin-1 Supplement, and the punctuation listed below.
 import { readFileSync } from "node:fs";
 import { fontProviders } from "astro/config";
@@ -54,9 +54,10 @@ export const fonts = tokens.items.map(({ name, value }) => {
     provider: fontProviders.local(),
     name: value[0],
     cssVariable: `--font-${name}`,
-    // Last entry is the generic Astro builds the optimised fallback from.
-    fallbacks: value.slice(1),
-    optimizedFallbacks: true,
+    // Our own metric-matched fallback face (src/css/global/fonts.css) goes first;
+    // Astro's optimiser is off because it uses one set of metrics for every weight.
+    fallbacks: [`${value[0]} fallback`, ...value.slice(1)],
+    optimizedFallbacks: false,
     options: {
       variants: [
         {

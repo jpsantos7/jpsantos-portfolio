@@ -1,1 +1,78 @@
-/* @font-face rules come from Astro's Fonts API (src/fonts.config.mjs, <Font /> in Base.astro). */
+/*
+  @font-face for the real faces comes from Astro's Fonts API (src/fonts.config.mjs,
+  <Font /> in Base.astro). The fallback faces below are ours, because Astro's
+  optimised fallback takes one set of metrics for the whole weight range, which
+  put Bricolage at 800 about 7% too wide over Arial Bold and reflowed headings
+  when the real face swapped in.
+
+  Each rule sets a local face, size-adjust (average advance width of the real
+  face at the weight in use over the local face's) and ascent/descent overrides
+  (the real face's metrics divided by size-adjust). Derived by
+  scripts/fallback-metrics.py; the e2e test font-swap.spec.ts checks the result.
+  Regular and bold local faces are paired with the lightest and heaviest weight
+  each family uses. Faces are named "<family> fallback" and sit second in each
+  --font-* stack (src/fonts.config.mjs).
+*/
+
+/* Bricolage Grotesque, 400 to 800 */
+@font-face {
+  font-family: "Bricolage Grotesque fallback";
+  src: local("Arial"), local("ArialMT");
+  font-weight: 100 599;
+  size-adjust: 94.48%;
+  ascent-override: 98.43%;
+  descent-override: 28.58%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 600 900;
+  size-adjust: 93.27%;
+  ascent-override: 99.71%;
+  descent-override: 28.95%;
+  line-gap-override: 0%;
+}
+
+/* Geist, 400 to 700 */
+@font-face {
+  font-family: "Geist fallback";
+  src: local("Arial"), local("ArialMT");
+  font-weight: 100 599;
+  size-adjust: 105.08%;
+  ascent-override: 95.64%;
+  descent-override: 28.07%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Geist fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 600 900;
+  size-adjust: 104.22%;
+  ascent-override: 96.43%;
+  descent-override: 28.3%;
+  line-gap-override: 0%;
+}
+
+/* Geist Mono, 500 */
+@font-face {
+  font-family: "Geist Mono fallback";
+  src: local("Courier New"), local("CourierNewPSMT");
+  size-adjust: 99.98%;
+  ascent-override: 100.52%;
+  descent-override: 29.5%;
+  line-gap-override: 0%;
+}
+
+/* Fraunces Italic, 400 */
+@font-face {
+  font-family: "Fraunces fallback";
+  src: local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT");
+  font-style: italic;
+  size-adjust: 109.44%;
+  ascent-override: 89.36%;
+  descent-override: 23.3%;
+  line-gap-override: 0%;
+}
