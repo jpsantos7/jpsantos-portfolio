@@ -85,7 +85,7 @@ export function generate({
     props.push(`--color-${slug(c.name)}: ${value};`);
   }
   // Font families are not generated: Astro's Fonts API emits --font-<role>
-  // (family plus optimised fallbacks) from the same fonts.json.
+  // (family, our fallback face from fonts.css, then the stack) from the same fonts.json.
   for (const w of weights.items) {
     props.push(`--weight-${slug(w.name)}: ${w.value};`);
   }

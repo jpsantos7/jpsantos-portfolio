@@ -5,61 +5,95 @@
   put Bricolage at 800 about 7% too wide over Arial Bold and reflowed headings
   when the real face swapped in.
 
-  Each rule sets a local face, size-adjust (average advance width of the real
-  face at the weight in use over the local face's) and ascent/descent overrides
-  (the real face's metrics divided by size-adjust). Derived by
-  scripts/fallback-metrics.py; the e2e test font-swap.spec.ts checks the result.
-  Regular and bold local faces are paired with the lightest and heaviest weight
-  each family uses. Faces are named "<family> fallback" and sit second in each
-  --font-* stack (src/fonts.config.mjs).
+  Each rule sets a local face, size-adjust and ascent/descent overrides. size-adjust is
+  the rendered width of a mixed-case English sample in the real face at the weight in use
+  over the same sample in the local face, both shaped with HarfBuzz so kerning counts
+  (raw advance widths overshot Geist by about 2%). The overrides are the real face's
+  hhea metrics divided by size-adjust. Derived by scripts/fallback-metrics.py (run it
+  to regenerate; its header lists the pinned tools). The e2e test font-swap.spec.ts
+  checks the result in a browser.
+
+  Matched for mixed-case text. All-caps text (.label, and any uppercase heading) can
+  differ slightly, since the sample's letter mix is lower-case. That is accepted.
+
+  Each src lists the platform's face, then the metric-compatible one that Linux and
+  Android carry: Liberation Sans / Arimo (Arial), Liberation Mono / Cousine
+  (Courier New), Liberation Serif / Tinos (Times New Roman). They share Arial's,
+  Courier's and Times' advance widths, and the shaped widths of the sample are
+  identical, so one set of overrides serves all.
+
+  Bricolage has three faces (400, 700, 800) because its bold widths differ by 1.5%
+  between 700 and 800 over the same Arial Bold. Geist has two (400, 700). Faces are
+  named "<family> fallback" and sit second in each --font-* stack
+  (src/fonts.config.mjs).
 */
 
-/* Bricolage Grotesque, 400 to 800 */
+/* Bricolage Grotesque: 400 regular, 700 and 800 bold */
 @font-face {
   font-family: "Bricolage Grotesque fallback";
-  src: local("Arial"), local("ArialMT");
+  src:
+    local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Arimo");
   font-weight: 100 599;
-  size-adjust: 94.48%;
-  ascent-override: 98.43%;
-  descent-override: 28.58%;
+  size-adjust: 94.13%;
+  ascent-override: 98.8%;
+  descent-override: 28.68%;
   line-gap-override: 0%;
 }
 
 @font-face {
   font-family: "Bricolage Grotesque fallback";
-  src: local("Arial Bold"), local("Arial-BoldMT");
-  font-weight: 600 900;
-  size-adjust: 93.27%;
-  ascent-override: 99.71%;
-  descent-override: 28.95%;
+  src:
+    local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"),
+    local("Arimo Bold");
+  font-weight: 600 749;
+  size-adjust: 91.71%;
+  ascent-override: 101.41%;
+  descent-override: 29.44%;
   line-gap-override: 0%;
 }
 
-/* Geist, 400 to 700 */
+@font-face {
+  font-family: "Bricolage Grotesque fallback";
+  src:
+    local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"),
+    local("Arimo Bold");
+  font-weight: 750 900;
+  size-adjust: 93.1%;
+  ascent-override: 99.89%;
+  descent-override: 29%;
+  line-gap-override: 0%;
+}
+
+/* Geist: 400 regular, 700 bold */
 @font-face {
   font-family: "Geist fallback";
-  src: local("Arial"), local("ArialMT");
+  src:
+    local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Arimo");
   font-weight: 100 599;
-  size-adjust: 105.08%;
-  ascent-override: 95.64%;
-  descent-override: 28.07%;
+  size-adjust: 102.96%;
+  ascent-override: 97.61%;
+  descent-override: 28.65%;
   line-gap-override: 0%;
 }
 
 @font-face {
   font-family: "Geist fallback";
-  src: local("Arial Bold"), local("Arial-BoldMT");
+  src:
+    local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"),
+    local("Arimo Bold");
   font-weight: 600 900;
-  size-adjust: 104.22%;
-  ascent-override: 96.43%;
-  descent-override: 28.3%;
+  size-adjust: 102.3%;
+  ascent-override: 98.24%;
+  descent-override: 28.84%;
   line-gap-override: 0%;
 }
 
 /* Geist Mono, 500 */
 @font-face {
   font-family: "Geist Mono fallback";
-  src: local("Courier New"), local("CourierNewPSMT");
+  src:
+    local("Courier New"), local("CourierNewPSMT"), local("Liberation Mono"),
+    local("Cousine");
   size-adjust: 99.98%;
   ascent-override: 100.52%;
   descent-override: 29.5%;
@@ -69,10 +103,12 @@
 /* Fraunces Italic, 400 */
 @font-face {
   font-family: "Fraunces fallback";
-  src: local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT");
+  src:
+    local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT"),
+    local("Liberation Serif Italic"), local("Tinos Italic");
   font-style: italic;
-  size-adjust: 109.44%;
-  ascent-override: 89.36%;
-  descent-override: 23.3%;
+  size-adjust: 108.86%;
+  ascent-override: 89.84%;
+  descent-override: 23.42%;
   line-gap-override: 0%;
 }

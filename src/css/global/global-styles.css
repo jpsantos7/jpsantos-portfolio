@@ -65,7 +65,7 @@ em,
 i {
   font-family: var(--font-emphasis);
   font-style: italic;
-  font-weight: 400;
+  font-weight: var(--weight-emphasis);
   letter-spacing: var(--tracking-emphasis);
 }
 

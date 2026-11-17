@@ -2,9 +2,10 @@
 // names and fallback stacks have one source. Astro emits --font-<role> (family,
 // our fallback face, then the stack) and the @font-face rules; see Base.astro.
 //
-// font-display: swap. Text shows at once in the metric-adjusted fallback and
-// swaps when the file arrives; the fallback is sized to the font at the weight
-// in use, so the swap shifts nothing (CLS) and text stays readable while fonts load.
+// font-display: swap. Text shows at once in a metric-adjusted fallback and swaps when
+// the file arrives. The fallback is sized to the font at the weight in use, so for
+// mixed-case text the swap shifts nothing (CLS). All-caps text differs slightly, which
+// is accepted (owner, 2026-11-17).
 // Subset: Basic Latin, Latin-1 Supplement, and the punctuation listed below.
 import { readFileSync } from "node:fs";
 import { fontProviders } from "astro/config";
