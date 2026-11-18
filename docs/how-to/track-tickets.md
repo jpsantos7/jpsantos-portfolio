@@ -23,7 +23,7 @@ The vault is the issue tracker. Every map and ticket is one note; its file name 
 - **Create:** new note from the template, `status: open`, `assignee` empty. Create all notes of a batch first, then wire `blocked_by` in a second pass, with real file names.
 - **Claim:** set `assignee` before any other work. An open note with an empty `assignee` is unclaimed.
 - **Unblocked:** every note in `blocked_by` has `status: closed` (or `done`).
-- **Frontier:** open, unblocked, unclaimed wayfinder tickets. The `Backlog.base` view "Frontier" shows it, sorted by ticket number.
+- **Frontier:** open, unblocked, unclaimed wayfinder tickets. In `Backlog.base`, the "Wayfinder tickets" view shows them: rows in the `open` group with no assignee and 0 open blockers.
 - **Resolve:** append a `## Resolution` section to the ticket (the answer, links to assets and branches), set `status: closed`, then add one line to the map's "Decisions so far": `- [[NNN-slug|Name]]: one-line gist`.
 - **Out of scope:** set `status: closed`, add `resolution: out-of-scope`, add one line to the map's "Out of scope" section with the reason.
 
