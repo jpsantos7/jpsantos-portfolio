@@ -1,2 +1,5 @@
 /* Blocks: one @import per Block file, namespaced by its class. */
 @import url("./mark.css");
+@import url("./skip-link.css");
+@import url("./site-header.css");
+@import url("./site-footer.css");

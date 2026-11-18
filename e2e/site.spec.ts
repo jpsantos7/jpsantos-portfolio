@@ -6,7 +6,10 @@ for (const route of routes()) {
     const response = await page.goto(route);
     expect(response?.ok()).toBe(true);
     await expect(page.locator("html")).toHaveAttribute("lang", "en-GB");
-    await expect(page).toHaveTitle(/^PLACEHOLDER: /);
+    // Home's title is fixed by the SEO decision; every other title carries a placeholder.
+    await expect(page).toHaveTitle(
+      route === "/" ? "JP Santos — Design Engineer" : /^PLACEHOLDER: /,
+    );
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   });
 }

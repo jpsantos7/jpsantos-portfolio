@@ -1,0 +1,49 @@
+---
+// Site header: the "jp." mark linking Home, the main navigation, and a slot for the
+// theme toggle (built in ticket 033). Section links point at pages that arrive in later tickets.
+import { isCurrentPath } from "../utils/nav";
+import Mark from "./Mark.astro";
+
+const current = (href: string) =>
+  isCurrentPath(Astro.url.pathname, href) ? "page" : undefined;
+---
+
+<header class="site-header">
+  <div class="wrapper">
+    <div class="repel">
+      <a class="site-header-home" href="/">
+        <Mark />
+        <span class="visually-hidden">
+          <!-- PLACEHOLDER: accessible name of the home link (the mark is decorative) -->
+          PLACEHOLDER: home link name
+        </span>
+      </a>
+      <div class="cluster">
+        <!-- PLACEHOLDER: aria-label for the main navigation landmark -->
+        <nav aria-label="PLACEHOLDER: main navigation label">
+          <ul class="cluster list-plain">
+            <li>
+              <a href="/work" aria-current={current("/work")}>
+                <!-- PLACEHOLDER: nav label for Work -->
+                PLACEHOLDER: nav Work
+              </a>
+            </li>
+            <li>
+              <a href="/about" aria-current={current("/about")}>
+                <!-- PLACEHOLDER: nav label for About -->
+                PLACEHOLDER: nav About
+              </a>
+            </li>
+            <li>
+              <a href="/contact" aria-current={current("/contact")}>
+                <!-- PLACEHOLDER: nav label for Contact -->
+                PLACEHOLDER: nav Contact
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <slot name="theme-toggle" />
+      </div>
+    </div>
+  </div>
+</header>

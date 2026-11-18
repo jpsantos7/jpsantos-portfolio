@@ -1,0 +1,19 @@
+/* Skip link: first focusable element, hidden until it takes focus. */
+.skip-link {
+  position: absolute;
+  z-index: 20;
+
+  /* PLACEHOLDER (owner's call): provisional offset, padding and stacking of the revealed link. */
+  inset-block-start: var(--space-2xs);
+  inset-inline-start: var(--space-2xs);
+  padding: var(--space-xs) var(--space-s);
+  background: var(--color-bg);
+  color: var(--color-fg);
+
+  /* Moved off-screen, not display:none, so it stays in the tab order. */
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}

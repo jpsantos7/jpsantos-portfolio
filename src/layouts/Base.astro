@@ -1,14 +1,33 @@
 ---
-// Minimal base layout. Ticket 032 builds the real one (header, footer, landmarks).
+// Base layout: head metadata, skip link, header, footer and the one <main> every page shares.
 // global.css is imported once, first, so every page shares one ordered stylesheet.
 import { Font } from "astro:assets";
 import "../css/global.css";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { canonicalUrl, pageTitle } from "../utils/seo";
 
 interface Props {
+  /** Page name; the layout adds ` — JP Santos`. Ignored on Home. */
   title: string;
+  /** Meta description, owner-written. Required: a missing one fails the build. */
+  description: string;
+  /** Home gets the `JP Santos — Design Engineer` title. */
+  home?: boolean;
+  /** Adds `noindex` and drops the canonical (404, "message sent"). */
+  noindex?: boolean;
 }
 
-const { title } = Astro.props;
+const { title, description, home = false, noindex = false } = Astro.props;
+
+if (typeof description !== "string" || description.trim() === "") {
+  throw new Error(
+    `Base layout: "description" is required (page title: "${title}").`,
+  );
+}
+
+const fullTitle = pageTitle(title, { home });
+const canonical = noindex ? undefined : canonicalUrl(Astro.url.pathname);
 ---
 
 <!doctype html>
@@ -26,9 +45,27 @@ const { title } = Astro.props;
     <Font cssVariable="--font-body" preload />
     <Font cssVariable="--font-label" />
     <Font cssVariable="--font-emphasis" />
-    <title>{title}</title>
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <!-- og:image and og:image:alt arrive with the OG card build (ticket 044). -->
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    <slot />
+    <a class="skip-link" href="#main">
+      <!-- PLACEHOLDER: skip link text (skip to main content) -->
+      PLACEHOLDER: skip link text
+    </a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>

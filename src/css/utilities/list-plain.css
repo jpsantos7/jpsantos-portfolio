@@ -1,0 +1,10 @@
+/*
+LIST PLAIN UTILITY
+Removes bullets and indent from a navigation or link list. Safari drops list semantics
+from lists with no markers, which is accepted for link lists whose context is clear.
+*/
+.list-plain {
+  list-style: none;
+  margin-block: 0;
+  padding-inline: 0;
+}

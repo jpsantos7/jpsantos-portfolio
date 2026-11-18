@@ -1,0 +1,85 @@
+/*
+Site header (src/components/Header.astro): the "jp." mark, the navigation and the theme
+toggle slot. The base style is opaque with a hairline, so nothing can fail unsafe.
+
+Sticky only on viewports tall enough to leave room for content (see the breakpoint below).
+Where scroll-driven animations exist, the header starts clear and gains the page colour and
+hairline once the page scrolls (decision 008). The easing and range belong to ticket 040.
+*/
+.site-header {
+  background: var(--color-bg);
+  border-block-end: 1px solid var(--color-line);
+
+  /* PLACEHOLDER (owner's call): provisional header padding. */
+  padding-block: var(--space-xs);
+
+  /* PLACEHOLDER (owner's call, carried over from ticket 031): provisional mark size,
+     taken from the space scale. */
+  --mark-size: var(--space-xl);
+}
+
+/*
+PLACEHOLDER (owner's call): provisional height breakpoint. A short viewport (400% zoom on
+a laptop is 320x256) cannot spare a sticky header, so it scrolls away there (WCAG 1.4.10,
+2.4.11). scroll-padding keeps anchor and focus targets clear of the sticky header. Its
+values (and the 40rem width split) are provisional estimates of the header height with the
+placeholder nav text, which wraps to three rows on a phone: retune them with the real copy.
+*/
+@media (height >= 32rem) {
+  :root {
+    scroll-padding-block-start: 7rem;
+  }
+
+  @media (width < 40rem) {
+    :root {
+      scroll-padding-block-start: 14rem;
+    }
+  }
+
+  .site-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 10;
+  }
+
+  /*
+  Longhands, not the shorthand: minifiers fold them into `animation`, which browsers
+  reject once animation-timeline is inside it. The transparent start lives in the
+  keyframes, so without the animation the opaque base style stays.
+  */
+  @supports (animation-timeline: scroll()) {
+    .site-header {
+      animation-name: site-header-scrolled;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root block);
+
+      /* PLACEHOLDER (owner's call): provisional end of the scroll range. */
+      animation-range: 0 var(--space-m);
+    }
+
+    @keyframes site-header-scrolled {
+      from {
+        background-color: transparent;
+        border-block-end-color: transparent;
+      }
+    }
+  }
+}
+
+/* Links in the header: plain text, with a target at least 24px tall (WCAG 2.5.8). */
+.site-header a {
+  display: inline-block;
+  min-block-size: 1.5rem;
+  color: inherit;
+}
+
+.site-header nav a {
+  /* PLACEHOLDER (owner's call): provisional nav link padding. */
+  padding-block: var(--space-3xs);
+}
+
+/* The home link is the mark alone; the accessible name is visually hidden text. */
+.site-header .site-header-home {
+  display: block;
+}

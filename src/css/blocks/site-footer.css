@@ -1,0 +1,36 @@
+/*
+Site footer (src/components/Footer.astro): ink in both themes. color-scheme: dark makes
+the light-dark() colour tokens resolve to their dark values here, so text stays light
+on the ink surface whichever theme the page uses.
+*/
+.site-footer {
+  color-scheme: dark;
+  background: var(--color-ink);
+  color: var(--color-fg);
+}
+
+/* Links read as links on ink: yellow text (allowed on ink, 10:1), underlined. */
+.site-footer a {
+  color: var(--color-yellow);
+  text-decoration: underline;
+
+  /* PLACEHOLDER (owner's call): provisional underline offset. */
+  text-underline-offset: 0.2em;
+}
+
+.site-footer-cta {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-heading);
+
+  /* PLACEHOLDER (owner's call): provisional call-to-action size, from the type scale. */
+  font-size: var(--size-step-4);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+}
+
+.site-footer li a {
+  display: inline-block;
+
+  /* PLACEHOLDER (owner's call): provisional link padding. */
+  padding-block: var(--space-3xs);
+}
