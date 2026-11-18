@@ -13,6 +13,7 @@ Personal Site of a design engineer and accessibility specialist, being rebuilt a
 - Authorship protocol is mandatory: [docs/authorship-protocol.md](docs/authorship-protocol.md).
 - Third-party skills ([.agents/skills/THIRD-PARTY.md](.agents/skills/THIRD-PARTY.md)): read authorship-protocol rule 6 before running one.
 - Stay tool-agnostic. Rules and workflows live in `AGENTS.md`, `docs/` and `.agents/skills/`; tool-specific files (`.claude/agents/`, `.claude/skills/` symlinks, `.mcp.json`) only point at them.
+- Every repo commit waits for the [commit gate](docs/how-to/build-a-backlog-ticket.md#commit-gate) (exemptions listed there).
 - Roles, briefs, checkpoints and escalation: [delegate-work](docs/how-to/delegate-work.md).
 - Library docs: use the source routed in [look-up-docs](docs/how-to/look-up-docs.md). A library with no row yet gets one decided with the human first.
 - Planning follows the wayfinder skill; the vault is its tracker ([track-tickets](docs/how-to/track-tickets.md)).
@@ -34,7 +35,7 @@ Open a doc only when the task matches.
 |---|---|
 | Start or end a session, write the handoff note | [start-and-end-a-session](docs/how-to/start-and-end-a-session.md) |
 | Chart the map or work a wayfinder ticket (research, prototype, grilling, task) | [work-a-wayfinder-ticket](docs/how-to/work-a-wayfinder-ticket.md) |
-| Build a backlog ticket (branch → implement → check → review → merge) | [build-a-backlog-ticket](docs/how-to/build-a-backlog-ticket.md) |
+| Build a backlog ticket (branch → implement → gate → commit → owner → merge) | [build-a-backlog-ticket](docs/how-to/build-a-backlog-ticket.md) |
 | Create, claim, block, close or query tickets in the vault | [track-tickets](docs/how-to/track-tickets.md) |
 | Write to the vault (any note) | [write-to-the-vault](docs/how-to/write-to-the-vault.md) |
 | Pick an agent, brief it, escalate | [delegate-work](docs/how-to/delegate-work.md) |

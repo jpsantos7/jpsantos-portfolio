@@ -1,6 +1,6 @@
 ---
 name: browser-checker
-description: Checks rendered portfolio pages in a real browser against the accessibility bar: mobile and desktop widths, every state, keyboard, zoom, preferences, console and network. Use after an implementer's checks are green and before review; keeps screenshots and logs out of the lead's session. Returns PASS or FAIL with a short list.
+description: Checks rendered portfolio pages in a real browser against the accessibility bar: mobile and desktop widths, every state, keyboard, zoom, preferences, console and network. Use as the first commit-gate step when changes affect a rendered page, after the implementer's checks are green; keeps screenshots and logs out of the lead's session. Returns PASS or FAIL with a short list.
 disallowedTools: Edit, Write, NotebookEdit
 model: opus
 effort: medium

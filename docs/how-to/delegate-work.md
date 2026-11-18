@@ -5,8 +5,8 @@ Roles are tool-agnostic tiers; the agent files under `.claude/agents/` implement
 ## Roles
 | Role | Tier | Claude Code | Effort | Rules |
 |---|---|---|---|---|
-| Lead (main session) | Strong | Opus | medium | Breaks work into tickets, briefs agents, decides which findings to accept. Writes no code. |
-| Implementer | Mid | Sonnet | medium | One per build ticket, own branch or worktree, test-first. Never one implementer working through several tickets. |
+| Lead (main session) | Strong | Opus | medium | Breaks work into tickets, briefs agents, decides which findings to accept. Writes no product code; edits harness docs itself, through the commit gate. |
+| Implementer | Mid | Sonnet | medium | One per build ticket on its own branch (own worktree when tickets run in parallel), test-first, leaves changes uncommitted. Never one implementer working through several tickets. |
 | Implementer retry | Mid | Sonnet | high | Only the ticket still red after one fix round. |
 | Reviewer | Strong | Opus | medium | Read-only diff review: code, security, authorship protocol. Reports; the lead decides. |
 | Browser checker | Strong | Opus | medium | Rendered pages at mobile and desktop widths, every state, a11y bar; keeps screenshots and logs out of the lead. |
@@ -18,11 +18,10 @@ Roles are tool-agnostic tiers; the agent files under `.claude/agents/` implement
 The lead stays on Strong at medium effort unless the owner asks otherwise.
 
 ## Brief
-Give each agent: goal, acceptance criteria, exact paths and branch, out-of-scope items, notes already read, and the commit trailers when it commits. Agents return their Report format only. The lead reads the diff before accepting: "looks good" requires having looked.
+Give each agent: goal, acceptance criteria, exact paths and branch, out-of-scope items, notes already read, and the commit trailers for agents that commit (`researcher`, `vault-writer`). Other agents leave repo changes uncommitted; the lead commits after the [commit gate](build-a-backlog-ticket.md#commit-gate). Agents return their Report format only. The lead reads the diff before accepting: "looks good" requires having looked.
 
 ## Checkpoints
-- `reviewer` before a build ticket goes to the owner, and before committing any harness change (`AGENTS.md`, `docs/`, agents, skills).
-- `browser-checker` before `reviewer` on any build ticket that changes a page.
+- The [commit gate](build-a-backlog-ticket.md#commit-gate) before every repo commit, harness changes (`AGENTS.md`, `docs/`, agents, skills) included.
 - One `vault-writer` at a time.
 
 ## Escalation
