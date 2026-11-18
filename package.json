@@ -38,9 +38,9 @@
     "vitest": "^5.1.0"
   },
   "scripts": {
-    "predev": "node src/css-utils/build-tokens.mjs",
+    "predev": "node src/css-utils/build-tokens.mjs && node scripts/check-media-sizes.mjs",
     "dev": "astro dev",
-    "prebuild": "node src/css-utils/build-tokens.mjs",
+    "prebuild": "node src/css-utils/build-tokens.mjs && node scripts/check-media-sizes.mjs",
     "build": "astro build && node scripts/noindex-headers.mjs dist",
     "preview": "astro preview",
     "lint": "eslint .",

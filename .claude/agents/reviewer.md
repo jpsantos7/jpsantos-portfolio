@@ -25,6 +25,7 @@ Give each item a verdict. Done when every item has one.
 7. Security: protocol §11-12; headers per the ticket.
 8. Tests: behaviour changes have tests; name the commands to run.
 9. Harness edits: single source of truth kept (rules link to the protocol, not copied).
+10. Disclosure, for content diffs (vault decision 006): the title does not identify an unnamed client, exact figures appear only at Named, and client visuals are redrawn or blurred below Named.
 
 ## Report format
 Mandatory. At most 200 words.
