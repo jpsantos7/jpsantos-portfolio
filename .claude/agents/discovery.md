@@ -1,7 +1,7 @@
 ---
 name: discovery
 description: Fast read-only lookups across the portfolio repo, the Portfolio Vault and library docs. Use to locate code, notes, conventions or doc passages when only a structured summary is needed.
-tools: Read, Grep, Glob, Skill, mcp__plugin_qmd_qmd__query, mcp__plugin_qmd_qmd__get, mcp__plugin_qmd_qmd__multi_get, mcp__astro-docs__search_astro_docs
+tools: Read, Grep, Glob, Skill, mcp__qmd__query, mcp__qmd__get, mcp__qmd__multi_get, mcp__astro-docs__search_astro_docs
 model: haiku
 effort: medium
 ---
