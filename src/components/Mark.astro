@@ -1,0 +1,30 @@
+---
+// The "jp." mark at header size: the full-size drawing of the favicon set (ticket 031),
+// outlined paths from scripts/generate-icons.py, colours from the tokens.
+// Decorative (aria-hidden): it sits inside the home link, which gets its accessible name
+// from the link's own text, so a second name here would be announced twice.
+// Size: set --mark-size on the element or a parent. No token fits yet, so the owner
+// picks it (open issue on ticket 031); until then the SVG fills its container.
+import colors from "../design-tokens/colors.json";
+import mark from "./mark-paths.json";
+
+const token = (name: string) => {
+  const c = colors.items.find((i) => i.name === name) as
+    { value?: string; light?: string } | undefined;
+  return c?.value ?? c?.light;
+};
+const fill = { letter: token("bg"), stop: token("yellow") };
+---
+
+<svg
+  class="mark"
+  viewBox="0 0 100 100"
+  aria-hidden="true"
+  focusable="false"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <rect width="100" height="100" rx={mark.radius} fill={token("ink")}></rect>
+  {mark.paths.map((p) => (
+    <path d={p.d} fill={fill[p.role as "letter" | "stop"]}></path>
+  ))}
+</svg>

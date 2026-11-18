@@ -1,1 +1,2 @@
-/* Blocks: one @import per Block file, namespaced by its class. None yet. */
+/* Blocks: one @import per Block file, namespaced by its class. */
+@import url("./mark.css");

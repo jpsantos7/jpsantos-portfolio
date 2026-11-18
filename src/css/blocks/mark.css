@@ -1,0 +1,7 @@
+/* Mark: the "jp." logo mark (src/components/Mark.astro). --mark-size is set by the
+   owner's layout; unset, the SVG fills its container. */
+.mark {
+  display: block;
+  inline-size: var(--mark-size);
+  block-size: auto;
+}

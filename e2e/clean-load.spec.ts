@@ -21,10 +21,10 @@ for (const route of routes()) {
   // Headless Playwright never requests /favicon.ico, but real browsers and
   // Lighthouse do, and a 404 is a console error. Without a declared icon the
   // request happens, so require one on every page.
-  test(`${route} declares an icon so no default favicon request is made`, async ({
+  test(`${route} declares its SVG and ICO icons so no default favicon request is made`, async ({
     page,
   }) => {
     await page.goto(route);
-    await expect(page.locator('head link[rel~="icon"]')).toHaveCount(1);
+    await expect(page.locator('head link[rel~="icon"]')).toHaveCount(2);
   });
 }
