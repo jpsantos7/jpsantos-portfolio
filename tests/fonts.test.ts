@@ -1,4 +1,5 @@
 import { readFileSync, statSync } from "node:fs";
+import { brotliDecompressSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
 import { fonts } from "../src/fonts.config.mjs";
 
@@ -210,10 +211,163 @@ describe("fonts config guard", () => {
               ),
       };
     });
-    await expect(import("../src/fonts.config.mjs")).rejects.toThrow(
-      /"display"/,
-    );
-    vi.doUnmock("node:fs");
-    vi.resetModules();
+    try {
+      await expect(import("../src/fonts.config.mjs")).rejects.toThrow(
+        /"display"/,
+      );
+    } finally {
+      vi.doUnmock("node:fs");
+      vi.resetModules();
+    }
   });
+});
+
+// Reads the wght axis (fvar) from a woff2 with Node's built-in brotli, no dependency.
+// WOFF2 layout: 48-byte header, a table directory, then one brotli stream holding every
+// table in directory order (https://www.w3.org/TR/WOFF2/).
+const KNOWN_TAGS = [
+  "cmap",
+  "head",
+  "hhea",
+  "hmtx",
+  "maxp",
+  "name",
+  "OS/2",
+  "post",
+  "cvt ",
+  "fpgm",
+  "glyf",
+  "loca",
+  "prep",
+  "CFF ",
+  "VORG",
+  "EBDT",
+  "EBLC",
+  "gasp",
+  "hdmx",
+  "kern",
+  "LTSH",
+  "PCLT",
+  "VDMX",
+  "vhea",
+  "vmtx",
+  "BASE",
+  "GDEF",
+  "GPOS",
+  "GSUB",
+  "EBSC",
+  "JSTF",
+  "MATH",
+  "CBDT",
+  "CBLC",
+  "COLR",
+  "CPAL",
+  "SVG ",
+  "sbix",
+  "acnt",
+  "avar",
+  "bdat",
+  "bloc",
+  "bsln",
+  "cvar",
+  "fdsc",
+  "feat",
+  "fmtx",
+  "fvar",
+  "gvar",
+  "hsty",
+  "just",
+  "lcar",
+  "mort",
+  "morx",
+  "opbd",
+  "prop",
+  "trak",
+  "Zapf",
+  "Silf",
+  "Glat",
+  "Gloc",
+  "Feat",
+  "Sill",
+];
+
+function wghtAxis(file: Buffer): [number, number] | null {
+  expect(file.toString("latin1", 0, 4)).toBe("wOF2");
+  // A font collection (ttcf) has a different table layout this reader does not handle.
+  expect(file.toString("latin1", 4, 8)).not.toBe("ttcf");
+  const numTables = file.readUInt16BE(12);
+  const compressedSize = file.readUInt32BE(20);
+  let pos = 48;
+  const base128 = () => {
+    let value = 0;
+    for (let i = 0; i < 5; i++) {
+      const byte = file[pos++]!;
+      // A leading 0x80 byte is padding the spec forbids.
+      if (i === 0 && byte === 0x80) throw new Error("bad UIntBase128");
+      value = value * 128 + (byte & 0x7f);
+      if (!(byte & 0x80)) return value;
+    }
+    throw new Error("bad UIntBase128");
+  };
+  const tables: { tag: string; offset: number; length: number }[] = [];
+  let offset = 0;
+  for (let i = 0; i < numTables; i++) {
+    const flags = file[pos++]!;
+    const index = flags & 0x3f;
+    const version = flags >> 6;
+    let tag = KNOWN_TAGS[index]!;
+    if (index === 63) {
+      tag = file.toString("latin1", pos, pos + 4);
+      pos += 4;
+    }
+    const origLength = base128();
+    // glyf and loca are transformed at version 0, hmtx at version 1; others never here.
+    const transformed =
+      ((tag === "glyf" || tag === "loca") && version === 0) ||
+      (tag === "hmtx" && version === 1);
+    const length = transformed ? base128() : origLength;
+    tables.push({ tag, offset, length });
+    offset += length;
+  }
+  const data = brotliDecompressSync(file.subarray(pos, pos + compressedSize));
+  const fvar = tables.find((t) => t.tag === "fvar");
+  if (!fvar) return null;
+  const t = data.subarray(fvar.offset, fvar.offset + fvar.length);
+  const axesOffset = t.readUInt16BE(4);
+  const axisCount = t.readUInt16BE(8);
+  const axisSize = t.readUInt16BE(10);
+  for (let i = 0; i < axisCount; i++) {
+    const a = axesOffset + i * axisSize;
+    if (t.toString("latin1", a, a + 4) === "wght") {
+      // Fixed 16.16 values.
+      return [t.readInt32BE(a + 4) / 65536, t.readInt32BE(a + 12) / 65536];
+    }
+  }
+  return null;
+}
+
+describe("font files against the config", () => {
+  const expected: Record<string, [number, number]> = {
+    "bricolage-grotesque.woff2": [400, 800],
+    "geist.woff2": [400, 700],
+    "geist-mono.woff2": [500, 700],
+    "fraunces-italic.woff2": [400, 700],
+  };
+
+  for (const f of fonts) {
+    const variant = f.options.variants[0]!;
+    const name = variant.src[0]!.split("/").at(-1)!;
+    it(`${name} has the wght axis range the config serves for ${f.cssVariable}`, () => {
+      const [lo, hi = lo] = String(variant.weight).split(" ").map(Number);
+      const axis = wghtAxis(readFileSync(new URL(name, dir)));
+      expect(axis, "no fvar wght axis").not.toBeNull();
+      expect(axis).toEqual([lo, hi]);
+      // And the owner-approved ranges, so a re-subset cannot quietly narrow a face.
+      expect(
+        expected[name],
+        `no approved wght range for ${name}`,
+      ).toBeDefined();
+      expect([lo, hi]).toEqual(expected[name]);
+    });
+  }
 });

@@ -7,7 +7,8 @@ import type { Page } from "@playwright/test";
 // The page loads twice, once with every woff2 request aborted (text stays in the fallback)
 // and once normally. Both times the same long mixed-case prose is injected into `/` and
 // styled by the real CSS (the actual element rules, tokens and tracking), one block per
-// role: heading 800, secondary display 700, lead 400, body 400, strong 700, label and em.
+// role: heading 800, secondary display 700, lead 400, body 400, strong 700, label 500,
+// label bold 700 (`.label strong`), em 400 and em bold 700 (`em strong`).
 // For each block the test compares
 //   - the text's own width on one line (a Range over the text, not the block box), and
 //   - the line count when it wraps in a narrow and in a wide column,
@@ -33,7 +34,21 @@ const prose = [
   "A focus ring that is easy to see, a heading that says what follows, and a form that explains its own errors are small details, and they decide whether a page is usable or merely present.",
 ];
 
+// PostScript names the local fallback faces report through CDP, per platform (macOS and
+// Windows, then Linux and ChromeOS). Each role must use the face of its own weight.
+const sans = /^local:(ArialMT|LiberationSans|Arimo(-Regular)?)$/;
+const sansBold = /^local:(Arial-BoldMT|LiberationSans-Bold|Arimo-Bold)$/;
+const mono = /^local:(CourierNewPSMT|LiberationMono|Cousine(-Regular)?)$/;
+const monoBold =
+  /^local:(CourierNewPS-BoldMT|LiberationMono-Bold|Cousine-Bold)$/;
+const serifItalic =
+  /^local:(TimesNewRomanPS-ItalicMT|LiberationSerif-Italic|Tinos-Italic)$/;
+const serifBoldItalic =
+  /^local:(TimesNewRomanPS-BoldItalicMT|LiberationSerif-BoldItalic|Tinos-BoldItalic)$/;
+
 type Role = {
+  // The local face the fallback run must use for this role.
+  local: RegExp;
   name: string;
   // Wrapper tag and inline style for each block; `inner` nests the text in these tags,
   // outermost first (so ["em", "strong"] is <em><strong>text</strong></em>).
@@ -45,25 +60,34 @@ type Role = {
   tolerance?: number;
 };
 const roles: Role[] = [
-  { name: "heading 800", tag: "h2" },
+  { local: sansBold, name: "heading 800", tag: "h2" },
   {
+    local: sansBold,
     name: "secondary display 700",
     tag: "p",
     style:
       "font-family: var(--font-heading); font-weight: var(--weight-display-secondary); letter-spacing: var(--tracking-lead)",
   },
   {
+    local: sans,
     name: "lead 400",
     tag: "p",
     style:
       "font-family: var(--font-heading); font-weight: var(--weight-lead); letter-spacing: var(--tracking-lead)",
   },
-  { name: "body 400", tag: "p" },
-  { name: "strong 700", tag: "p", inner: ["strong"] },
-  { name: "label 500", tag: "p", className: "label" },
-  { name: "label bold 700", tag: "p", className: "label", inner: ["strong"] },
-  { name: "emphasis 400", tag: "p", inner: ["em"] },
+  { local: sans, name: "body 400", tag: "p" },
+  { local: sansBold, name: "strong 700", tag: "p", inner: ["strong"] },
+  { local: mono, name: "label 500", tag: "p", className: "label" },
   {
+    local: monoBold,
+    name: "label bold 700",
+    tag: "p",
+    className: "label",
+    inner: ["strong"],
+  },
+  { local: serifItalic, name: "emphasis 400", tag: "p", inner: ["em"] },
+  {
+    local: serifBoldItalic,
     name: "emphasis bold 700",
     tag: "p",
     inner: ["em", "strong"],
@@ -188,9 +212,7 @@ async function run(page: Page, blockFonts: boolean): Promise<Run> {
   // is served by a real face and the browser has nothing to synthesise (faux bold).
   const faces = await page.evaluate(() =>
     [...document.querySelectorAll("[data-swap]")].map((el) => {
-      let text: Element = el;
-      while (text.firstElementChild) text = text.firstElementChild;
-      const cs = getComputedStyle(text);
+      const cs = getComputedStyle(el);
       const family = cs.fontFamily
         .split(",")[0]!
         .replace(/^["'\s]+|["'\s]+$/g, "");
@@ -234,18 +256,26 @@ test.describe("font swap", () => {
       await realContext.close();
     }
 
+    // One entry per injected block in every per-block array, so no loop below can pass
+    // by iterating over nothing.
+    const blocks = roles.length * prose.length;
+    expect(fallback.fonts).toHaveLength(blocks);
+    expect(real.fonts).toHaveLength(blocks);
+    expect(real.faces).toHaveLength(blocks);
+    expect(fallback.measures).toHaveLength(blocks);
+    expect(real.measures).toHaveLength(blocks);
+
     // Not vacuous: the fallback run used our local faces, the real run the web fonts.
-    for (const used of fallback.fonts) {
+    fallback.fonts.forEach((used, i) => {
+      const role = roles[Math.floor(i / prose.length)]!;
       expect(used.length).toBeGreaterThan(0);
       for (const f of used) {
         expect(
           f,
-          "fallback run fell past the local face (install Arial, Liberation or Arimo)",
-        ).toMatch(
-          /^local:(Arial|CourierNew|TimesNewRoman|Liberation|Arimo|Tinos|Cousine)/,
-        );
+          `${role.name}: fallback run is not on the intended local face (install Arial, Liberation or Arimo)`,
+        ).toMatch(role.local);
       }
-    }
+    });
     for (const used of real.fonts) {
       expect(used.length).toBeGreaterThan(0);
       for (const f of used) expect(f).toMatch(/^web:/);
@@ -253,10 +283,8 @@ test.describe("font swap", () => {
 
     // Every block, strong inside em and inside a label included, has a real face at its
     // weight, so font-synthesis has nothing to do.
-    expect(real.faces).toHaveLength(roles.length * prose.length);
     for (const face of real.faces) expect(face).toMatch(/: real face$/);
 
-    expect(fallback.measures).toHaveLength(roles.length * prose.length);
     fallback.measures.forEach((f, i) => {
       const r = real.measures[i]!;
       const id = `${f.role} #${f.index}`;
