@@ -23,6 +23,7 @@ body {
   color: var(--color-fg);
   font-size: var(--size-step-0);
   font-family: var(--font-body);
+  font-weight: var(--weight-body);
   line-height: var(--leading-standard);
 
   /* Long words wrap instead of forcing horizontal scroll (WCAG 1.4.10). */
@@ -37,4 +38,46 @@ body {
 :focus-visible {
   outline: 3px solid var(--color-fg);
   box-shadow: 0 0 0 6px var(--color-yellow);
+}
+
+/* Headings: Bricolage 800, tighter tracking as the type gets bigger. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-heading);
+  letter-spacing: var(--tracking-subheading);
+}
+
+h1 {
+  letter-spacing: var(--tracking-display);
+}
+
+h2 {
+  letter-spacing: var(--tracking-heading);
+}
+
+/* Emphasis: Fraunces Italic. */
+em,
+i {
+  font-family: var(--font-emphasis);
+  font-style: italic;
+  font-weight: var(--weight-emphasis);
+  letter-spacing: var(--tracking-emphasis);
+}
+
+strong,
+b {
+  font-weight: var(--weight-strong);
+}
+
+/* Labels: Geist Mono 500 (700 for strong inside), uppercase, tracked. */
+.label {
+  font-family: var(--font-label);
+  font-weight: var(--weight-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
 }

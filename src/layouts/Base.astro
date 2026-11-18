@@ -1,6 +1,7 @@
 ---
 // Minimal base layout. Ticket 032 builds the real one (header, footer, landmarks).
 // global.css is imported once, first, so every page shares one ordered stylesheet.
+import { Font } from "astro:assets";
 import "../css/global.css";
 
 interface Props {
@@ -17,6 +18,12 @@ const { title } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Stops the default /favicon.ico request until ticket 031 adds the real icon. -->
     <link rel="icon" href="data:," />
+    <!-- Heading and body are above the fold on every page, so they are preloaded.
+         Label and emphasis load only when a page uses them. -->
+    <Font cssVariable="--font-heading" preload />
+    <Font cssVariable="--font-body" preload />
+    <Font cssVariable="--font-label" />
+    <Font cssVariable="--font-emphasis" />
     <title>{title}</title>
   </head>
   <body>

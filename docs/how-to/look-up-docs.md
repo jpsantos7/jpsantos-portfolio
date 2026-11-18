@@ -18,3 +18,6 @@ Each library or platform gets one docs source, decided with the owner when it is
 | Lighthouse CI | GitHub docs (GoogleChrome/lighthouse-ci: `docs/configuration.md`, `docs/getting-started.md`), read with `defuddle` | `@lhci/cli`; performance budget gate |
 | utopia-core | GitHub README (trys/utopia-core), read with `defuddle` | Fluid type and space maths; `calculateClamp` and `checkWCAG` are used by `src/css-utils/generate.mjs` |
 | CUBE boilerplate | github.com/Set-Creative-Studio/cube-boilerplate, pinned at commit `f8c626c` | Source for the reset, global styles, compositions and utilities (ported to logical properties and `vi`) |
+| fonttools | fonttools.readthedocs.io, read with `defuddle` | `pyftsubset` and `varLib.instancer` in `scripts/subset-fonts.sh`, version pinned there |
+| uharfbuzz | GitHub README (harfbuzz/uharfbuzz), read with `defuddle` | Shapes kerned sample widths in `scripts/fallback-metrics.py`; version pinned there |
+| google/fonts | GitHub (github.com/google/fonts), pinned at the commit in `scripts/subset-fonts.sh` | Source of the font files and their `OFL.txt` |
