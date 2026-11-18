@@ -1,5 +1,6 @@
 // Byte budgets that Lighthouse CI cannot express (see lighthouserc.cjs):
-// HTML + CSS <= 50 KB gzip per page, and no client JS at all.
+// HTML + CSS <= 50 KB gzip per page, and no JS files: the only client JS is the one small
+// inline theme script in the head (src/scripts/theme-init.ts, size-capped by its own test).
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { gzipSync } from "node:zlib";
@@ -21,7 +22,9 @@ const pages = files.filter((f) => f.endsWith(".html"));
 const failures = [];
 
 if (js.length > 0)
-  failures.push(`client JS must be 0 KB, found: ${js.join(", ")}`);
+  failures.push(
+    `JS files must be 0 KB (only the inline theme script is allowed), found: ${js.join(", ")}`,
+  );
 
 // Conservative: every stylesheet counts against every page.
 const cssBytes = css.reduce((n, f) => n + gzipSync(readFileSync(f)).length, 0);
@@ -36,5 +39,5 @@ if (failures.length > 0) {
   process.exit(1);
 }
 console.log(
-  `budgets ok: ${pages.length} page(s), CSS ${cssBytes} B gzip, no client JS`,
+  `budgets ok: ${pages.length} page(s), CSS ${cssBytes} B gzip, no JS files`,
 );

@@ -32,7 +32,7 @@ placeholder nav text, which wraps to three rows on a phone: retune them with the
 
   @media (width < 40rem) {
     :root {
-      scroll-padding-block-start: 14rem;
+      scroll-padding-block-start: 18rem;
     }
   }
 

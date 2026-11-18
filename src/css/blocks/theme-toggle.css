@@ -1,0 +1,84 @@
+/*
+Theme toggle (src/components/ThemeToggle.astro, ticket 033). The button needs JavaScript, so
+it is hidden until the head script adds html.js; without JS the OS theme applies.
+
+The theme change crossfades through a view transition. html.theme-fade scopes the timing to
+theme changes so page transitions (ticket 040) keep their own. Under reduced motion the fade
+stays, shortened to 0.15s (decisions 008 and 009).
+*/
+
+/*
+PLACEHOLDER (owner's call): provisional button look, from the 009 prototype: 2.25rem (36px)
+round button (above the 24px minimum target, WCAG 2.5.8) with a 1px border in the text colour.
+*/
+.theme-toggle {
+  display: none;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentcolor;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.js .theme-toggle {
+  display: inline-grid;
+}
+
+/* PLACEHOLDER (owner's call): provisional hover fill, the card colour. */
+.theme-toggle:hover {
+  background: var(--color-card);
+}
+
+/* PLACEHOLDER (owner's call): provisional icon size, from the 009 prototype. */
+.theme-toggle svg {
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+}
+
+/* Forced colours: system colours for the border, hover and icon. */
+@media (forced-colors: active) {
+  .theme-toggle {
+    border-color: ButtonText;
+  }
+
+  .theme-toggle:hover {
+    background: ButtonFace;
+    border-color: Highlight;
+  }
+}
+
+/*
+PLACEHOLDER (owner's call): provisional theme crossfade timing, taken from the 009 prototype
+(old page out 0.2s, new page in 0.25s). Only the 0.15s reduced-motion value is fixed by the
+decisions. The easing is the one ease-out curve of decision 008.
+*/
+.theme-fade::view-transition-old(root) {
+  animation: theme-fade-out 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.theme-fade::view-transition-new(root) {
+  animation: theme-fade-in 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-fade::view-transition-old(root),
+  .theme-fade::view-transition-new(root) {
+    animation-duration: 0.15s;
+  }
+}
+
+@keyframes theme-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes theme-fade-in {
+  from {
+    opacity: 0;
+  }
+}

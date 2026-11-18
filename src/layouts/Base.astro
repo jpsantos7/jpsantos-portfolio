@@ -5,6 +5,8 @@ import { Font } from "astro:assets";
 import "../css/global.css";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import { THEME_SCRIPT } from "../scripts/theme-init";
 import { canonicalUrl, pageTitle } from "../utils/seo";
 
 interface Props {
@@ -34,6 +36,8 @@ const canonical = noindex ? undefined : canonicalUrl(Astro.url.pathname);
 <html lang="en-GB">
   <head>
     <meta charset="utf-8" />
+    <!-- Inline on purpose: sets the saved theme before first paint. Justified and size-capped in src/scripts/theme-init.ts. -->
+    <script is:inline set:html={THEME_SCRIPT} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -62,7 +66,9 @@ const canonical = noindex ? undefined : canonicalUrl(Astro.url.pathname);
       <!-- PLACEHOLDER: skip link text (skip to main content) -->
       PLACEHOLDER: skip link text
     </a>
-    <Header />
+    <Header>
+      <ThemeToggle slot="theme-toggle" />
+    </Header>
     <main id="main">
       <slot />
     </main>
