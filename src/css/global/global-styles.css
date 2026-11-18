@@ -60,7 +60,7 @@ h2 {
   letter-spacing: var(--tracking-heading);
 }
 
-/* Emphasis: Fraunces Italic. Reset to normal style where nested in itself. */
+/* Emphasis: Fraunces Italic. */
 em,
 i {
   font-family: var(--font-emphasis);
@@ -74,7 +74,7 @@ b {
   font-weight: var(--weight-strong);
 }
 
-/* Labels: Geist Mono 500, uppercase, tracked. */
+/* Labels: Geist Mono 500 (700 for strong inside), uppercase, tracked. */
 .label {
   font-family: var(--font-label);
   font-weight: var(--weight-label);

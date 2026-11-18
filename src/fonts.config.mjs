@@ -39,8 +39,12 @@ const files = {
     style: "normal",
   },
   body: { file: "geist.woff2", weight: "400 700", style: "normal" },
-  label: { file: "geist-mono.woff2", weight: 500, style: "normal" },
-  emphasis: { file: "fraunces-italic.woff2", weight: 400, style: "italic" },
+  label: { file: "geist-mono.woff2", weight: "500 700", style: "normal" },
+  emphasis: {
+    file: "fraunces-italic.woff2",
+    weight: "400 700",
+    style: "italic",
+  },
 };
 
 /**
@@ -50,7 +54,12 @@ const files = {
 
 /** @type {Family[]} */
 export const fonts = tokens.items.map(({ name, value }) => {
-  const { file, weight, style } = files[name];
+  const entry = files[name];
+  if (!entry)
+    throw new Error(
+      `fonts.json role "${name}" has no entry in files (src/fonts.config.mjs)`,
+    );
+  const { file, weight, style } = entry;
   return {
     provider: fontProviders.local(),
     name: value[0],

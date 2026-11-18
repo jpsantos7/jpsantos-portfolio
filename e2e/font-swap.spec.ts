@@ -19,8 +19,12 @@ import type { Page } from "@playwright/test";
 // (Linux, CI). Firefox and WebKit use the same CSS, but their local() lookup and engines
 // are not gated here. The prose is mixed case on purpose: all-caps text is allowed to
 // differ slightly (owner decision, 2026-11-17). Test sample text, not site copy.
-// Observed maximum width difference: 0.42% on macOS, 0.40% on Linux (Playwright container).
+// Observed maximum width difference over all roles except emphasis bold: 0.41% on macOS,
+// 0.40% on Linux (Playwright container). Emphasis bold: 0.71% on macOS, 0.68% on Linux.
 const WIDTH_TOLERANCE = 0.005;
+// Fraunces Bold Italic against Times New Roman Bold Italic varies more with the letter mix
+// of a short paragraph than the other pairs, so that role gets a wider limit.
+const WIDE_TOLERANCE = 0.01;
 const WRAP_WIDTHS = [320, 720];
 
 const prose = [
@@ -31,11 +35,14 @@ const prose = [
 
 type Role = {
   name: string;
-  // Wrapper tag and inline style for each block; `inner` wraps the text in a child tag.
+  // Wrapper tag and inline style for each block; `inner` nests the text in these tags,
+  // outermost first (so ["em", "strong"] is <em><strong>text</strong></em>).
   tag: string;
   style?: string;
   className?: string;
-  inner?: string;
+  inner?: string[];
+  // Width tolerance override; see WIDTH_TOLERANCE.
+  tolerance?: number;
 };
 const roles: Role[] = [
   { name: "heading 800", tag: "h2" },
@@ -52,9 +59,16 @@ const roles: Role[] = [
       "font-family: var(--font-heading); font-weight: var(--weight-lead); letter-spacing: var(--tracking-lead)",
   },
   { name: "body 400", tag: "p" },
-  { name: "strong 700", tag: "p", inner: "strong" },
+  { name: "strong 700", tag: "p", inner: ["strong"] },
   { name: "label 500", tag: "p", className: "label" },
-  { name: "emphasis 400", tag: "p", inner: "em" },
+  { name: "label bold 700", tag: "p", className: "label", inner: ["strong"] },
+  { name: "emphasis 400", tag: "p", inner: ["em"] },
+  {
+    name: "emphasis bold 700",
+    tag: "p",
+    inner: ["em", "strong"],
+    tolerance: WIDE_TOLERANCE,
+  },
 ];
 
 type Measure = {
@@ -64,7 +78,7 @@ type Measure = {
   lines: number[];
   heights: number[];
 };
-type Run = { measures: Measure[]; fonts: string[][] };
+type Run = { measures: Measure[]; fonts: string[][]; faces: string[] };
 
 async function run(page: Page, blockFonts: boolean): Promise<Run> {
   if (blockFonts) await page.route("**/*.woff2", (r) => r.abort());
@@ -84,10 +98,15 @@ async function run(page: Page, blockFonts: boolean): Promise<Run> {
           const el = document.createElement(role.tag);
           if (role.className) el.className = role.className;
           if (role.style) el.style.cssText = role.style;
-          const inner = role.inner ? document.createElement(role.inner) : el;
+          let inner: HTMLElement = el;
+          for (const tag of role.inner ?? []) {
+            const child = document.createElement(tag);
+            inner.append(child);
+            inner = child;
+          }
           inner.textContent = text;
-          if (role.inner) el.append(inner);
-          el.dataset["swap"] = `${r}-${i}`;
+          // The element holding the text is the one whose font CDP and the weight check read.
+          inner.dataset["swap"] = `${r}-${i}`;
           wrapper.append(el);
           host.append(wrapper);
         });
@@ -164,7 +183,28 @@ async function run(page: Page, blockFonts: boolean): Promise<Run> {
       ),
     );
   }
-  return { measures, fonts };
+
+  // Whether a loaded web face covers each block's computed weight and style, so the weight
+  // is served by a real face and the browser has nothing to synthesise (faux bold).
+  const faces = await page.evaluate(() =>
+    [...document.querySelectorAll("[data-swap]")].map((el) => {
+      let text: Element = el;
+      while (text.firstElementChild) text = text.firstElementChild;
+      const cs = getComputedStyle(text);
+      const family = cs.fontFamily
+        .split(",")[0]!
+        .replace(/^["'\s]+|["'\s]+$/g, "");
+      const weight = Number(cs.fontWeight);
+      const covered = [...document.fonts].some((f) => {
+        if (f.family.replace(/^["']|["']$/g, "") !== family) return false;
+        if (f.status !== "loaded" || f.style !== cs.fontStyle) return false;
+        const [lo, hi = lo] = f.weight.split(" ").map(Number);
+        return lo! <= weight && weight <= hi!;
+      });
+      return `${family} ${cs.fontStyle} ${weight}: ${covered ? "real face" : "NO FACE"}`;
+    }),
+  );
+  return { measures, fonts, faces };
 }
 
 // Linux Chromium rounds each glyph advance to whole pixels when hinting is on (the
@@ -202,7 +242,7 @@ test.describe("font swap", () => {
           f,
           "fallback run fell past the local face (install Arial, Liberation or Arimo)",
         ).toMatch(
-          /^local:(Arial|CourierNewPSMT|TimesNewRoman|Liberation|Arimo|Tinos|Cousine)/,
+          /^local:(Arial|CourierNew|TimesNewRoman|Liberation|Arimo|Tinos|Cousine)/,
         );
       }
     }
@@ -210,6 +250,11 @@ test.describe("font swap", () => {
       expect(used.length).toBeGreaterThan(0);
       for (const f of used) expect(f).toMatch(/^web:/);
     }
+
+    // Every block, strong inside em and inside a label included, has a real face at its
+    // weight, so font-synthesis has nothing to do.
+    expect(real.faces).toHaveLength(roles.length * prose.length);
+    for (const face of real.faces) expect(face).toMatch(/: real face$/);
 
     expect(fallback.measures).toHaveLength(roles.length * prose.length);
     fallback.measures.forEach((f, i) => {
@@ -220,7 +265,10 @@ test.describe("font swap", () => {
           Math.abs(f.lineWidth - r.lineWidth) / r.lineWidth,
           `${id} one-line width ${f.lineWidth} (fallback) vs ${r.lineWidth} (real)`,
         )
-        .toBeLessThanOrEqual(WIDTH_TOLERANCE);
+        .toBeLessThanOrEqual(
+          roles.find((role) => role.name === f.role)?.tolerance ??
+            WIDTH_TOLERANCE,
+        );
       expect.soft(f.lines, `${id} line count`).toEqual(r.lines);
       f.heights.forEach((h, w) =>
         expect

@@ -44,7 +44,7 @@ module.exports = {
         ],
         "resource-summary:font:size": [
           "error",
-          { maxNumericValue: 100000, ...median },
+          { maxNumericValue: 120000, ...median },
         ],
         "resource-summary:image:size": [
           "error",

@@ -17,18 +17,20 @@
 #   /tmp/fm/bin/python scripts/fallback-metrics.py [--linux DIR]
 # Real faces are the shipped files in src/assets/fonts. Local faces are the macOS system
 # fonts. --linux DIR points at a folder holding the Linux look-alikes (LiberationSans-*.ttf,
-# LiberationSerif-Italic.ttf, LiberationMono-Regular.ttf, Arimo.ttf, Tinos-Italic.ttf,
-# Cousine-Regular.ttf) and also prints their size-adjust, to check the local() fallbacks
-# listed after Arial, Times New Roman and Courier New in fonts.css hold the same overrides.
+# LiberationSerif-Italic.ttf, LiberationSerif-BoldItalic.ttf, LiberationMono-*.ttf, Arimo.ttf,
+# Tinos-Italic.ttf, Tinos-BoldItalic.ttf, Cousine-Regular.ttf, Cousine-Bold.ttf) and also
+# prints their size-adjust, to check the local() fallbacks listed after Arial, Times New
+# Roman and Courier New in fonts.css hold the same overrides.
 #
 # Local fonts the numbers in fonts.css were measured against (name table, version string):
-#   macOS 27.2.1: Arial and Arial Bold "Version 5.01.2x", Times New Roman Italic
-#   "Version 5.00.3x", Courier New "Version 5.00.2x".
+#   macOS 27.2.1: Arial and Arial Bold "Version 5.01.2x", Times New Roman Italic and Bold
+#   Italic "Version 5.00.3x", Courier New and Courier New Bold "Version 5.00.2x".
 # Confirmed metric-identical to them (+0.00% shaped width of the sample): Liberation Sans
-# Regular and Bold, Liberation Serif Italic, Liberation Mono Regular, all 2.1.5 (also the
-# version of Ubuntu 24.04's fonts-liberation 1:2.1.5-3); Arimo "Version 1.341", Tinos Italic
-# "Version 1.340", Cousine Regular "Version 1.241" (google/fonts at the commit pinned in
-# scripts/subset-fonts.sh). Re-run with --linux if a platform font is updated.
+# Regular and Bold, Liberation Serif Italic and Bold Italic, Liberation Mono Regular and
+# Bold, all 2.1.5 (also the version of Ubuntu 24.04's fonts-liberation 1:2.1.5-3); Arimo
+# "Version 1.341", Tinos Italic and Bold Italic "Version 1.340", Cousine Regular and Bold
+# "Version 1.241" (google/fonts at the commit pinned in scripts/subset-fonts.sh). Re-run
+# with --linux if a platform font is updated.
 import io
 import sys
 from pathlib import Path
@@ -88,14 +90,18 @@ CASES = [
     ("Bricolage 800", "bricolage-grotesque.woff2", {"wght": 800}, "arial-bold"),
     ("Geist 400", "geist.woff2", {"wght": 400}, "arial"),
     ("Geist 700", "geist.woff2", {"wght": 700}, "arial-bold"),
-    ("Geist Mono 500", "geist-mono.woff2", None, "courier"),
-    ("Fraunces Italic 400", "fraunces-italic.woff2", None, "times-italic"),
+    ("Geist Mono 500", "geist-mono.woff2", {"wght": 500}, "courier"),
+    ("Geist Mono 700", "geist-mono.woff2", {"wght": 700}, "courier-bold"),
+    ("Fraunces Italic 400", "fraunces-italic.woff2", {"wght": 400}, "times-italic"),
+    ("Fraunces Italic 700", "fraunces-italic.woff2", {"wght": 700}, "times-bold-italic"),
 ]
 MAC_FACES = {
     "arial": MAC / "Arial.ttf",
     "arial-bold": MAC / "Arial Bold.ttf",
     "courier": MAC / "Courier New.ttf",
+    "courier-bold": MAC / "Courier New Bold.ttf",
     "times-italic": MAC / "Times New Roman Italic.ttf",
+    "times-bold-italic": MAC / "Times New Roman Bold Italic.ttf",
 }
 
 
@@ -107,6 +113,14 @@ def linux_faces(d):
         "courier": [
             d / "liberation-fonts-ttf-2.1.5/LiberationMono-Regular.ttf",
             d / "Cousine-Regular.ttf",
+        ],
+        "courier-bold": [
+            d / "liberation-fonts-ttf-2.1.5/LiberationMono-Bold.ttf",
+            d / "Cousine-Bold.ttf",
+        ],
+        "times-bold-italic": [
+            d / "liberation-fonts-ttf-2.1.5/LiberationSerif-BoldItalic.ttf",
+            d / "Tinos-BoldItalic.ttf",
         ],
         "times-italic": [
             d / "liberation-fonts-ttf-2.1.5/LiberationSerif-Italic.ttf",

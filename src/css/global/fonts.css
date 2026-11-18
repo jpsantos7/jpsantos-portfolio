@@ -24,7 +24,8 @@
   identical, so one set of overrides serves all.
 
   Bricolage has three faces (400, 700, 800) because its bold widths differ by 1.5%
-  between 700 and 800 over the same Arial Bold. Geist has two (400, 700). Faces are
+  between 700 and 800 over the same Arial Bold. Geist, Geist Mono and Fraunces Italic
+  have two each (regular up to 599, bold from 600). Faces are
   named "<family> fallback" and sit second in each --font-* stack
   (src/fonts.config.mjs).
 */
@@ -89,27 +90,54 @@
   line-gap-override: 0%;
 }
 
-/* Geist Mono, 500 */
+/* Geist Mono: 500 regular, 700 bold (strong inside a label) */
 @font-face {
   font-family: "Geist Mono fallback";
   src:
     local("Courier New"), local("CourierNewPSMT"), local("Liberation Mono"),
     local("Cousine");
+  font-weight: 100 599;
   size-adjust: 99.98%;
   ascent-override: 100.52%;
   descent-override: 29.5%;
   line-gap-override: 0%;
 }
 
-/* Fraunces Italic, 400 */
+@font-face {
+  font-family: "Geist Mono fallback";
+  src:
+    local("Courier New Bold"), local("CourierNewPS-BoldMT"),
+    local("Liberation Mono Bold"), local("Cousine Bold");
+  font-weight: 600 900;
+  size-adjust: 99.98%;
+  ascent-override: 100.52%;
+  descent-override: 29.5%;
+  line-gap-override: 0%;
+}
+
+/* Fraunces Italic: 400 regular, 700 bold (strong inside emphasis) */
 @font-face {
   font-family: "Fraunces fallback";
   src:
     local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT"),
     local("Liberation Serif Italic"), local("Tinos Italic");
   font-style: italic;
-  size-adjust: 108.86%;
-  ascent-override: 89.84%;
+  font-weight: 100 599;
+  size-adjust: 108.87%;
+  ascent-override: 89.83%;
   descent-override: 23.42%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Fraunces fallback";
+  src:
+    local("Times New Roman Bold Italic"), local("TimesNewRomanPS-BoldItalicMT"),
+    local("Liberation Serif Bold Italic"), local("Tinos Bold Italic");
+  font-style: italic;
+  font-weight: 600 900;
+  size-adjust: 116.57%;
+  ascent-override: 83.9%;
+  descent-override: 21.88%;
   line-gap-override: 0%;
 }

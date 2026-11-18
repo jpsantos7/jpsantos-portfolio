@@ -42,12 +42,13 @@ sub bricolage bricolage-grotesque
 inst geist geist wght=400:700
 sub geist geist
 
-# Geist Mono: pinned to 500 (labels only).
-inst geistmono geistmono wght=500
+# Geist Mono: wght 500-700 kept (labels at 500, <strong> inside a label at 700).
+inst geistmono geistmono wght=500:700
 sub geistmono geist-mono
 
-# Fraunces Italic: wght 400, SOFT 0, WONK 1 (font defaults), opsz 16 (body-size emphasis).
-inst fraunces fraunces-italic wght=400 SOFT=0 WONK=1 opsz=16
+# Fraunces Italic: wght 400-700 kept (<strong> inside emphasis at 700), SOFT 0, WONK 1
+# (font defaults), opsz 16 (body-size emphasis).
+inst fraunces fraunces-italic wght=400:700 SOFT=0 WONK=1 opsz=16
 sub fraunces fraunces-italic
 
 ls -l "$out"
