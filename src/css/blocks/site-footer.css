@@ -1,7 +1,10 @@
 /*
-Site footer (src/components/Footer.astro): ink in both themes. color-scheme: dark makes
-the light-dark() colour tokens resolve to their dark values here, so text stays light
-on the ink surface whichever theme the page uses.
+Site footer (src/components/Footer.astro), after the 008 prototype: ink in both themes.
+color-scheme: dark makes the light-dark() colour tokens resolve to their dark values here,
+so text stays light on the ink surface whichever theme the page uses.
+
+Links carry no underline at rest and gain one on hover. In forced colours they keep it, so
+they stay identifiable.
 */
 .site-footer {
   color-scheme: dark;
@@ -9,28 +12,61 @@ on the ink surface whichever theme the page uses.
   color: var(--color-fg);
 }
 
-/* Links read as links on ink: yellow text (allowed on ink, 10:1), underlined. */
 .site-footer a {
-  color: var(--color-yellow);
-  text-decoration: underline;
+  color: inherit;
+  text-decoration: none;
+}
 
-  /* PLACEHOLDER (owner's call): provisional underline offset. */
-  text-underline-offset: 0.2em;
+/* PLACEHOLDER (owner's call): provisional label size, from the prototype (.75rem). */
+.site-footer-label {
+  display: block;
+  font-size: 0.75rem;
 }
 
 .site-footer-cta {
   font-family: var(--font-heading);
   font-weight: var(--weight-heading);
 
-  /* PLACEHOLDER (owner's call): provisional call-to-action size, from the type scale. */
-  font-size: var(--size-step-4);
+  /* PLACEHOLDER (owner's call): provisional size, the largest type token (the
+     prototype's --step-6 is larger, up to 17rem). Leading is --leading-tight, not
+     the prototype's .86. */
+  font-size: var(--size-step-6);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-display);
 }
 
-.site-footer li a {
+.site-footer-cta a {
+  color: var(--color-yellow);
+}
+
+.site-footer-row {
+  /* PLACEHOLDER (owner's call): provisional space above the row, from the prototype
+     (--space-l). */
+  --flow-space: var(--space-l);
+
+  font-size: 0.75rem;
+}
+
+.site-footer-row a {
   display: inline-block;
 
-  /* PLACEHOLDER (owner's call): provisional link padding. */
+  /* PLACEHOLDER (owner's call): provisional link padding (keeps targets at 24px). */
   padding-block: var(--space-3xs);
+  min-block-size: 1.5rem;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+.site-footer-cta a:hover {
+  /* PLACEHOLDER (owner's call): provisional thin underline, from the prototype. */
+  text-decoration-thickness: 0.05em;
+  text-underline-offset: 0.08em;
+}
+
+@media (forced-colors: active) {
+  .site-footer a {
+    text-decoration: underline;
+  }
 }

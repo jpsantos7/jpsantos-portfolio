@@ -218,3 +218,56 @@ test("nav marks the current page", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("header [aria-current]")).toHaveCount(0);
 });
+
+test.describe("link underlines", () => {
+  const targets = [
+    ["nav link", "header nav a >> nth=0"],
+    ["home mark link", "header a.site-header-home"],
+    ["footer call to action", "footer .site-footer-cta a"],
+    ["footer Privacy link", 'footer a[href="/privacy"]'],
+    ["footer Colophon link", 'footer a[href="/about#colophon"]'],
+  ] as const;
+  const line = (el: Element) => getComputedStyle(el).textDecorationLine;
+
+  for (const [name, selector] of targets) {
+    test(`${name}: no underline at rest`, async ({ page }) => {
+      await page.goto("/");
+      await expect
+        .poll(() => page.locator(selector).evaluate(line))
+        .toBe("none");
+    });
+  }
+
+  for (const [name, selector] of targets.filter(
+    ([name]) => name !== "home mark link",
+  )) {
+    test(`${name}: underline on hover`, async ({ page }) => {
+      await page.goto("/");
+      const link = page.locator(selector);
+      await link.scrollIntoViewIfNeeded();
+      await link.hover();
+      await expect.poll(() => link.evaluate(line)).toBe("underline");
+    });
+  }
+
+  test("footer links keep a 24px target and the focus ring", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const link = page.locator('footer a[href="/privacy"]');
+    expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(24);
+    await link.focus();
+    await expect(link).toHaveCSS("outline-style", "solid");
+  });
+
+  test("forced colours restore the underline", async ({ page }) => {
+    await page.emulateMedia({ forcedColors: "active" });
+    await page.goto("/");
+    await expect
+      .poll(() => page.locator("header nav a >> nth=0").evaluate(line))
+      .toBe("underline");
+    await expect
+      .poll(() => page.locator('footer a[href="/privacy"]').evaluate(line))
+      .toBe("underline");
+  });
+});
