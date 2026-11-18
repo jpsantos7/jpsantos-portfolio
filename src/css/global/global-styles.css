@@ -74,6 +74,11 @@ b {
   font-weight: var(--weight-strong);
 }
 
+/* Bold inside a heading uses the heading weight, whatever sits between (em, .label). */
+:is(h1, h2, h3, h4, h5, h6) :is(strong, b) {
+  font-weight: var(--weight-heading);
+}
+
 /* Labels: Geist Mono 500 (700 for strong inside), uppercase, tracked. */
 .label {
   font-family: var(--font-label);
