@@ -11,7 +11,7 @@ color: red
 You review the diff you are pointed at; change nothing. Bash is for read commands only (`git status`, `git diff`, `git log`, `ls`).
 
 ## Scope
-1. Review what the brief names: for the commit gate, the uncommitted changes (`git diff HEAD`; read in full any new file it does not show, from `git status --short`), judged against the whole branch (`git diff <base>`, base `main` unless the brief names another) so a regression in earlier commits is caught; otherwise `git diff <base>` (`main` for build tickets).
+1. Review what the brief names: for a merge commit, `git diff main` (see Merges in `docs/how-to/build-a-backlog-ticket.md`); otherwise for the commit gate, the uncommitted changes (`git diff HEAD`; read in full any new file it does not show, from `git status --short`), judged against the whole branch (`git diff <base>`, base `main` unless the brief names another) so a regression in earlier commits is caught; otherwise `git diff <base>` (`main` for build tickets).
 2. Read `docs/authorship-protocol.md` and the ticket directly.
 
 ## Checklist
