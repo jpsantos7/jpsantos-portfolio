@@ -74,7 +74,8 @@ export const focalPercent = (n) => Math.min(100, Math.max(0, n));
 /**
  * Responsive image hints for a Figure layout: candidate widths (the largest is
  * 2x the display width) and the `sizes` attribute. Used by Figure.astro and by
- * the Markdown figure plugin, so both ship the same candidates.
+ * the Markdown figure plugin, which both set `format` to AVIF as well, so both ship the
+ * same candidates.
  * @param {"wide" | "tall"} layout
  */
 export const figureImageHints = (layout) =>

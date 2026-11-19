@@ -63,6 +63,12 @@ describe("figureMarkdownPlugin", () => {
     expect(html).toContain('data-layout="wide"');
   });
 
+  it("asks for AVIF only, with no picture or other format", async () => {
+    const html = await render("![a](./w.png)", { "w.png": [200, 100] });
+    expect(html).toContain('format="avif"');
+    expect(html).not.toMatch(/webp|jpe?g|<picture|<source/);
+  });
+
   it("keeps lazy loading and async decoding, like Figure.astro", async () => {
     const html = await render("![a](./w.png)", { "w.png": [200, 100] });
     expect(html).toContain('loading="lazy"');

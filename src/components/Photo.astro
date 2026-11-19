@@ -6,7 +6,7 @@
 // Three crops, each a frame with overflow: clip around an object-fit: cover image whose
 // object-position is the Cover's focal point (percent): row 16:10, cover full-screen,
 // band 21:9. A filtered image never animates position.
-import { Picture } from "astro:assets";
+import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import { focalPercent } from "../utils/figure-layout.mjs";
 
@@ -46,10 +46,10 @@ const sizes = {
   data-crop={crop}
   style={`--fx: ${focalPercent(focalPoint.x)}%; --fy: ${focalPercent(focalPoint.y)}%`}
 >
-  <Picture
+  <Image
     src={src}
     alt=""
-    formats={["avif", "webp"]}
+    format="avif"
     widths={widths[crop]}
     sizes={sizes[crop]}
     loading={eager ? "eager" : "lazy"}

@@ -94,7 +94,7 @@ export const figureMarkdownPlugin = {
           properties: {
             ...imgProps,
             ...figureImageHints(layout),
-            format: "webp",
+            format: "avif",
             loading: "lazy",
             decoding: "async",
           },

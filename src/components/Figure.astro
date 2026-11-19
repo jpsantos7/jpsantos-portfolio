@@ -4,7 +4,7 @@
 // prose column (--figure-column). Full alt text is required; a redrawn or blurred Figure
 // also requires a caption. Markdown bodies get the same markup from
 // src/integrations/figure-markdown.mjs, so the classes below must stay in step with it.
-import { Picture } from "astro:assets";
+import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import {
   figureImageHints,
@@ -36,10 +36,10 @@ const { widths, sizes } = figureImageHints(layout);
 ---
 
 <figure class="figure" data-layout={layout}>
-  <Picture
+  <Image
     src={src}
     alt={alt}
-    formats={["avif", "webp"]}
+    format="avif"
     widths={widths}
     sizes={sizes}
     loading="lazy"

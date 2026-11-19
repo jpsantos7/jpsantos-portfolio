@@ -38,13 +38,6 @@ CUSTOM PROPERTIES
   block-size: 100svh;
 }
 
-/* <Picture> wraps the image in <picture>, inline with an auto height, so the img's
-   100% would resolve against nothing. Taking <picture> out of the box tree makes the
-   img size against the frame. */
-.photo picture {
-  display: contents;
-}
-
 .photo img {
   display: block;
   inline-size: 100%;

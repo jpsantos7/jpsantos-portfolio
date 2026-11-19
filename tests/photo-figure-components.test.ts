@@ -27,7 +27,7 @@ describe("Photo", () => {
     expect(html).toContain(`data-crop="${crop}"`);
     expect(html).toMatch(/<img[^>]* alt(=""|\s|>)/);
     expect(html).toContain("--fx: 50%; --fy: 50%");
-    expect(html).toContain("image/avif");
+    expect(html).toContain("fm=avif");
     expect(html).toContain("sizes=");
   });
 
@@ -57,6 +57,26 @@ describe("Photo", () => {
       focalPoint: { x: 50, y: 50 },
     });
     expect(html).toMatch(/w=1280[^"]*1280w/);
+  });
+});
+
+// Owner decision 2026-11-19: every image is AVIF only. A fallback file in any other
+// format (the Netlify image URL carries it as fm=) or a <picture> would break that.
+describe("AVIF only", () => {
+  const other =
+    /fm=(webp|jpe?g|png|gif)\b|<picture|<source|\.(webp|jpe?g|png)\s+\d+w/;
+
+  it("Photo and Figure reference only avif variants", async () => {
+    const photo = await render(Photo, {
+      src: cover,
+      crop: "cover",
+      focalPoint: { x: 50, y: 50 },
+    });
+    const figure = await render(Figure, { src: wide, alt: "a" });
+    for (const html of [photo, figure]) {
+      expect(html).toContain("fm=avif");
+      expect(html).not.toMatch(other);
+    }
   });
 });
 
@@ -113,7 +133,7 @@ describe("Figure", () => {
 // it here. Real photos are checked by the lhci image-size budget on built pages.
 describe("above-the-fold image budget", () => {
   const BUDGET = 150_000;
-  it.each(["avif", "webp"] as const)(
+  it.each(["avif"] as const)(
     "the 1280 px %s of the stand-in Cover is within 150 KB",
     async (format) => {
       const file = new URL(
