@@ -17,3 +17,4 @@ Rules: [authorship-protocol](../authorship-protocol.md). One session per task: a
 2. Fill: branch, tickets touched with status, open decisions, accepted review findings, one next action, skills the next session should load.
 3. Reference notes by `[[link]]`; copy nothing; no secrets or PII.
 4. Reindex: [reindex-vault](reindex-vault.md).
+5. End the session by giving the owner the handoff note's vault path (`sessions/YYYY-MM-DD-<slug>.md`), so they can start the next session fresh from it.
