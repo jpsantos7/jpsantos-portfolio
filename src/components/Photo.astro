@@ -1,0 +1,58 @@
+---
+// Photo: a decorative duotone image (ink to yellow, the #duotone filter defined once in
+// Base.astro). The filter is live, never baked into the files. alt is always "": a Photo
+// carries no information a Figure or the surrounding text does not.
+//
+// Three crops, each a frame with overflow: clip around an object-fit: cover image whose
+// object-position is the Cover's focal point (percent): row 16:10, cover full-screen,
+// band 21:9. A filtered image never animates position.
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { focalPercent } from "../utils/figure-layout.mjs";
+
+export type PhotoCrop = "row" | "cover" | "band";
+
+interface Props {
+  src: ImageMetadata;
+  crop: PhotoCrop;
+  /** The Cover's `focalPoint`, percent from the top-left. */
+  focalPoint: { x: number; y: number };
+  /** Load eagerly: the one Photo above the fold. */
+  eager?: boolean;
+}
+
+const { src, crop, focalPoint, eager = false } = Astro.props;
+
+// Widths a frame can need; `sizes` says what share of the viewport the frame takes.
+// row: half of a two-column grid at wide viewports, the full width below that.
+const widths = {
+  row: [480, 640, 960, 1280],
+  cover: [640, 960, 1280, 1920, 2880],
+  band: [640, 960, 1280, 1920, 2560],
+};
+// cover: object-fit: cover on a 100svh frame draws the image max(100vw, 100svh x ratio) wide,
+// so a narrow tall viewport needs a wider file than 100vw. `sizes` takes any CSS length,
+// math functions and viewport units included.
+const coverWidth = `max(100vw, ${Number(((src.width / src.height) * 100).toFixed(2))}svh)`;
+const sizes = {
+  row: "(min-width: 48rem) 50vw, 100vw",
+  cover: coverWidth,
+  band: "(min-width: 80rem) 80rem, 100vw",
+};
+---
+
+<div
+  class="photo"
+  data-crop={crop}
+  style={`--fx: ${focalPercent(focalPoint.x)}%; --fy: ${focalPercent(focalPoint.y)}%`}
+>
+  <Picture
+    src={src}
+    alt=""
+    formats={["avif", "webp"]}
+    widths={widths[crop]}
+    sizes={sizes[crop]}
+    loading={eager ? "eager" : "lazy"}
+    decoding="async"
+  />
+</div>

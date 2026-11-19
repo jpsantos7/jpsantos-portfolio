@@ -1,0 +1,34 @@
+/*
+Figure (src/components/Figure.astro, and the Markdown body images that
+src/integrations/figure-markdown.mjs turns into the same markup): a full-colour
+image that is never cropped.
+
+Landscape ("wide") runs the full width of its container, which is the wrapper's 80rem
+at most. Portrait and square ("tall") sit in a prose column, --figure-column.
+
+CUSTOM PROPERTIES
+--figure-column (in variables.css): width of the prose column, 40rem (owner decision).
+*/
+
+/* Reset the browser's default figure margins: a wide Figure must fill its container, and
+   vertical spacing comes from the flow composition (--flow-space), not the user agent. */
+.figure {
+  margin: 0;
+}
+
+.figure img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.figure[data-layout="tall"] {
+  max-inline-size: var(--figure-column);
+}
+
+/* PLACEHOLDER (owner's call): provisional caption spacing and colour, existing tokens only.
+   No caption type size is set, so it inherits the body size. */
+.figure-caption {
+  margin-block-start: var(--space-xs);
+  color: var(--color-muted);
+}

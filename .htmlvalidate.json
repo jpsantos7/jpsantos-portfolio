@@ -1,3 +1,12 @@
 {
-  "extends": ["html-validate:recommended"]
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "no-inline-style": [
+      "error",
+      {
+        "allowVariables": false,
+        "allowedProperties": ["--fx", "--fy"]
+      }
+    ]
+  }
 }

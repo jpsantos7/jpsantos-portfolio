@@ -1,8 +1,20 @@
 ---
 // Dev-only CSS test page. Mounted by src/integrations/css-test-page.mjs under
 // `astro dev`, or in a build when CSS_TEST_PAGE=1. All copy is placeholder text.
+import { getEntry, render } from "astro:content";
+import Figure from "../components/Figure.astro";
+import Photo from "../components/Photo.astro";
 import Base from "../layouts/Base.astro";
+import figureTall from "../content/case-studies/email-builder-figure-tall.jpg";
+import figureWide from "../content/case-studies/email-builder-figure-wide.jpg";
 import "./css-test.css";
+
+// Stand-in Cover and its focal point for the three Photo crops.
+const study = await getEntry("case-studies", "email-builder");
+if (!study)
+  throw new Error("css-test: stand-in Case study email-builder is missing");
+const { cover } = study.data;
+const { Content: StudyBody } = await render(study);
 
 const colours = ["bg", "fg", "muted", "line", "card"];
 const spaces = [
@@ -163,6 +175,54 @@ const steps = [0, 1, 2, 3, 4, 5, 6];
         PLACEHOLDER: visually-hidden text follows
         <span class="visually-hidden">PLACEHOLDER: hidden</span>
       </p>
+    </section>
+
+    <section class="flow" aria-labelledby="t-photo">
+      <h2 id="t-photo">PLACEHOLDER: Photo, three crops</h2>
+      <h3>PLACEHOLDER: row, 16:10</h3>
+      <div class="css-test-photo-row">
+        <Photo src={cover.image} crop="row" focalPoint={cover.focalPoint} />
+      </div>
+      <h3>PLACEHOLDER: band, 21:9</h3>
+      <Photo src={cover.image} crop="band" focalPoint={cover.focalPoint} />
+      <h3>
+        PLACEHOLDER: cover, full-screen (focal point 0, 0 to show the crop)
+      </h3>
+      <Photo src={cover.image} crop="cover" focalPoint={{ x: 0, y: 0 }} />
+    </section>
+
+    <section class="flow" aria-labelledby="t-figure">
+      <h2 id="t-figure">PLACEHOLDER: Figure, both placements</h2>
+      <h3>PLACEHOLDER: landscape, with caption</h3>
+      <Figure
+        src={figureWide}
+        alt="PLACEHOLDER: full alt text for the stand-in landscape Figure"
+        caption="PLACEHOLDER: caption for the landscape Figure"
+      />
+      <h3>PLACEHOLDER: landscape, no caption</h3>
+      <Figure
+        src={figureWide}
+        alt="PLACEHOLDER: full alt text for the stand-in landscape Figure"
+      />
+      <h3>PLACEHOLDER: portrait, with caption (redrawn)</h3>
+      <Figure
+        src={figureTall}
+        alt="PLACEHOLDER: full alt text for the stand-in portrait Figure"
+        caption="PLACEHOLDER: caption saying the Figure is redrawn"
+        edited
+      />
+      <h3>PLACEHOLDER: portrait, no caption</h3>
+      <Figure
+        src={figureTall}
+        alt="PLACEHOLDER: full alt text for the stand-in portrait Figure"
+      />
+    </section>
+
+    <section class="flow" aria-labelledby="t-body">
+      <h2 id="t-body">PLACEHOLDER: Case study body from Markdown</h2>
+      <div class="flow">
+        <StudyBody />
+      </div>
     </section>
 
     <section class="flow" aria-labelledby="t-focus">

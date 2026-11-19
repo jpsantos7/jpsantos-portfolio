@@ -35,6 +35,10 @@ PLACEHOLDER: the challenge, in the owner's words.
 
 PLACEHOLDER: the approach, in the owner's words.
 
+![PLACEHOLDER: full alt text for the stand-in landscape Figure](./email-builder-figure-wide.jpg "PLACEHOLDER: caption for the landscape Figure")
+
+![PLACEHOLDER: full alt text for the stand-in portrait Figure](./email-builder-figure-tall.jpg)
+
 ## Results
 
 PLACEHOLDER: the results in prose, in the owner's words.

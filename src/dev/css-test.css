@@ -21,3 +21,8 @@
   background: var(--color-card);
   block-size: 1rem;
 }
+
+/* Two-column stand-in for a Work row, so the 16:10 Photo is shown at row width. */
+.css-test-photo-row {
+  max-inline-size: 30rem;
+}

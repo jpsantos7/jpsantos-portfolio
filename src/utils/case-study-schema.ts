@@ -3,7 +3,8 @@ import { z } from "astro/zod";
 /** "About 6" in decision 006; 6 is provisional. */
 const STACK_MAX = 6;
 
-type ImageHelper = () => z.ZodType<{ width: number; height: number }>;
+type ImageShape = { width: number; height: number };
+type ImageHelper<I extends ImageShape> = () => z.ZodType<I>;
 
 /**
  * Cover: the image plus its focal point (percent from the top-left, used by the
@@ -11,7 +12,7 @@ type ImageHelper = () => z.ZodType<{ width: number; height: number }>;
  * photo came from (credited in the Colophon). The Cover's pixel size is checked
  * by `scripts/check-media-sizes.mjs`, which the build runs first.
  */
-const coverSchema = (image: ImageHelper) =>
+const coverSchema = <I extends ImageShape>(image: ImageHelper<I>) =>
   z.object({
     image: image(),
     focalPoint: z.object({
@@ -30,7 +31,7 @@ const oneLine = z
   .refine((s) => !/[\r\n]/.test(s), "Must be one line.");
 
 /** The Case study collection schema. `image` is Astro's schema helper. */
-export const caseStudySchema = (image: ImageHelper) =>
+export const caseStudySchema = <I extends ImageShape>(image: ImageHelper<I>) =>
   z
     .object({
       title: z.string().min(1),

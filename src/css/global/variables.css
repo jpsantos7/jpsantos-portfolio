@@ -1,6 +1,9 @@
 /* Custom properties that are not generated from tokens. */
 :root {
   --gutter: var(--space-gutter);
+
+  /* Prose column for portrait and square Figures (owner decision); the Case study page reuses it. */
+  --figure-column: 40rem;
   --leading-standard: 1.5;
   --leading-tight: 1.1;
 }

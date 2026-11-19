@@ -1,0 +1,49 @@
+---
+// Figure: a full-colour image with its own aspect ratio, never cropped. Landscape runs
+// full-width of its container (up to the wrapper's 80rem); portrait and square sit in the
+// prose column (--figure-column). Full alt text is required; a redrawn or blurred Figure
+// also requires a caption. Markdown bodies get the same markup from
+// src/integrations/figure-markdown.mjs, so the classes below must stay in step with it.
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import {
+  figureImageHints,
+  figureLayout,
+  figureProblem,
+  figureSizeProblem,
+} from "../utils/figure-layout.mjs";
+
+interface Props {
+  src: ImageMetadata;
+  /** Full alt text, owner-written. An empty alt fails the build. */
+  alt: string;
+  /** Optional, owner-written. Rendered as <figcaption>. */
+  caption?: string;
+  /** The image is redrawn or blurred: the caption must say so, so one is required. */
+  edited?: boolean;
+}
+
+const { src, alt, caption, edited = false } = Astro.props;
+
+const problem = figureProblem({ alt, caption, edited });
+if (problem) throw new Error(`Figure ${src.src}: ${problem}.`);
+
+const sizeProblem = figureSizeProblem(src.width, src.height);
+if (sizeProblem) throw new Error(`Figure ${src.src} ${sizeProblem}.`);
+
+const layout = figureLayout(src.width, src.height);
+const { widths, sizes } = figureImageHints(layout);
+---
+
+<figure class="figure" data-layout={layout}>
+  <Picture
+    src={src}
+    alt={alt}
+    formats={["avif", "webp"]}
+    widths={widths}
+    sizes={sizes}
+    loading="lazy"
+    decoding="async"
+  />
+  {caption && <figcaption class="figure-caption">{caption}</figcaption>}
+</figure>

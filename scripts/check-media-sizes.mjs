@@ -1,7 +1,24 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import sharp from "sharp";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { createSatteriMarkdownProcessor } from "@astrojs/markdown-satteri";
+import {
+  FIGURE_LANDSCAPE_DISPLAY,
+  FIGURE_MIN_RATIO,
+  FIGURE_PORTRAIT_DISPLAY,
+  figureSizeProblem,
+  meetsFigureMinimum,
+} from "../src/utils/figure-layout.mjs";
+import { soleLocalImage } from "../src/integrations/figure-markdown.mjs";
+import { decodeImagePath, displayedSize } from "../src/utils/image-files.mjs";
+
+export {
+  FIGURE_LANDSCAPE_DISPLAY,
+  FIGURE_MIN_RATIO,
+  FIGURE_PORTRAIT_DISPLAY,
+  figureSizeProblem,
+  meetsFigureMinimum,
+};
 
 /**
  * Source-size rules from vault decision 024 (Photography). They live in a
@@ -10,7 +27,6 @@ import sharp from "sharp";
  * image's dimensions (and `image().refine()` is unsupported).
  */
 export const COVER_MIN_WIDTH = 2880;
-export const FIGURE_MIN_RATIO = 2;
 
 /**
  * @param {number} width
@@ -26,16 +42,6 @@ export function coverSizeProblem(width, height) {
   }
   return null;
 }
-
-/**
- * A Figure source must be at least 2x its display width. Figures have no
- * schema or component yet (tickets 035/037); call this where they land.
- *
- * @param {number} sourceWidth
- * @param {number} displayWidth
- */
-export const meetsFigureMinimum = (sourceWidth, displayWidth) =>
-  sourceWidth >= displayWidth * FIGURE_MIN_RATIO;
 
 /** The `image:` path inside the `cover:` block of a file's frontmatter. */
 function coverImagePath(text) {
@@ -59,21 +65,87 @@ export async function checkCovers(dir) {
       problems.push(`${name}: no cover image`);
       continue;
     }
-    let meta;
+    let w, h;
     try {
-      meta = await sharp(resolve(dir, dirname(name), imagePath)).metadata();
+      [w, h] = await displayedSize(resolve(dir, dirname(name), imagePath));
     } catch {
       problems.push(`${name}: cover ${imagePath} cannot be read`);
       continue;
     }
-    // EXIF orientation 5-8 means the pixels are stored rotated by a quarter
-    // turn, so the displayed width and height are swapped.
-    const turned = (meta.orientation ?? 1) >= 5;
-    const [w, h] = turned
-      ? [meta.height, meta.width]
-      : [meta.width, meta.height];
-    const problem = coverSizeProblem(w ?? 0, h ?? 0);
+    const problem = coverSizeProblem(w, h);
     if (problem) problems.push(`${name}: cover ${imagePath} ${problem}`);
+  }
+  return problems;
+}
+
+/**
+ * The Figures in a Markdown body: what src/integrations/figure-markdown.mjs would turn
+ * into Figures, found by running the same Markdown pipeline with a collecting plugin
+ * (so code, inline code and inline images are never matched).
+ *
+ * @param {string} body Markdown without frontmatter
+ * @param {URL} fileURL
+ * @returns {Promise<{ alt: string, src: string }[]>}
+ */
+async function figuresIn(body, fileURL) {
+  const found = [];
+  const collector = {
+    name: "collect-figures",
+    element: {
+      filter: ["p"],
+      visit(node) {
+        const img = soleLocalImage(node);
+        if (img) {
+          found.push({
+            alt:
+              typeof img.properties?.alt === "string" ? img.properties.alt : "",
+            src: String(img.properties.src),
+          });
+        }
+      },
+    },
+  };
+  const processor = await createSatteriMarkdownProcessor({
+    syntaxHighlight: false,
+    hastPlugins: [collector],
+  });
+  await processor.render(body, { fileURL });
+  return found;
+}
+
+/**
+ * Checks every Figure in each Case study body: alt text present, file
+ * readable, source wide enough for its display width.
+ *
+ * @param {string} dir folder of Case study `.md` files
+ * @returns {Promise<string[]>} one message per problem; empty when all pass
+ */
+export async function checkFigures(dir) {
+  const problems = [];
+  for (const name of readdirSync(dir, { recursive: true }).filter((n) =>
+    n.endsWith(".md"),
+  )) {
+    const file = join(dir, name);
+    const body = readFileSync(file, "utf8").replace(
+      /^---\r?\n[\s\S]*?\r?\n---/,
+      "",
+    );
+    for (const { alt, src } of await figuresIn(body, pathToFileURL(file))) {
+      if (!alt.trim()) {
+        problems.push(`${name}: figure ${src} has empty alt text`);
+      }
+      let w, h;
+      try {
+        [w, h] = await displayedSize(
+          resolve(dir, dirname(name), decodeImagePath(src)),
+        );
+      } catch {
+        problems.push(`${name}: figure ${src} cannot be read`);
+        continue;
+      }
+      const problem = figureSizeProblem(w, h);
+      if (problem) problems.push(`${name}: figure ${src} ${problem}`);
+    }
   }
   return problems;
 }
@@ -83,7 +155,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     dirname(fileURLToPath(import.meta.url)),
     "../src/content/case-studies",
   );
-  const problems = await checkCovers(dir);
+  const problems = [...(await checkCovers(dir)), ...(await checkFigures(dir))];
   if (problems.length > 0) {
     console.error(problems.map((p) => `media sizes: ${p}`).join("\n"));
     process.exit(1);

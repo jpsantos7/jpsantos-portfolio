@@ -1,0 +1,55 @@
+/*
+Photo (src/components/Photo.astro): a decorative duotone image in a frame.
+
+The #duotone filter is defined once in the base layout (see .duotone-defs). It maps
+luminance to ink -> yellow with gamma 0.5 mid-tones, the same in light and dark.
+
+Frames use overflow: clip, never hidden, so they cannot become scroll containers.
+Filtered images never animate position, so nothing here moves.
+
+CUSTOM PROPERTIES
+--photo-ratio: the frame's aspect ratio, set per crop below.
+--fx, --fy: the focal point in percent (set inline by Photo.astro; the HTML validator allows only these two).
+*/
+.duotone-defs {
+  position: absolute;
+  inline-size: 0;
+  block-size: 0;
+  overflow: clip;
+}
+
+.photo {
+  overflow: clip;
+  background: var(--color-yellow);
+  aspect-ratio: var(--photo-ratio);
+}
+
+.photo[data-crop="row"] {
+  --photo-ratio: 16 / 10;
+}
+
+.photo[data-crop="band"] {
+  --photo-ratio: 21 / 9;
+}
+
+/* Full-screen cover: fills the viewport instead of holding a ratio. */
+.photo[data-crop="cover"] {
+  aspect-ratio: auto;
+  block-size: 100svh;
+}
+
+/* <Picture> wraps the image in <picture>, inline with an auto height, so the img's
+   100% would resolve against nothing. Taking <picture> out of the box tree makes the
+   img size against the frame. */
+.photo picture {
+  display: contents;
+}
+
+.photo img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: var(--fx, 50%) var(--fy, 50%);
+  filter: url("#duotone");
+}
